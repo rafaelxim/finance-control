@@ -81,13 +81,11 @@ async function saveBudget() {
       <MonthlyBudgetForm
         v-model:month="budgetStore.draftMonth"
         :available-amount="budgetStore.draftAvailableAmount"
-        :saving="saving"
         @update:available-amount="budgetStore.setAvailableAmount"
-        @save="saveBudget"
       />
 
       <BudgetSummary
-        :available-amount="budgetStore.draftAvailableAmount"
+        :available-amount="budgetStore.summaryAvailableAmount"
         :allocated="budgetStore.totals.allocated"
         :unallocated="budgetStore.totals.unallocated"
         :over-allocated="budgetStore.totals.overAllocated"
@@ -127,6 +125,16 @@ async function saveBudget() {
           :computed-limit="category.computedLimit"
         />
       </section>
+
+      <footer class="budget-save-actions" aria-label="Salvar orçamento completo">
+        <div>
+          <strong>Salvar orçamento completo</strong>
+          <span>Mês, valor disponível, categorias e alocações serão persistidos juntos.</span>
+        </div>
+        <BaseButton :disabled="saving" @click="saveBudget">
+          {{ saving ? 'Salvando...' : 'Salvar orçamento' }}
+        </BaseButton>
+      </footer>
     </template>
   </section>
 </template>
@@ -139,5 +147,31 @@ async function saveBudget() {
   color: #276749;
   margin: 0;
   padding: 12px;
+}
+
+.budget-save-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  border-top: 1px solid var(--color-border);
+  padding-top: 18px;
+}
+
+.budget-save-actions div {
+  display: grid;
+  gap: 3px;
+}
+
+.budget-save-actions span {
+  color: var(--color-muted);
+  font-size: 0.9rem;
+}
+
+@media (max-width: 640px) {
+  .budget-save-actions {
+    align-items: stretch;
+    flex-direction: column;
+  }
 }
 </style>

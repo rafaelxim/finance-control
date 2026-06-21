@@ -1,25 +1,22 @@
 <script setup lang="ts">
 import type { MonthKey } from '@/domain/shared/types'
 
-import BaseButton from '@/components/ui/BaseButton.vue'
 import CurrencyInput from '@/components/ui/CurrencyInput.vue'
 import MonthPicker from '@/components/ui/MonthPicker.vue'
 
 defineProps<{
   month: MonthKey
   availableAmount: string
-  saving?: boolean
 }>()
 
 defineEmits<{
   'update:month': [value: MonthKey]
   'update:availableAmount': [value: string]
-  save: []
 }>()
 </script>
 
 <template>
-  <form class="monthly-form panel" @submit.prevent="$emit('save')">
+  <section class="monthly-form panel" aria-label="Dados do orçamento mensal">
     <MonthPicker
       id="budget-month"
       :model-value="month"
@@ -32,16 +29,13 @@ defineEmits<{
       label="Valor mensal disponível"
       @update:model-value="$emit('update:availableAmount', $event)"
     />
-    <BaseButton type="submit" :disabled="saving">
-      {{ saving ? 'Salvando...' : 'Salvar orçamento' }}
-    </BaseButton>
-  </form>
+  </section>
 </template>
 
 <style scoped>
 .monthly-form {
   display: grid;
-  grid-template-columns: minmax(160px, 220px) minmax(200px, 1fr) auto;
+  grid-template-columns: minmax(160px, 220px) minmax(200px, 1fr);
   align-items: end;
   gap: 14px;
 }

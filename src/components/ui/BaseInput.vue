@@ -12,6 +12,7 @@ defineProps<{
 
 defineEmits<{
   'update:modelValue': [value: string]
+  blur: []
 }>()
 </script>
 
@@ -28,6 +29,7 @@ defineEmits<{
       :aria-invalid="Boolean(error)"
       :aria-describedby="error ? `${id}-error` : undefined"
       @input="$emit('update:modelValue', ($event.target as HTMLInputElement).value)"
+      @blur="$emit('blur')"
     />
     <span v-if="error" :id="`${id}-error`" class="field__error">{{ error }}</span>
   </label>

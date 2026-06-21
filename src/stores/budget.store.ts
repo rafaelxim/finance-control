@@ -64,9 +64,12 @@ export const useBudgetStore = defineStore('budget', {
           )
 
       return calculateBudgetTotals(
-        state.draftAvailableAmount || state.budget?.availableAmount || '0',
+        state.budget?.availableAmount ?? state.draftAvailableAmount ?? '0',
         source
       )
+    },
+    summaryAvailableAmount(state): string {
+      return state.budget?.availableAmount ?? state.draftAvailableAmount
     },
     activeCategories(state): BudgetCategory[] {
       return state.categories.filter((category) => category.status === 'active')
@@ -101,7 +104,7 @@ export const useBudgetStore = defineStore('budget', {
       }
     },
     setAvailableAmount(value: string) {
-      this.draftAvailableAmount = toMoneyString(value || '0')
+      this.draftAvailableAmount = value
     },
     addCategory() {
       this.draftCategories.push({
