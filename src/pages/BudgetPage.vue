@@ -125,7 +125,6 @@ async function saveBudget() {
           :allocation-type="category.allocationType"
           :allocation-value="category.allocationValue"
           :computed-limit="category.computedLimit"
-          :pokemon-asset-id="category.pokemonAssetId"
         />
       </section>
     </template>

@@ -2,8 +2,8 @@
 
 ## Overview
 
-The app stores one local user's budgets, expenses, monthly balance snapshots,
-and Pokémon-themed presentation metadata in IndexedDB. Monetary values are
+The app stores one local user's budgets, expenses, and monthly balance snapshots
+in IndexedDB. Monetary values are
 represented as decimal strings in storage to preserve precision and converted to
 Decimal.js values in domain logic.
 
@@ -74,7 +74,6 @@ Defines a monthly spending bucket such as aluguel, comida, or lazer.
 - `computedLimit`: decimal string calculated from the monthly budget
 - `sortOrder`: integer for display order
 - `status`: `active` or `archived`
-- `pokemonAssetId`: optional reference to `PokemonAsset`
 - `createdAt`: creation timestamp
 - `updatedAt`: last update timestamp
 
@@ -82,7 +81,6 @@ Defines a monthly spending bucket such as aluguel, comida, or lazer.
 
 - Belongs to `MonthlyBudget`
 - Has many `Expense`
-- Optionally references one `PokemonAsset`
 
 ### Validation Rules
 
@@ -133,7 +131,6 @@ Derived read model for the category card.
 - `remaining`: decimal string; may be negative
 - `usagePercent`: decimal string
 - `state`: `safe`, `warning`, `limitReached`, or `overLimit`
-- `pokemonAssetId`: optional display asset
 
 ### Calculation Rules
 
@@ -145,27 +142,6 @@ Derived read model for the category card.
 - `warning`: usage from 75% up to below 100%.
 - `limitReached`: usage equals 100%.
 - `overLimit`: usage greater than 100%.
-
-## Entity: PokemonAsset
-
-Maps local official Pokémon asset files to app presentation use.
-
-### Fields
-
-- `id`: stable asset identifier
-- `pokemonNumber`: Pokédex number
-- `name`: display name
-- `type`: optional Pokémon type used for visual grouping
-- `filePath`: path under `public/pokemon-assets/official/`
-- `altText`: accessible description
-- `usage`: `categoryCard`, `badge`, or `background`
-
-### Validation Rules
-
-- `filePath` must point to a local asset path, not a remote hotlink.
-- `altText` is required for visible images.
-- Assets are for local private educational use only and must not be published or
-  redistributed.
 
 ## Entity: BalanceSnapshot
 
@@ -252,11 +228,9 @@ Portable backup format for local data.
 - `expenses`: list of `Expense`
 - `balanceSnapshots`: list of `BalanceSnapshot`
 - `balanceItems`: list of `BalanceItem`
-- `pokemonAssetAssignments`: category-to-asset mapping, no binary asset files
 
 ### Validation Rules
 
 - Import must validate every section before replacing or merging data.
 - Import must report duplicate months, invalid references, and invalid decimal
   values before applying changes.
-- Export does not include official Pokémon binary assets.

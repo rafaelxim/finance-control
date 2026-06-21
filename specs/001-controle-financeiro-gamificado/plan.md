@@ -8,11 +8,11 @@
 
 Build a private-study, local-first finance control web app using Vue. The app
 lets one user define a monthly available budget, allocate it across custom
-categories as fixed amounts or percentages, track expenses through gamified
-Pokémon-themed cards, and record monthly balance snapshots for accounts,
+categories as fixed amounts or percentages, track expenses through dense
+financial category cards, and record monthly balance snapshots for accounts,
 investments, and credit cards. The first implementation is a browser-only SPA
-with local persistence, official Pokémon assets stored locally for private
-educational use, and export/import support for user-owned data.
+with local persistence, Binance-style visual direction from `DESIGN-binance.md`,
+and export/import support for user-owned data.
 
 ## Technical Context
 
@@ -36,8 +36,8 @@ within 100 ms; monthly evolution charts remain interactive for at least 60
 monthly snapshots
 
 **Constraints**: Local-only private study app; no backend in initial scope; no
-bank, broker, or credit-card integrations; official Pokémon assets are used only
-locally and are not published, redistributed, or used commercially
+bank, broker, or credit-card integrations; no external licensed-brand theme or
+licensed brand assets
 
 **Scale/Scope**: One local user, 5 years of data, up to 60 monthly budgets, 20
 categories per month, 5,000 expenses, 20 financial accounts/investments/cards,
@@ -57,8 +57,9 @@ and 60 balance snapshots
   Playwright covers the primary budget, expense, and balance workflows.
 - **UX Consistency**: Use a stable app shell with Dashboard, Orçamento,
   Despesas, Balanço, Evolução, and Configurações. Forms share validation,
-  loading, empty, and error patterns. Pokémon card states map consistently to
-  budget health states.
+  loading, empty, and error patterns. Category card states use Binance-like
+  financial semantics: yellow for primary emphasis, green for positive
+  remaining balance, and red for over-limit.
 - **Performance**: IndexedDB queries are scoped by month and indexes. Derived
   totals are computed in stores/selectors and cached per active month where
   useful. Quickstart includes a 5-year seeded history validation.
@@ -94,10 +95,6 @@ src/
 ├── app/
 │   ├── router/
 │   └── styles/
-├── assets/
-│   └── pokemon/
-│       ├── manifest.ts
-│       └── README.md
 ├── components/
 │   ├── budget/
 │   ├── finance/
@@ -115,8 +112,7 @@ src/
 └── main.ts
 
 public/
-└── pokemon-assets/
-    └── official/
+└── [static assets if needed later]
 
 tests/
 ├── e2e/
@@ -126,9 +122,8 @@ tests/
 
 **Structure Decision**: Use a single Vue application at repository root. Domain
 logic lives under `src/domain/`, persistence adapters under `src/storage/`, UI
-components under `src/components/`, routed pages under `src/pages/`, and
-official Pokémon asset files under `public/pokemon-assets/official/` for local
-private use.
+components under `src/components/`, routed pages under `src/pages/`, and visual
+direction comes from `DESIGN-binance.md`.
 
 ## Complexity Tracking
 

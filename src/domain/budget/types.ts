@@ -18,7 +18,6 @@ export interface BudgetCategory extends TimestampedEntity {
   computedLimit: DecimalString
   sortOrder: number
   status: 'active' | 'archived'
-  pokemonAssetId?: string
 }
 
 export interface BudgetTotals {
@@ -32,5 +31,4 @@ export interface BudgetDraftCategoryInput {
   name: string
   allocationType: AllocationType
   allocationValue: DecimalString
-  pokemonAssetId?: string
 }

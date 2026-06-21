@@ -147,7 +147,7 @@ Required fields:
   "expenses": [],
   "balanceSnapshots": [],
   "balanceItems": [],
-  "pokemonAssetAssignments": []
+  "visualPreferences": {}
 }
 ```
 
@@ -163,10 +163,9 @@ Before applying imported data, the app must validate:
 - Category references point to existing budgets.
 - Balance items point to existing snapshots.
 - Credit card balance items are treated as debts.
-- Asset assignments reference known local asset IDs.
+- Visual preferences use supported local theme values.
 
-## Backup and Asset Boundary
+## Backup Boundary
 
-Export/import handles financial data and asset assignments only. It must not
-embed or distribute official Pokémon binary assets. A restored app can reuse
-local assets already present in `public/pokemon-assets/official/`.
+Export/import handles financial data and visual preferences only. It must not
+embed decorative media or external brand assets.

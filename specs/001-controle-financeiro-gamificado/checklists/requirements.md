@@ -32,6 +32,5 @@
 ## Notes
 
 - Validation passed on 2026-06-21.
-- The specification assumes official Pokémon assets are used only for local,
-  private, educational study and are not published, redistributed, or used
-  commercially.
+- The specification uses `DESIGN-binance.md` as visual reference and excludes
+  themes, names, images, and assets from external licensed brands.

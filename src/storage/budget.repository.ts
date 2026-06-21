@@ -57,8 +57,7 @@ export async function saveBudgetWithCategories(input: {
         allocationValue: category.allocationValue,
         computedLimit,
         sortOrder: index,
-        status: 'active',
-        pokemonAssetId: category.pokemonAssetId
+        status: 'active'
       }
     })
 

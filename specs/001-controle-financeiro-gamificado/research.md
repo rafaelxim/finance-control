@@ -71,22 +71,21 @@ backups, and data loaded from IndexedDB after future migrations.
   totals and snapshot calculations.
 - Full form framework: useful later, but not necessary for the initial scope.
 
-## Decision: Official Pokémon assets stored locally for private study
+## Decision: Binance-style visual reference without character assets
 
-**Rationale**: The user explicitly requested official Pokémon assets and stated
-the project will not be public. The implementation will reference local files
-under `public/pokemon-assets/official/` and a manifest in `src/assets/pokemon/`
-so the UI is deterministic and does not require runtime scraping or third-party
-asset availability.
+**Rationale**: The user changed the visual direction and added
+`DESIGN-binance.md` as the design reference. The implementation should use a
+dark financial-platform canvas, yellow primary actions, dense cards, and
+green/red financial semantics without relying on external licensed-brand themes,
+names, images, or brand assets.
 
 **Alternatives considered**:
 
-- Use generated or original monster art: legally cleaner for public release, but
-  does not match the user's study requirement.
-- Hotlink official public URLs: brittle, slower, and dependent on external
-  network access.
-- PokeAPI sprites only: convenient but not the same as explicitly managing
-  official study assets and can blur source/usage expectations.
+- External licensed-brand theme: removed by user request.
+- Generic playful illustrations: visually weaker for a finance dashboard and
+  less aligned with the new reference.
+- Light-only personal finance theme: simpler, but does not match the selected
+  high-contrast market-platform reference.
 
 ## Decision: Chart.js with vue-chartjs for financial evolution
 

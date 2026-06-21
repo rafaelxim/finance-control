@@ -9,9 +9,7 @@ data model, and UI/data contracts.
 
 - Node.js LTS installed
 - pnpm installed
-- Official Pokémon assets available locally under
-  `public/pokemon-assets/official/`
-- Asset manifest configured in `src/assets/pokemon/manifest.ts`
+- Visual reference available at `DESIGN-binance.md`
 
 ## Setup
 
@@ -150,8 +148,8 @@ Expected results:
 Expected results:
 
 - Budgets, categories, expenses, snapshots, and balance items are restored.
-- Pokémon asset assignments are restored when matching local assets exist.
-- Export file does not include official Pokémon binary asset data.
+- Visual preferences are restored when present.
+- Export file contains financial data and preferences only.
 
 ## Reference Contracts
 

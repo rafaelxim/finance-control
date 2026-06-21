@@ -20,7 +20,7 @@ implemented and tested as an independent increment.
 
 ## Phase 1: Setup (Shared Infrastructure)
 
-**Purpose**: Initialize the Vue application, tooling, project structure, and local asset boundaries.
+**Purpose**: Initialize the Vue application, tooling, project structure, and Binance-style visual reference boundaries.
 
 - [X] T001 Initialize Vue 3 TypeScript Vite project and package scripts in package.json
 - [X] T002 Configure Vite application entry and path aliases in vite.config.ts
@@ -33,8 +33,8 @@ implemented and tested as an independent increment.
 - [X] T009 Create base app component and router outlet in src/App.vue
 - [X] T010 Create planned source directory structure with placeholders in src/domain/shared/index.ts
 - [X] T011 Create tests directory structure with placeholders in tests/unit/setup.ts
-- [X] T012 Create local official Pokémon asset usage notes in public/pokemon-assets/official/README.md
-- [X] T013 Create Pokémon asset manifest scaffold in src/assets/pokemon/manifest.ts
+- [X] T012 Adopt DESIGN-binance.md as the app visual reference in DESIGN-binance.md
+- [X] T013 Remove character-asset scaffolding from MVP setup in src/components/budget/CategoryBudgetCard.vue
 
 ---
 
@@ -58,7 +58,7 @@ implemented and tested as an independent increment.
 - [X] T025 Create AppShell navigation layout with responsive desktop and mobile behavior in src/components/layout/AppShell.vue
 - [X] T026 Create shared button, input, select, currency input, month picker, form error, empty state, and loading state components in src/components/ui/index.ts
 - [X] T027 [P] Add component tests for shared form validation, empty, and loading states in tests/unit/components/ui/shared-states.test.ts
-- [X] T028 Create base application styles, tokens, and Pokémon-inspired palette in src/app/styles/main.css
+- [X] T028 Create base application styles and Binance-style dark/yellow tokens in src/app/styles/main.css
 - [X] T029 Wire Pinia, router, global styles, and app shell in src/main.ts
 - [X] T030 Create Dashboard page stub in src/pages/DashboardPage.vue
 - [X] T031 Create route page stubs in src/pages/BudgetPage.vue, src/pages/ExpensesPage.vue, src/pages/BalancePage.vue, src/pages/EvolutionPage.vue, and src/pages/SettingsPage.vue
@@ -104,7 +104,7 @@ implemented and tested as an independent increment.
 
 ## Phase 4: User Story 2 - Acompanhar gastos e progresso gamificado (Priority: P2)
 
-**Goal**: User can register expenses, see category spending progress, and get Pokémon-themed card states for safe, warning, limit reached, and over-limit categories.
+**Goal**: User can register expenses, see category spending progress, and get market-style card states for safe, warning, limit reached, and over-limit categories.
 
 **Independent Test**: Register R$ 75,00 and then R$ 250,00 in Comida with a R$ 300,00 limit; verify remaining values and transition to over-limit.
 
@@ -113,7 +113,7 @@ implemented and tested as an independent increment.
 - [ ] T051 [P] [US2] Add unit tests for expense validation and same-budget category references in tests/unit/domain/expenses/validation.test.ts
 - [ ] T052 [P] [US2] Add unit tests for category progress state calculations in tests/unit/domain/gamification/category-progress.test.ts
 - [ ] T053 [P] [US2] Add component tests for ExpenseForm validation and category creation shortcut in tests/unit/components/expenses/ExpenseForm.test.ts
-- [ ] T054 [P] [US2] Add component tests for Pokémon category card states and accessible text in tests/unit/components/budget/PokemonCategoryCard.test.ts
+- [ ] T054 [P] [US2] Add component tests for market-style category card states and accessible text in tests/unit/components/budget/MarketCategoryCard.test.ts
 - [ ] T055 [US2] Add Playwright scenario for expense tracking and over-limit card state from quickstart scenario 3 in tests/e2e/expense-progress.spec.ts
 
 ### Implementation for User Story 2
@@ -126,11 +126,11 @@ implemented and tested as an independent increment.
 - [ ] T061 [US2] Implement expense Pinia store for month expense loading, mutations, and derived lists in src/stores/expenses.store.ts
 - [ ] T062 [P] [US2] Create expense entry form component in src/components/finance/ExpenseForm.vue
 - [ ] T063 [P] [US2] Create expense list component with edit and delete actions in src/components/finance/ExpenseList.vue
-- [ ] T064 [P] [US2] Create Pokémon-themed progress card component with image, text state, and currency values in src/components/budget/PokemonCategoryCard.vue
+- [ ] T064 [P] [US2] Create market-style progress card component with text state and currency values in src/components/budget/MarketCategoryCard.vue
 - [ ] T065 [US2] Implement Despesas page workflow with expense form, list, and category shortcut in src/pages/ExpensesPage.vue
 - [ ] T066 [US2] Replace dashboard allocation preview cards with progress cards after expense data loads in src/pages/DashboardPage.vue
-- [ ] T067 [US2] Add Pokémon asset manifest entries and alt text for initial category card assets in src/assets/pokemon/manifest.ts
-- [ ] T068 [US2] Add local asset missing-state handling and private-use notice in src/components/budget/PokemonCategoryCard.vue
+- [ ] T067 [US2] Add Binance-style financial state tokens for category cards in src/app/styles/main.css
+- [ ] T068 [US2] Add missing-data and over-limit messaging in src/components/budget/MarketCategoryCard.vue
 - [ ] T069 [US2] Validate US2 against quickstart scenario 3 in specs/001-controle-financeiro-gamificado/quickstart.md
 
 **Checkpoint**: Expense tracking and gamified card progress work independently on top of US1.
@@ -175,7 +175,7 @@ implemented and tested as an independent increment.
 
 **Goal**: User can adapt categories, values, percentages, and theme settings while preserving historical month data and supporting export/import backup.
 
-**Independent Test**: Change a current-month category and verify previous months keep their original values; export data, clear local storage, import it, and verify records are restored without embedded Pokémon binaries.
+**Independent Test**: Change a current-month category and verify previous months keep their original values; export data, clear local storage, import it, and verify records are restored without decorative media embedded.
 
 ### Tests for User Story 4
 
@@ -187,14 +187,14 @@ implemented and tested as an independent increment.
 
 ### Implementation for User Story 4
 
-- [ ] T093 [P] [US4] Define export schema version, export payload types, and asset assignment types in src/domain/shared/data-export.ts
+- [ ] T093 [P] [US4] Define export schema version, export payload types, and visual preference types in src/domain/shared/data-export.ts
 - [ ] T094 [US4] Implement historical budget copy and archive rules in src/domain/budget/history.ts
 - [ ] T095 [US4] Implement export/import validation with Zod and reference checks in src/domain/shared/data-export.validation.ts
 - [ ] T096 [US4] Implement data export/import repository orchestration in src/storage/data-export.repository.ts
 - [ ] T097 [US4] Extend budget store with rename, archive, and copy-forward behavior in src/stores/budget.store.ts
-- [ ] T098 [US4] Create settings page for Pokémon asset theme, export, and import actions in src/pages/SettingsPage.vue
+- [ ] T098 [US4] Create settings page for visual preferences, export, and import actions in src/pages/SettingsPage.vue
 - [ ] T099 [P] [US4] Create export/import panel component with validation results in src/components/finance/DataBackupPanel.vue
-- [ ] T100 [P] [US4] Create Pokémon asset selector component for category cards in src/components/budget/PokemonAssetSelector.vue
+- [ ] T100 [P] [US4] Create category visual preference selector component in src/components/budget/CategoryVisualSelector.vue
 - [ ] T101 [US4] Wire settings route import and navigation state in src/app/router/index.ts
 - [ ] T102 [US4] Validate US4 against quickstart scenarios 6 and 8 in specs/001-controle-financeiro-gamificado/quickstart.md
 
@@ -210,11 +210,11 @@ implemented and tested as an independent increment.
 - [ ] T104 Add performance validation test for current-month dashboard and evolution charts in tests/e2e/performance-history.spec.ts
 - [ ] T105 Add accessibility checks for navigation, forms, card states, and image alt text in tests/e2e/accessibility.spec.ts
 - [ ] T106 [P] Add README setup, asset placement, and private-study usage instructions in README.md
-- [ ] T107 [P] Add developer notes for official Pokémon assets and export boundary in src/assets/pokemon/README.md
+- [ ] T107 [P] Add developer notes for DESIGN-binance.md usage and export boundary in README.md
 - [ ] T108 Run lint, formatting, typecheck, unit, integration, and e2e commands and record results in specs/001-controle-financeiro-gamificado/quickstart.md
 - [ ] T109 Validate all quickstart scenarios 1 through 8 manually or through Playwright and record evidence in specs/001-controle-financeiro-gamificado/quickstart.md
 - [ ] T110 Review UI terminology, loading states, empty states, validation states, and error states for consistency in src/pages/DashboardPage.vue
-- [ ] T111 Review local data contract compliance for indexes, decimal strings, and asset export boundary in specs/001-controle-financeiro-gamificado/contracts/local-data-contract.md
+- [ ] T111 Review local data contract compliance for indexes, decimal strings, and preference export boundary in specs/001-controle-financeiro-gamificado/contracts/local-data-contract.md
 
 ---
 
@@ -276,7 +276,7 @@ Task: "T035 [P] [US1] Add component tests for CategoryAllocationForm fixed and p
 Task: "T051 [P] [US2] Add unit tests for expense validation and same-budget category references in tests/unit/domain/expenses/validation.test.ts"
 Task: "T052 [P] [US2] Add unit tests for category progress state calculations in tests/unit/domain/gamification/category-progress.test.ts"
 Task: "T053 [P] [US2] Add component tests for ExpenseForm validation and category creation shortcut in tests/unit/components/expenses/ExpenseForm.test.ts"
-Task: "T054 [P] [US2] Add component tests for Pokémon category card states and accessible text in tests/unit/components/budget/PokemonCategoryCard.test.ts"
+Task: "T054 [P] [US2] Add component tests for market-style category card states and accessible text in tests/unit/components/budget/MarketCategoryCard.test.ts"
 ```
 
 ## Parallel Example: User Story 3
@@ -299,9 +299,9 @@ Task: "T072 [P] [US3] Add component tests for BalanceSnapshotForm item add, edit
 ### Incremental Delivery
 
 1. US1: Monthly budget, categories, allocation totals, and cards.
-2. US2: Expense tracking and Pokémon card progress states.
+2. US2: Expense tracking and market-style card progress states.
 3. US3: Balance snapshots and financial evolution.
-4. US4: Historical editing, asset selection, and export/import backup.
+4. US4: Historical editing, visual preferences, and export/import backup.
 5. Polish: performance, accessibility, docs, and full quickstart validation.
 
 ### Validation Commands

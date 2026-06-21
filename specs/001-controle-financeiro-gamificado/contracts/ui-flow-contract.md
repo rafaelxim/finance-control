@@ -15,7 +15,7 @@ The app shell must expose these destinations:
 - `Despesas`: expense list and expense entry flow
 - `Balanço`: monthly balance snapshot entry and editing
 - `Evolução`: historical net worth, assets, and debts
-- `Configurações`: asset theme, export/import, and preferences
+- `Configurações`: visual preferences, export/import, and preferences
 
 ## Shared UI States
 
@@ -99,12 +99,12 @@ User opens `Despesas` or uses a dashboard quick action.
 - A category crossing its limit changes to `overLimit`.
 - Deleting an expense recalculates the card state.
 
-## Flow: Pokémon-Themed Category Cards
+## Flow: Market-Style Category Cards
 
 ### Inputs
 
 - Category progress state
-- Optional selected Pokémon asset
+- Category label initials or financial glyph
 
 ### Visual States
 
@@ -116,7 +116,6 @@ User opens `Despesas` or uses a dashboard quick action.
 ### Required Accessibility Signals
 
 - Card state must be represented by text in addition to color and imagery.
-- Official Pokémon image usage must include alt text.
 - Currency values must be readable without relying on the image.
 
 ## Flow: Monthly Balance Snapshot
@@ -188,5 +187,5 @@ User opens `Configurações`.
 ### Acceptance Signals
 
 - Export includes budgets, categories, expenses, snapshots, and balance items.
-- Export does not include official Pokémon binary asset files.
+- Export contains financial data only and does not embed decorative media.
 - Import reports invalid references and invalid decimal values before applying.

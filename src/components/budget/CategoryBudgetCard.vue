@@ -1,31 +1,19 @@
 <script setup lang="ts">
-import { computed } from 'vue'
-
-import { getPokemonAsset } from '@/assets/pokemon/manifest'
 import type { AllocationType } from '@/domain/budget/types'
 import { formatBRL } from '@/domain/shared/money'
 
-const props = defineProps<{
+defineProps<{
   name: string
   allocationType: AllocationType
   allocationValue: string
   computedLimit: string
-  pokemonAssetId?: string
 }>()
-
-const asset = computed(() => getPokemonAsset(props.pokemonAssetId))
 </script>
 
 <template>
   <article class="category-card">
     <div class="category-card__media">
-      <img
-        v-if="asset"
-        :src="asset.filePath"
-        :alt="asset.altText"
-        @error="($event.target as HTMLImageElement).style.display = 'none'"
-      />
-      <span v-else aria-hidden="true">FC</span>
+      <span aria-hidden="true">{{ (name || 'FC').slice(0, 2).toUpperCase() }}</span>
     </div>
 
     <div class="category-card__body">
@@ -41,30 +29,25 @@ const asset = computed(() => getPokemonAsset(props.pokemonAssetId))
 <style scoped>
 .category-card {
   display: grid;
-  grid-template-columns: 82px minmax(0, 1fr);
+  grid-template-columns: 64px minmax(0, 1fr);
   gap: 14px;
-  min-height: 132px;
+  min-height: 124px;
   border: 1px solid var(--color-border);
   border-radius: var(--radius);
   background: var(--color-surface);
-  box-shadow: var(--shadow);
   padding: 14px;
 }
 
 .category-card__media {
   display: grid;
-  min-width: 72px;
-  height: 72px;
-  place-items: center;
-  border-radius: 50%;
-  background: var(--color-surface-muted);
-  overflow: hidden;
-}
-
-.category-card__media img {
   width: 64px;
   height: 64px;
-  object-fit: contain;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  font-family: var(--font-number);
+  font-weight: 800;
 }
 
 .category-card h3,
@@ -84,6 +67,8 @@ const asset = computed(() => getPokemonAsset(props.pokemonAssetId))
 }
 
 .category-card strong {
+  color: var(--color-primary);
+  font-family: var(--font-number);
   font-size: 1.3rem;
 }
 </style>

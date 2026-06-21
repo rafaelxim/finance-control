@@ -8,3 +8,4 @@ pnpm-lock.yaml
 .specify/
 specs/
 AGENTS.md
+DESIGN-binance.md

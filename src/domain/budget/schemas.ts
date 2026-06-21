@@ -19,8 +19,7 @@ export const budgetCategorySchema = z
   .object({
     name: requiredTextSchema,
     allocationType: allocationTypeSchema,
-    allocationValue: nonNegativeDecimalStringSchema,
-    pokemonAssetId: z.string().optional()
+    allocationValue: nonNegativeDecimalStringSchema
   })
   .superRefine((category, context) => {
     if (category.allocationType === 'percentage') {

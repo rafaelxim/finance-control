@@ -22,20 +22,17 @@ function initialCategories(): BudgetDraftCategoryInput[] {
     {
       name: 'Aluguel',
       allocationType: 'fixed',
-      allocationValue: '400.00',
-      pokemonAssetId: 'bulbasaur-card'
+      allocationValue: '400.00'
     },
     {
       name: 'Comida',
       allocationType: 'fixed',
-      allocationValue: '300.00',
-      pokemonAssetId: 'pikachu-card'
+      allocationValue: '300.00'
     },
     {
       name: 'Lazer',
       allocationType: 'fixed',
-      allocationValue: '100.00',
-      pokemonAssetId: 'squirtle-card'
+      allocationValue: '100.00'
     }
   ]
 }
@@ -86,8 +83,7 @@ export const useBudgetStore = defineStore('budget', {
                 id: category.id,
                 name: category.name,
                 allocationType: category.allocationType,
-                allocationValue: category.allocationValue,
-                pokemonAssetId: category.pokemonAssetId
+                allocationValue: category.allocationValue
               }))
           : this.draftCategories
       } finally {
@@ -126,8 +122,7 @@ export const useBudgetStore = defineStore('budget', {
         id: category.id,
         name: category.name,
         allocationType: category.allocationType,
-        allocationValue: category.allocationValue,
-        pokemonAssetId: category.pokemonAssetId
+        allocationValue: category.allocationValue
       }))
       this.lastSavedAt = new Date().toISOString()
     }

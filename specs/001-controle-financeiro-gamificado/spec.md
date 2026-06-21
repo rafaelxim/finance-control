@@ -6,7 +6,7 @@
 
 **Status**: Draft
 
-**Input**: User description: "quero uma aplicação que me ajude a controlar minhas finanças, o objetivo é que seja gamificado, utilizando pokemon como tema. Digamos que eu tenha um valor específico, fixo, mas que pode ser alterado, para gastar por mês, a aplicações deverá criar slots(ou cards, ou o que vc imaginar) que represente o quanto eu posso gastar durante o mes com cada categoria, por exemplo: se eu ganho 1000 reais, eu gasto 400 de aluguel, 300 de comida, 100 de lazer, enfim... os percentuais ou valores de cada categoria podem ser decidos pelo usuario, assim como as categorias. alem disso a aplicação deve servir como um controle de balanço: todo mes eu atualizo o balanço das minhas contas, investimentos e saldos de cartões de creditos, para que eu tenha um controle da minha evolução financeira ao longo do tempo."
+**Input**: User description: "quero uma aplicação que me ajude a controlar minhas finanças de forma gamificada. Digamos que eu tenha um valor específico, fixo, mas que pode ser alterado, para gastar por mês, a aplicação deverá criar slots/cards que representem o quanto eu posso gastar durante o mês com cada categoria. Os percentuais ou valores de cada categoria podem ser decididos pelo usuário, assim como as categorias. Além disso, a aplicação deve servir como controle de balanço: todo mês eu atualizo o balanço das minhas contas, investimentos e saldos de cartões de crédito para controlar minha evolução financeira ao longo do tempo. A referência visual atual é o arquivo DESIGN-binance.md."
 
 ## User Scenarios & Testing *(mandatory)*
 
@@ -34,7 +34,7 @@ se os cards mostram os limites definidos e o total alocado corretamente.
 ### User Story 2 - Acompanhar gastos e progresso gamificado (Priority: P2)
 
 Como usuário, quero registrar gastos nas categorias do mês e acompanhar meu
-progresso por uma experiência gamificada inspirada em Pokémon, para perceber
+progresso por uma experiência visual de plataforma financeira, para perceber
 rapidamente onde ainda posso gastar e onde estou passando do limite.
 
 **Why this priority**: O planejamento só gera valor se o usuário conseguir
@@ -125,7 +125,7 @@ verificando que meses anteriores continuam consultáveis com os valores usados n
 - **FR-005**: A aplicação DEVE exibir cada categoria mensal como um card gamificado com limite, valor gasto, valor restante e estado de uso.
 - **FR-006**: O usuário DEVE conseguir registrar despesas com valor, data, categoria e descrição opcional.
 - **FR-007**: A aplicação DEVE atualizar os cards de categoria após cada despesa e identificar claramente os estados seguro, atenção, limite atingido e limite excedido.
-- **FR-008**: A aplicação DEVE oferecer um tema visual com assets oficiais de Pokémon para uso local, privado e educacional, sem publicação pública ou distribuição desses assets.
+- **FR-008**: A aplicação DEVE seguir a referência visual `DESIGN-binance.md`, usando canvas escuro, acento amarelo, cards financeiros densos e sinais verde/vermelho apenas para estados positivos e negativos.
 - **FR-009**: O usuário DEVE conseguir criar um fechamento financeiro mensal contendo saldos de contas, investimentos e cartões de crédito.
 - **FR-010**: A aplicação DEVE calcular ativos mensais, dívidas, patrimônio líquido e variação mês a mês a partir dos fechamentos.
 - **FR-011**: O usuário DEVE conseguir visualizar a evolução histórica por mês, incluindo totais e detalhamento por conta, investimento e cartão de crédito.
@@ -180,9 +180,8 @@ verificando que meses anteriores continuam consultáveis com os valores usados n
   manualmente.
 - Categorias podem misturar valor fixo e percentual no mesmo orçamento, desde
   que a aplicação mostre os totais resultantes.
-- O tema usará assets oficiais de Pokémon apenas em ambiente local, privado e
-  educacional; publicação pública, distribuição dos assets ou uso comercial ficam
-  fora do escopo.
+- A referência visual principal é `DESIGN-binance.md`; o app não usa temas,
+  nomes, imagens ou assets de marcas externas licenciadas.
 - O balanço mensal usa saldos informados manualmente pelo usuário; integrações
   automáticas com bancos, corretoras ou operadoras de cartão ficam fora do
   escopo inicial.
