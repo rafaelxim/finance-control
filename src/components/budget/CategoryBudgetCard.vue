@@ -18,9 +18,10 @@ defineProps<{
 
     <div class="category-card__body">
       <h3>{{ name || 'Nova categoria' }}</h3>
-      <p>
-        {{ allocationType === 'percentage' ? `${allocationValue}% do mês` : 'Valor fixo mensal' }}
+      <p v-if="allocationType === 'percentage'">
+        <span class="category-card__metric">{{ allocationValue }}%</span> do mês
       </p>
+      <p v-else>Valor fixo mensal</p>
       <strong>{{ formatBRL(computedLimit) }}</strong>
     </div>
   </article>
@@ -66,9 +67,16 @@ defineProps<{
   font-size: 0.92rem;
 }
 
+.category-card__metric {
+  font-family: var(--font-number);
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+}
+
 .category-card strong {
   color: var(--color-primary);
   font-family: var(--font-number);
+  font-variant-numeric: tabular-nums;
   font-size: 1.3rem;
 }
 </style>

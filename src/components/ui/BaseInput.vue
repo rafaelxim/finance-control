@@ -6,6 +6,8 @@ defineProps<{
   type?: string
   error?: string
   placeholder?: string
+  inputClass?: string
+  inputMode?: string
 }>()
 
 defineEmits<{
@@ -18,10 +20,11 @@ defineEmits<{
     <span class="field__label">{{ label }}</span>
     <input
       :id="id"
-      class="input"
+      :class="['input', inputClass]"
       :type="type ?? 'text'"
       :value="modelValue"
       :placeholder="placeholder"
+      :inputmode="inputMode"
       :aria-invalid="Boolean(error)"
       :aria-describedby="error ? `${id}-error` : undefined"
       @input="$emit('update:modelValue', ($event.target as HTMLInputElement).value)"

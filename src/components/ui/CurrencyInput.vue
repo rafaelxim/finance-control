@@ -20,7 +20,8 @@ defineEmits<{
     :label="label"
     :error="error"
     placeholder="0,00"
-    inputmode="decimal"
+    input-class="input--number"
+    input-mode="decimal"
     @update:model-value="$emit('update:modelValue', $event)"
   />
 </template>

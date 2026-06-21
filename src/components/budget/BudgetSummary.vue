@@ -48,6 +48,8 @@ defineProps<{
 }
 
 .budget-summary strong {
+  font-family: var(--font-number);
+  font-variant-numeric: tabular-nums;
   font-size: 1.25rem;
 }
 

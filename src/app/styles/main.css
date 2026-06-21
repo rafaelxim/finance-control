@@ -3,7 +3,7 @@
   font-family: var(--font-body);
   --font-body:
     Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, ui-sans-serif, sans-serif;
-  --font-number: 'IBM Plex Sans', 'JetBrains Mono', Inter, ui-sans-serif, sans-serif;
+  --font-number: 'JetBrains Mono', 'IBM Plex Mono', 'SFMono-Regular', Consolas, monospace;
   --color-bg: #0b0e11;
   --color-surface: #1e2329;
   --color-surface-muted: #2b3139;
@@ -170,6 +170,13 @@ select {
   background: var(--color-bg);
   color: var(--color-text);
   padding: 10px 12px;
+}
+
+.input--number,
+.input[type='number'],
+.input[type='month'] {
+  font-family: var(--font-number);
+  font-variant-numeric: tabular-nums;
 }
 
 .input[aria-invalid='true'] {
