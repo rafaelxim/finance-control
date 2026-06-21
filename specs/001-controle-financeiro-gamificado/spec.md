@@ -125,7 +125,7 @@ verificando que meses anteriores continuam consultáveis com os valores usados n
 - **FR-005**: A aplicação DEVE exibir cada categoria mensal como um card gamificado com limite, valor gasto, valor restante e estado de uso.
 - **FR-006**: O usuário DEVE conseguir registrar despesas com valor, data, categoria e descrição opcional.
 - **FR-007**: A aplicação DEVE atualizar os cards de categoria após cada despesa e identificar claramente os estados seguro, atenção, limite atingido e limite excedido.
-- **FR-008**: A aplicação DEVE oferecer um tema visual inspirado em progressão de monstros colecionáveis no estilo Pokémon, sem depender de ativos oficiais licenciados por padrão.
+- **FR-008**: A aplicação DEVE oferecer um tema visual com assets oficiais de Pokémon para uso local, privado e educacional, sem publicação pública ou distribuição desses assets.
 - **FR-009**: O usuário DEVE conseguir criar um fechamento financeiro mensal contendo saldos de contas, investimentos e cartões de crédito.
 - **FR-010**: A aplicação DEVE calcular ativos mensais, dívidas, patrimônio líquido e variação mês a mês a partir dos fechamentos.
 - **FR-011**: O usuário DEVE conseguir visualizar a evolução histórica por mês, incluindo totais e detalhamento por conta, investimento e cartão de crédito.
@@ -180,9 +180,9 @@ verificando que meses anteriores continuam consultáveis com os valores usados n
   manualmente.
 - Categorias podem misturar valor fixo e percentual no mesmo orçamento, desde
   que a aplicação mostre os totais resultantes.
-- O tema será inspirado em Pokémon e progressão de monstros colecionáveis, mas
-  a especificação não exige uso de nomes, imagens, sprites, sons ou marcas
-  oficiais.
+- O tema usará assets oficiais de Pokémon apenas em ambiente local, privado e
+  educacional; publicação pública, distribuição dos assets ou uso comercial ficam
+  fora do escopo.
 - O balanço mensal usa saldos informados manualmente pelo usuário; integrações
   automáticas com bancos, corretoras ou operadoras de cartão ficam fora do
   escopo inicial.

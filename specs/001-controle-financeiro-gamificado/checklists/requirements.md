@@ -32,5 +32,6 @@
 ## Notes
 
 - Validation passed on 2026-06-21.
-- The specification assumes a Pokémon-inspired collectible-monster theme without
-  requiring official licensed assets in the initial scope.
+- The specification assumes official Pokémon assets are used only for local,
+  private, educational study and are not published, redistributed, or used
+  commercially.
