@@ -86,6 +86,11 @@ Expected results:
 - `Comida` shows `-R$ 25,00` remaining.
 - The card state changes to `overLimit` with text and visual treatment.
 
+Validation evidence:
+
+- Automated Playwright coverage: `tests/e2e/expense-progress.spec.ts`
+- Last validated command: `pnpm test:e2e` with Scenario 3 passing on 2026-06-21.
+
 ## Scenario 4: Monthly Balance Snapshot
 
 1. Open `Balanço`.

@@ -2,6 +2,8 @@ import { defineStore } from 'pinia'
 
 import { calculateBudgetTotals, withComputedLimits } from '@/domain/budget/allocation'
 import type { BudgetCategory, BudgetDraftCategoryInput, MonthlyBudget } from '@/domain/budget/types'
+import type { Expense } from '@/domain/expenses/types'
+import { calculateCategoryProgress } from '@/domain/gamification/category-progress'
 import { toMoneyString } from '@/domain/shared/money'
 import type { MonthKey } from '@/domain/shared/types'
 import { currentMonthKey } from '@/domain/shared/types'
@@ -65,6 +67,14 @@ export const useBudgetStore = defineStore('budget', {
         state.draftAvailableAmount || state.budget?.availableAmount || '0',
         source
       )
+    },
+    activeCategories(state): BudgetCategory[] {
+      return state.categories.filter((category) => category.status === 'active')
+    },
+    progressForExpenses(
+      state
+    ): (expenses: Expense[]) => ReturnType<typeof calculateCategoryProgress> {
+      return (expenses: Expense[]) => calculateCategoryProgress(state.categories, expenses)
     }
   },
   actions: {

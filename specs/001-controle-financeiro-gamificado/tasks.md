@@ -110,28 +110,28 @@ implemented and tested as an independent increment.
 
 ### Tests for User Story 2
 
-- [ ] T051 [P] [US2] Add unit tests for expense validation and same-budget category references in tests/unit/domain/expenses/validation.test.ts
-- [ ] T052 [P] [US2] Add unit tests for category progress state calculations in tests/unit/domain/gamification/category-progress.test.ts
-- [ ] T053 [P] [US2] Add component tests for ExpenseForm validation and category creation shortcut in tests/unit/components/expenses/ExpenseForm.test.ts
-- [ ] T054 [P] [US2] Add component tests for market-style category card states and accessible text in tests/unit/components/budget/MarketCategoryCard.test.ts
-- [ ] T055 [US2] Add Playwright scenario for expense tracking and over-limit card state from quickstart scenario 3 in tests/e2e/expense-progress.spec.ts
+- [X] T051 [P] [US2] Add unit tests for expense validation and same-budget category references in tests/unit/domain/expenses/validation.test.ts
+- [X] T052 [P] [US2] Add unit tests for category progress state calculations in tests/unit/domain/gamification/category-progress.test.ts
+- [X] T053 [P] [US2] Add component tests for ExpenseForm validation and category creation shortcut in tests/unit/components/expenses/ExpenseForm.test.ts
+- [X] T054 [P] [US2] Add component tests for market-style category card states and accessible text in tests/unit/components/budget/MarketCategoryCard.test.ts
+- [X] T055 [US2] Add Playwright scenario for expense tracking and over-limit card state from quickstart scenario 3 in tests/e2e/expense-progress.spec.ts
 
 ### Implementation for User Story 2
 
-- [ ] T056 [P] [US2] Define Expense and CategoryProgress domain types in src/domain/expenses/types.ts
-- [ ] T057 [P] [US2] Implement expense Zod schemas and date/category validation in src/domain/expenses/schemas.ts
-- [ ] T058 [US2] Implement expense totals and category progress calculations in src/domain/gamification/category-progress.ts
-- [ ] T059 [US2] Implement expense repository functions for create, update, delete, and month queries in src/storage/expense.repository.ts
-- [ ] T060 [US2] Extend budget store with category progress selectors in src/stores/budget.store.ts
-- [ ] T061 [US2] Implement expense Pinia store for month expense loading, mutations, and derived lists in src/stores/expenses.store.ts
-- [ ] T062 [P] [US2] Create expense entry form component in src/components/finance/ExpenseForm.vue
-- [ ] T063 [P] [US2] Create expense list component with edit and delete actions in src/components/finance/ExpenseList.vue
-- [ ] T064 [P] [US2] Create market-style progress card component with text state and currency values in src/components/budget/MarketCategoryCard.vue
-- [ ] T065 [US2] Implement Despesas page workflow with expense form, list, and category shortcut in src/pages/ExpensesPage.vue
-- [ ] T066 [US2] Replace dashboard allocation preview cards with progress cards after expense data loads in src/pages/DashboardPage.vue
-- [ ] T067 [US2] Add Binance-style financial state tokens for category cards in src/app/styles/main.css
-- [ ] T068 [US2] Add missing-data and over-limit messaging in src/components/budget/MarketCategoryCard.vue
-- [ ] T069 [US2] Validate US2 against quickstart scenario 3 in specs/001-controle-financeiro-gamificado/quickstart.md
+- [X] T056 [P] [US2] Define Expense and CategoryProgress domain types in src/domain/expenses/types.ts
+- [X] T057 [P] [US2] Implement expense Zod schemas and date/category validation in src/domain/expenses/schemas.ts
+- [X] T058 [US2] Implement expense totals and category progress calculations in src/domain/gamification/category-progress.ts
+- [X] T059 [US2] Implement expense repository functions for create, update, delete, and month queries in src/storage/expense.repository.ts
+- [X] T060 [US2] Extend budget store with category progress selectors in src/stores/budget.store.ts
+- [X] T061 [US2] Implement expense Pinia store for month expense loading, mutations, and derived lists in src/stores/expenses.store.ts
+- [X] T062 [P] [US2] Create expense entry form component in src/components/finance/ExpenseForm.vue
+- [X] T063 [P] [US2] Create expense list component with edit and delete actions in src/components/finance/ExpenseList.vue
+- [X] T064 [P] [US2] Create market-style progress card component with text state and currency values in src/components/budget/MarketCategoryCard.vue
+- [X] T065 [US2] Implement Despesas page workflow with expense form, list, and category shortcut in src/pages/ExpensesPage.vue
+- [X] T066 [US2] Replace dashboard allocation preview cards with progress cards after expense data loads in src/pages/DashboardPage.vue
+- [X] T067 [US2] Add Binance-style financial state tokens for category cards in src/app/styles/main.css
+- [X] T068 [US2] Add missing-data and over-limit messaging in src/components/budget/MarketCategoryCard.vue
+- [X] T069 [US2] Validate US2 against quickstart scenario 3 in specs/001-controle-financeiro-gamificado/quickstart.md
 
 **Checkpoint**: Expense tracking and gamified card progress work independently on top of US1.
 

@@ -22,6 +22,10 @@
   --color-info: #3b82f6;
   --color-warning: #f0b90b;
   --color-danger: #f6465d;
+  --color-state-safe: #0ecb81;
+  --color-state-warning: #f0b90b;
+  --color-state-limit: #3b82f6;
+  --color-state-over: #f6465d;
   --radius: 6px;
   --radius-card: 12px;
   --shadow: none;

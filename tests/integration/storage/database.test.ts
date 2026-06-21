@@ -9,6 +9,7 @@ describe('FinanceDatabase', () => {
 
     expect(database.tables.map((table) => table.name).sort()).toEqual([
       'budgetCategories',
+      'expenses',
       'monthlyBudgets',
       'profiles'
     ])

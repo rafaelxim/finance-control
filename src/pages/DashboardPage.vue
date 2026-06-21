@@ -2,19 +2,20 @@
 import { computed, onMounted } from 'vue'
 
 import BudgetSummary from '@/components/budget/BudgetSummary.vue'
-import CategoryBudgetCard from '@/components/budget/CategoryBudgetCard.vue'
+import MarketCategoryCard from '@/components/budget/MarketCategoryCard.vue'
 import EmptyState from '@/components/ui/EmptyState.vue'
 import LoadingState from '@/components/ui/LoadingState.vue'
 import { useBudgetStore } from '@/stores/budget.store'
+import { useExpensesStore } from '@/stores/expenses.store'
 
 const budgetStore = useBudgetStore()
+const expensesStore = useExpensesStore()
 
-const cards = computed(() =>
-  budgetStore.draftCategoriesWithLimits.filter((category) => category.name.trim())
-)
+const cards = computed(() => expensesStore.categoryProgress)
 
-onMounted(() => {
-  void budgetStore.loadMonth(budgetStore.draftMonth)
+onMounted(async () => {
+  await budgetStore.loadMonth(budgetStore.draftMonth)
+  await expensesStore.loadForBudget(budgetStore.budget?.id ?? null, budgetStore.draftMonth)
 })
 </script>
 
@@ -25,7 +26,7 @@ onMounted(() => {
       <p>Resumo do orçamento atual e dos cards iniciais por categoria.</p>
     </header>
 
-    <LoadingState v-if="budgetStore.loading" />
+    <LoadingState v-if="budgetStore.loading || expensesStore.loading" />
 
     <template v-else>
       <BudgetSummary
@@ -44,13 +45,10 @@ onMounted(() => {
       </EmptyState>
 
       <section v-else class="grid grid--cards" aria-label="Cards de orçamento por categoria">
-        <CategoryBudgetCard
-          v-for="category in cards"
-          :key="category.id ?? category.name"
-          :name="category.name"
-          :allocation-type="category.allocationType"
-          :allocation-value="category.allocationValue"
-          :computed-limit="category.computedLimit"
+        <MarketCategoryCard
+          v-for="progress in cards"
+          :key="progress.categoryId"
+          :progress="progress"
         />
       </section>
     </template>
