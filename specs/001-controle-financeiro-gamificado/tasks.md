@@ -22,19 +22,19 @@ implemented and tested as an independent increment.
 
 **Purpose**: Initialize the Vue application, tooling, project structure, and local asset boundaries.
 
-- [ ] T001 Initialize Vue 3 TypeScript Vite project and package scripts in package.json
-- [ ] T002 Configure Vite application entry and path aliases in vite.config.ts
-- [ ] T003 Configure TypeScript strict project settings in tsconfig.json
-- [ ] T004 [P] Configure ESLint for Vue and TypeScript in eslint.config.js
-- [ ] T005 [P] Configure Prettier formatting rules in .prettierrc.json
-- [ ] T006 Configure Vitest and Vue Test Utils in vitest.config.ts
-- [ ] T007 Configure Playwright browser testing in playwright.config.ts
-- [ ] T008 Create root Vue entry and application bootstrap in src/main.ts
-- [ ] T009 Create base app component and router outlet in src/App.vue
-- [ ] T010 Create planned source directory structure with placeholders in src/domain/shared/index.ts
-- [ ] T011 Create tests directory structure with placeholders in tests/unit/setup.ts
-- [ ] T012 Create local official Pokémon asset usage notes in public/pokemon-assets/official/README.md
-- [ ] T013 Create Pokémon asset manifest scaffold in src/assets/pokemon/manifest.ts
+- [X] T001 Initialize Vue 3 TypeScript Vite project and package scripts in package.json
+- [X] T002 Configure Vite application entry and path aliases in vite.config.ts
+- [X] T003 Configure TypeScript strict project settings in tsconfig.json
+- [X] T004 [P] Configure ESLint for Vue and TypeScript in eslint.config.js
+- [X] T005 [P] Configure Prettier formatting rules in .prettierrc.json
+- [X] T006 Configure Vitest and Vue Test Utils in vitest.config.ts
+- [X] T007 Configure Playwright browser testing in playwright.config.ts
+- [X] T008 Create root Vue entry and application bootstrap in src/main.ts
+- [X] T009 Create base app component and router outlet in src/App.vue
+- [X] T010 Create planned source directory structure with placeholders in src/domain/shared/index.ts
+- [X] T011 Create tests directory structure with placeholders in tests/unit/setup.ts
+- [X] T012 Create local official Pokémon asset usage notes in public/pokemon-assets/official/README.md
+- [X] T013 Create Pokémon asset manifest scaffold in src/assets/pokemon/manifest.ts
 
 ---
 
@@ -44,24 +44,24 @@ implemented and tested as an independent increment.
 
 **Critical**: No user story implementation should begin until this phase is complete.
 
-- [ ] T014 Define shared identifiers, month keys, timestamp, and currency types in src/domain/shared/types.ts
-- [ ] T015 Implement Decimal.js currency helpers for BRL parsing, arithmetic, comparison, and formatting in src/domain/shared/money.ts
-- [ ] T016 [P] Add unit tests for BRL parsing, arithmetic, rounding, and formatting in tests/unit/domain/shared/money.test.ts
-- [ ] T017 Implement shared Zod validation helpers for decimal strings, month keys, and required text in src/domain/shared/validation.ts
-- [ ] T018 [P] Add unit tests for shared validation helpers in tests/unit/domain/shared/validation.test.ts
-- [ ] T019 Define Dexie database schema, versions, and table typings in src/storage/database.ts
-- [ ] T020 Implement repository base helpers for timestamps, ids, and transaction wrappers in src/storage/repository.ts
-- [ ] T021 [P] Add integration tests for IndexedDB schema and required indexes in tests/integration/storage/database.test.ts
-- [ ] T022 Define UserProfile model and preferences defaults in src/domain/shared/profile.ts
-- [ ] T023 Implement profile persistence store in src/stores/profile.store.ts
-- [ ] T024 Configure Vue Router routes for Dashboard, Orçamento, Despesas, Balanço, Evolução, and Configurações in src/app/router/index.ts
-- [ ] T025 Create AppShell navigation layout with responsive desktop and mobile behavior in src/components/layout/AppShell.vue
-- [ ] T026 Create shared button, input, select, currency input, month picker, form error, empty state, and loading state components in src/components/ui/index.ts
-- [ ] T027 [P] Add component tests for shared form validation, empty, and loading states in tests/unit/components/ui/shared-states.test.ts
-- [ ] T028 Create base application styles, tokens, and Pokémon-inspired palette in src/app/styles/main.css
-- [ ] T029 Wire Pinia, router, global styles, and app shell in src/main.ts
-- [ ] T030 Create Dashboard page stub in src/pages/DashboardPage.vue
-- [ ] T031 Create route page stubs in src/pages/BudgetPage.vue, src/pages/ExpensesPage.vue, src/pages/BalancePage.vue, src/pages/EvolutionPage.vue, and src/pages/SettingsPage.vue
+- [X] T014 Define shared identifiers, month keys, timestamp, and currency types in src/domain/shared/types.ts
+- [X] T015 Implement Decimal.js currency helpers for BRL parsing, arithmetic, comparison, and formatting in src/domain/shared/money.ts
+- [X] T016 [P] Add unit tests for BRL parsing, arithmetic, rounding, and formatting in tests/unit/domain/shared/money.test.ts
+- [X] T017 Implement shared Zod validation helpers for decimal strings, month keys, and required text in src/domain/shared/validation.ts
+- [X] T018 [P] Add unit tests for shared validation helpers in tests/unit/domain/shared/validation.test.ts
+- [X] T019 Define Dexie database schema, versions, and table typings in src/storage/database.ts
+- [X] T020 Implement repository base helpers for timestamps, ids, and transaction wrappers in src/storage/repository.ts
+- [X] T021 [P] Add integration tests for IndexedDB schema and required indexes in tests/integration/storage/database.test.ts
+- [X] T022 Define UserProfile model and preferences defaults in src/domain/shared/profile.ts
+- [X] T023 Implement profile persistence store in src/stores/profile.store.ts
+- [X] T024 Configure Vue Router routes for Dashboard, Orçamento, Despesas, Balanço, Evolução, and Configurações in src/app/router/index.ts
+- [X] T025 Create AppShell navigation layout with responsive desktop and mobile behavior in src/components/layout/AppShell.vue
+- [X] T026 Create shared button, input, select, currency input, month picker, form error, empty state, and loading state components in src/components/ui/index.ts
+- [X] T027 [P] Add component tests for shared form validation, empty, and loading states in tests/unit/components/ui/shared-states.test.ts
+- [X] T028 Create base application styles, tokens, and Pokémon-inspired palette in src/app/styles/main.css
+- [X] T029 Wire Pinia, router, global styles, and app shell in src/main.ts
+- [X] T030 Create Dashboard page stub in src/pages/DashboardPage.vue
+- [X] T031 Create route page stubs in src/pages/BudgetPage.vue, src/pages/ExpensesPage.vue, src/pages/BalancePage.vue, src/pages/EvolutionPage.vue, and src/pages/SettingsPage.vue
 
 **Checkpoint**: Foundation ready; user story implementation can start.
 
@@ -75,28 +75,28 @@ implemented and tested as an independent increment.
 
 ### Tests for User Story 1
 
-- [ ] T032 [P] [US1] Add unit tests for fixed and percentage budget allocation calculations in tests/unit/domain/budget/allocation.test.ts
-- [ ] T033 [P] [US1] Add unit tests for budget and category validation rules in tests/unit/domain/budget/validation.test.ts
-- [ ] T034 [P] [US1] Add component tests for BudgetSummary totals and over-allocation states in tests/unit/components/budget/BudgetSummary.test.ts
-- [ ] T035 [P] [US1] Add component tests for CategoryAllocationForm fixed and percentage inputs in tests/unit/components/budget/CategoryAllocationForm.test.ts
-- [ ] T036 [US1] Add Playwright scenario for monthly budget setup from quickstart scenario 1 in tests/e2e/monthly-budget.spec.ts
+- [X] T032 [P] [US1] Add unit tests for fixed and percentage budget allocation calculations in tests/unit/domain/budget/allocation.test.ts
+- [X] T033 [P] [US1] Add unit tests for budget and category validation rules in tests/unit/domain/budget/validation.test.ts
+- [X] T034 [P] [US1] Add component tests for BudgetSummary totals and over-allocation states in tests/unit/components/budget/BudgetSummary.test.ts
+- [X] T035 [P] [US1] Add component tests for CategoryAllocationForm fixed and percentage inputs in tests/unit/components/budget/CategoryAllocationForm.test.ts
+- [X] T036 [US1] Add Playwright scenario for monthly budget setup from quickstart scenario 1 in tests/e2e/monthly-budget.spec.ts
 
 ### Implementation for User Story 1
 
-- [ ] T037 [P] [US1] Define MonthlyBudget, BudgetCategory, and allocation domain types in src/domain/budget/types.ts
-- [ ] T038 [P] [US1] Implement Zod schemas for monthly budgets and categories in src/domain/budget/schemas.ts
-- [ ] T039 [US1] Implement budget allocation calculations for fixed, percentage, unallocated, and over-allocated totals in src/domain/budget/allocation.ts
-- [ ] T040 [US1] Implement budget and category repository functions in src/storage/budget.repository.ts
-- [ ] T041 [US1] Implement Pinia budget store with active month loading, saving, category CRUD, reordering, and confirmation in src/stores/budget.store.ts
-- [ ] T042 [P] [US1] Create monthly budget form component in src/components/budget/MonthlyBudgetForm.vue
-- [ ] T043 [P] [US1] Create category allocation form component in src/components/budget/CategoryAllocationForm.vue
-- [ ] T044 [P] [US1] Create budget summary totals component in src/components/budget/BudgetSummary.vue
-- [ ] T045 [P] [US1] Create gamified category card component for allocation preview in src/components/budget/CategoryBudgetCard.vue
-- [ ] T046 [US1] Implement Orçamento page workflow using budget store and budget components in src/pages/BudgetPage.vue
-- [ ] T047 [US1] Implement Dashboard current-month budget summary using budget cards in src/pages/DashboardPage.vue
-- [ ] T048 [US1] Connect route imports for Dashboard and Orçamento pages in src/app/router/index.ts
-- [ ] T049 [US1] Add empty, loading, validation, and save-success states for budget setup in src/pages/BudgetPage.vue
-- [ ] T050 [US1] Validate US1 against quickstart scenarios 1 and 2 in specs/001-controle-financeiro-gamificado/quickstart.md
+- [X] T037 [P] [US1] Define MonthlyBudget, BudgetCategory, and allocation domain types in src/domain/budget/types.ts
+- [X] T038 [P] [US1] Implement Zod schemas for monthly budgets and categories in src/domain/budget/schemas.ts
+- [X] T039 [US1] Implement budget allocation calculations for fixed, percentage, unallocated, and over-allocated totals in src/domain/budget/allocation.ts
+- [X] T040 [US1] Implement budget and category repository functions in src/storage/budget.repository.ts
+- [X] T041 [US1] Implement Pinia budget store with active month loading, saving, category CRUD, reordering, and confirmation in src/stores/budget.store.ts
+- [X] T042 [P] [US1] Create monthly budget form component in src/components/budget/MonthlyBudgetForm.vue
+- [X] T043 [P] [US1] Create category allocation form component in src/components/budget/CategoryAllocationForm.vue
+- [X] T044 [P] [US1] Create budget summary totals component in src/components/budget/BudgetSummary.vue
+- [X] T045 [P] [US1] Create gamified category card component for allocation preview in src/components/budget/CategoryBudgetCard.vue
+- [X] T046 [US1] Implement Orçamento page workflow using budget store and budget components in src/pages/BudgetPage.vue
+- [X] T047 [US1] Implement Dashboard current-month budget summary using budget cards in src/pages/DashboardPage.vue
+- [X] T048 [US1] Connect route imports for Dashboard and Orçamento pages in src/app/router/index.ts
+- [X] T049 [US1] Add empty, loading, validation, and save-success states for budget setup in src/pages/BudgetPage.vue
+- [X] T050 [US1] Validate US1 against quickstart scenarios 1 and 2 in specs/001-controle-financeiro-gamificado/quickstart.md
 
 **Checkpoint**: MVP budget planning works independently.
 
