@@ -105,8 +105,8 @@ verificando que meses anteriores continuam consultáveis com os valores usados n
   permitir escolher uma categoria existente ou criar uma nova.
 - O usuário pode ter renda ou valor mensal disponível igual a zero; a aplicação
   deve explicar que não há limite distribuível e evitar divisões por percentual.
-- O usuário pode ter cartão de crédito com saldo devedor; a aplicação deve
-  tratá-lo como dívida no balanço mensal.
+- O usuário pode registrar itens de dívida; a aplicação deve tratá-los como
+  redução do patrimônio no balanço mensal.
 - O usuário pode corrigir fechamentos antigos; a aplicação deve recalcular a
   evolução sem apagar os demais meses.
 - Estados de carregamento, lista vazia, validação e recuperação devem usar
@@ -128,7 +128,7 @@ verificando que meses anteriores continuam consultáveis com os valores usados n
 - **FR-008**: A aplicação DEVE seguir a referência visual `DESIGN-binance.md`, usando canvas escuro, acento amarelo, cards financeiros densos e sinais verde/vermelho apenas para estados positivos e negativos.
 - **FR-009**: O usuário DEVE conseguir criar um fechamento financeiro mensal contendo saldos de contas, investimentos e cartões de crédito.
 - **FR-010**: A aplicação DEVE calcular ativos mensais, dívidas, patrimônio líquido e variação mês a mês a partir dos fechamentos.
-- **FR-011**: O usuário DEVE conseguir visualizar a evolução histórica por mês, incluindo totais e detalhamento por conta, investimento e cartão de crédito.
+- **FR-011**: O usuário DEVE conseguir visualizar a evolução histórica por mês, incluindo totais e detalhamento por ativo e dívida.
 - **FR-012**: O usuário DEVE conseguir editar orçamentos, despesas e fechamentos financeiros atuais e passados, com recálculo dos totais afetados.
 - **FR-013**: A aplicação DEVE preservar os dados históricos de cada mês para que mudanças posteriores de categoria ou orçamento não reescrevam meses anteriores silenciosamente.
 - **FR-014**: A aplicação DEVE apresentar mensagens de validação quando valores obrigatórios estiverem ausentes, negativos, inconsistentes ou fora das restrições financeiras esperadas.
@@ -150,10 +150,10 @@ verificando que meses anteriores continuam consultáveis com os valores usados n
   opcional.
 - **Fechamento Mensal**: Registro mensal dos saldos financeiros que permite
   acompanhar evolução ao longo do tempo.
-- **Conta**: Saldo de dinheiro disponível, como conta corrente ou carteira.
-- **Investimento**: Saldo aplicado que compõe os ativos do usuário.
-- **Cartão de Crédito**: Saldo devedor que compõe as dívidas do usuário no
-  fechamento mensal.
+- **Ativo**: Saldo que aumenta o patrimônio do usuário, como conta corrente,
+  carteira, dinheiro disponível ou investimentos.
+- **Dívida**: Saldo devedor que reduz o patrimônio do usuário no fechamento
+  mensal.
 - **Evolução Financeira**: Série histórica calculada a partir dos fechamentos
   mensais, mostrando ativos, dívidas, patrimônio líquido e variações.
 

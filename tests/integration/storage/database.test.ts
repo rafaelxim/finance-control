@@ -8,6 +8,8 @@ describe('FinanceDatabase', () => {
     await database.open()
 
     expect(database.tables.map((table) => table.name).sort()).toEqual([
+      'balanceItems',
+      'balanceSnapshots',
       'budgetCategories',
       'expenses',
       'monthlyBudgets',

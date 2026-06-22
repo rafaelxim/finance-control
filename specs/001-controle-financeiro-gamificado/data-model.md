@@ -167,14 +167,14 @@ Captures the user's monthly financial position.
 
 ## Entity: BalanceItem
 
-Stores one account, investment, or credit card balance inside a snapshot.
+Stores one asset or debt balance inside a snapshot.
 
 ### Fields
 
 - `id`: stable identifier
 - `snapshotId`: parent balance snapshot
-- `name`: user-facing account/investment/card name
-- `kind`: `account`, `investment`, or `creditCard`
+- `name`: user-facing item name
+- `kind`: `asset` or `debt`
 - `amount`: decimal string
 - `institution`: optional text
 - `notes`: optional text
@@ -187,9 +187,9 @@ Stores one account, investment, or credit card balance inside a snapshot.
 ### Validation Rules
 
 - `name` is required.
-- Account and investment amounts are treated as assets.
-- Credit card amounts are treated as debt. The UI accepts a positive amount for
-  the debt balance and converts it into debt totals.
+- Asset amounts increase net worth.
+- Debt amounts reduce net worth. The UI accepts a positive amount for the debt
+  balance and converts it into debt totals.
 - Amount must be a valid decimal number.
 
 ## Entity: FinancialEvolution
@@ -208,8 +208,8 @@ Derived read model calculated from snapshots.
 
 ### Calculation Rules
 
-- `assetsTotal` is the sum of account and investment balance items.
-- `debtsTotal` is the sum of credit card balance items.
+- `assetsTotal` is the sum of asset balance items.
+- `debtsTotal` is the sum of debt balance items.
 - `netWorth` equals `assetsTotal - debtsTotal`.
 - Month-over-month variation compares the current snapshot to the immediately
   previous available snapshot.

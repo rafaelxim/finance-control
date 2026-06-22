@@ -9,8 +9,8 @@
 Build a private-study, local-first finance control web app using Vue. The app
 lets one user define a monthly available budget, allocate it across custom
 categories as fixed amounts or percentages, track expenses through dense
-financial category cards, and record monthly balance snapshots for accounts,
-investments, and credit cards. The first implementation is a browser-only SPA
+financial category cards, and record monthly balance snapshots for assets and
+debts. The first implementation is a browser-only SPA
 with local persistence, Binance-style visual direction from `DESIGN-binance.md`,
 and export/import support for user-owned data.
 
@@ -40,7 +40,7 @@ bank, broker, or credit-card integrations; no external licensed-brand theme or
 licensed brand assets
 
 **Scale/Scope**: One local user, 5 years of data, up to 60 monthly budgets, 20
-categories per month, 5,000 expenses, 20 financial accounts/investments/cards,
+categories per month, 5,000 expenses, 20 financial balance items,
 and 60 balance snapshots
 
 ## Constitution Check

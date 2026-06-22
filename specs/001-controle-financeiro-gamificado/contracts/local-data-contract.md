@@ -162,7 +162,7 @@ Before applying imported data, the app must validate:
 - Expense references point to existing budgets and categories.
 - Category references point to existing budgets.
 - Balance items point to existing snapshots.
-- Credit card balance items are treated as debts.
+- Debt balance items reduce net worth.
 - Visual preferences use supported local theme values.
 
 ## Backup Boundary

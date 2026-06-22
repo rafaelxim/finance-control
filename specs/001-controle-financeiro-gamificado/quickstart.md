@@ -95,9 +95,8 @@ Validation evidence:
 
 1. Open `Balanço`.
 2. Create a snapshot for the current month with:
-   - Conta Corrente: `R$ 2.000,00`
-   - Investimentos: `R$ 5.000,00`
-   - Cartão de Crédito: `R$ 1.200,00`
+   - Ativos: `R$ 7.000,00`
+   - Dívidas: `R$ 1.200,00`
 3. Save the snapshot.
 
 Expected results:
@@ -105,6 +104,11 @@ Expected results:
 - Assets total is `R$ 7.000,00`.
 - Debts total is `R$ 1.200,00`.
 - Net worth is `R$ 5.800,00`.
+
+Validation evidence:
+
+- Automated Playwright coverage: `tests/e2e/balance-snapshot.spec.ts`
+- Last validated command: `pnpm test:e2e` with Scenario 4 passing on 2026-06-21.
 
 ## Scenario 5: Financial Evolution
 
@@ -117,6 +121,11 @@ Expected results:
 - The app shows both months in chronological order.
 - Net worth variation is `R$ 800,00`.
 - Assets, debts, and net worth are visually distinguishable.
+
+Validation evidence:
+
+- Automated Playwright coverage: `tests/e2e/financial-evolution.spec.ts`
+- Last validated command: `pnpm test:e2e` with Scenario 5 passing on 2026-06-21.
 
 ## Scenario 6: Historical Preservation
 

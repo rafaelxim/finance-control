@@ -3,19 +3,24 @@ import { computed, onMounted } from 'vue'
 
 import BudgetSummary from '@/components/budget/BudgetSummary.vue'
 import MarketCategoryCard from '@/components/budget/MarketCategoryCard.vue'
+import NetWorthSummary from '@/components/finance/NetWorthSummary.vue'
 import EmptyState from '@/components/ui/EmptyState.vue'
 import LoadingState from '@/components/ui/LoadingState.vue'
+import { useBalanceStore } from '@/stores/balance.store'
 import { useBudgetStore } from '@/stores/budget.store'
 import { useExpensesStore } from '@/stores/expenses.store'
 
 const budgetStore = useBudgetStore()
 const expensesStore = useExpensesStore()
+const balanceStore = useBalanceStore()
 
 const cards = computed(() => expensesStore.categoryProgress)
+const latestNetWorth = computed(() => balanceStore.latestEvolution)
 
 onMounted(async () => {
   await budgetStore.loadMonth(budgetStore.draftMonth)
   await expensesStore.loadForBudget(budgetStore.budget?.id ?? null, budgetStore.draftMonth)
+  await balanceStore.loadHistory()
 })
 </script>
 
@@ -29,6 +34,12 @@ onMounted(async () => {
     <LoadingState v-if="budgetStore.loading || expensesStore.loading" />
 
     <template v-else>
+      <NetWorthSummary
+        v-if="latestNetWorth"
+        :totals="latestNetWorth"
+        :change="latestNetWorth.netWorthChange"
+      />
+
       <BudgetSummary
         :available-amount="budgetStore.draftAvailableAmount"
         :allocated="budgetStore.totals.allocated"

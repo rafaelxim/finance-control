@@ -127,9 +127,8 @@ User opens `Balanço` for the active month.
 ### Required Inputs
 
 - Month
-- Account items with name and amount
-- Investment items with name and amount
-- Credit card items with name and debt amount
+- Asset items with name and amount
+- Debt items with name and amount
 
 ### Actions
 
@@ -148,8 +147,8 @@ User opens `Balanço` for the active month.
 
 ### Acceptance Signals
 
-- Account and investment values increase assets.
-- Credit card values increase debts.
+- Asset values increase assets.
+- Debt values increase debts.
 - Net worth equals assets minus debts.
 - Editing a past month updates future comparisons that depend on it.
 

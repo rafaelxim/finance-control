@@ -139,33 +139,33 @@ implemented and tested as an independent increment.
 
 ## Phase 5: User Story 3 - Atualizar balanço patrimonial mensal (Priority: P3)
 
-**Goal**: User can create and edit monthly balance snapshots for accounts, investments, and credit cards, then see assets, debts, net worth, and month-over-month changes.
+**Goal**: User can create and edit monthly balance snapshots for assets and debts, then see assets, debts, net worth, and month-over-month changes.
 
-**Independent Test**: Create two monthly snapshots and verify net worth, variation, and breakdown by account, investment, and credit card.
+**Independent Test**: Create two monthly snapshots and verify net worth, variation, and breakdown by asset and debt.
 
 ### Tests for User Story 3
 
-- [ ] T070 [P] [US3] Add unit tests for balance item validation and credit card debt treatment in tests/unit/domain/balance/validation.test.ts
-- [ ] T071 [P] [US3] Add unit tests for assets, debts, net worth, and monthly variation calculations in tests/unit/domain/balance/evolution.test.ts
-- [ ] T072 [P] [US3] Add component tests for BalanceSnapshotForm item add, edit, delete, and totals in tests/unit/components/finance/BalanceSnapshotForm.test.ts
-- [ ] T073 [US3] Add Playwright scenario for monthly balance snapshot from quickstart scenario 4 in tests/e2e/balance-snapshot.spec.ts
-- [ ] T074 [US3] Add Playwright scenario for financial evolution from quickstart scenario 5 in tests/e2e/financial-evolution.spec.ts
+- [X] T070 [P] [US3] Add unit tests for balance item validation and debt treatment in tests/unit/domain/balance/validation.test.ts
+- [X] T071 [P] [US3] Add unit tests for assets, debts, net worth, and monthly variation calculations in tests/unit/domain/balance/evolution.test.ts
+- [X] T072 [P] [US3] Add component tests for BalanceSnapshotForm item add, edit, delete, and totals in tests/unit/components/finance/BalanceSnapshotForm.test.ts
+- [X] T073 [US3] Add Playwright scenario for monthly balance snapshot from quickstart scenario 4 in tests/e2e/balance-snapshot.spec.ts
+- [X] T074 [US3] Add Playwright scenario for financial evolution from quickstart scenario 5 in tests/e2e/financial-evolution.spec.ts
 
 ### Implementation for User Story 3
 
-- [ ] T075 [P] [US3] Define BalanceSnapshot, BalanceItem, and FinancialEvolution domain types in src/domain/balance/types.ts
-- [ ] T076 [P] [US3] Implement balance snapshot and item Zod schemas in src/domain/balance/schemas.ts
-- [ ] T077 [US3] Implement assets, debts, net worth, and month-over-month calculations in src/domain/balance/evolution.ts
-- [ ] T078 [US3] Implement balance snapshot and item repository functions in src/storage/balance.repository.ts
-- [ ] T079 [US3] Implement balance Pinia store for snapshots, items, totals, and historical evolution in src/stores/balance.store.ts
-- [ ] T080 [P] [US3] Create balance snapshot form component in src/components/finance/BalanceSnapshotForm.vue
-- [ ] T081 [P] [US3] Create balance item table component in src/components/finance/BalanceItemTable.vue
-- [ ] T082 [P] [US3] Create net worth summary component in src/components/finance/NetWorthSummary.vue
-- [ ] T083 [P] [US3] Create financial evolution chart component with Chart.js in src/components/finance/FinancialEvolutionChart.vue
-- [ ] T084 [US3] Implement Balanço page workflow using balance store and snapshot form in src/pages/BalancePage.vue
-- [ ] T085 [US3] Implement Evolução page with period filtering and charts in src/pages/EvolutionPage.vue
-- [ ] T086 [US3] Add dashboard net worth summary for current and previous snapshot in src/pages/DashboardPage.vue
-- [ ] T087 [US3] Validate US3 against quickstart scenarios 4 and 5 in specs/001-controle-financeiro-gamificado/quickstart.md
+- [X] T075 [P] [US3] Define BalanceSnapshot, BalanceItem, and FinancialEvolution domain types in src/domain/balance/types.ts
+- [X] T076 [P] [US3] Implement balance snapshot and item Zod schemas in src/domain/balance/schemas.ts
+- [X] T077 [US3] Implement assets, debts, net worth, and month-over-month calculations in src/domain/balance/evolution.ts
+- [X] T078 [US3] Implement balance snapshot and item repository functions in src/storage/balance.repository.ts
+- [X] T079 [US3] Implement balance Pinia store for snapshots, items, totals, and historical evolution in src/stores/balance.store.ts
+- [X] T080 [P] [US3] Create balance snapshot form component in src/components/finance/BalanceSnapshotForm.vue
+- [X] T081 [P] [US3] Create balance item table component in src/components/finance/BalanceItemTable.vue
+- [X] T082 [P] [US3] Create net worth summary component in src/components/finance/NetWorthSummary.vue
+- [X] T083 [P] [US3] Create financial evolution chart component with Chart.js in src/components/finance/FinancialEvolutionChart.vue
+- [X] T084 [US3] Implement Balanço page workflow using balance store and snapshot form in src/pages/BalancePage.vue
+- [X] T085 [US3] Implement Evolução page with period filtering and charts in src/pages/EvolutionPage.vue
+- [X] T086 [US3] Add dashboard net worth summary for current and previous snapshot in src/pages/DashboardPage.vue
+- [X] T087 [US3] Validate US3 against quickstart scenarios 4 and 5 in specs/001-controle-financeiro-gamificado/quickstart.md
 
 **Checkpoint**: Monthly balance and financial evolution work independently with saved data.
 
