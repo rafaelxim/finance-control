@@ -34,6 +34,16 @@ All commands must pass before the feature is considered complete. If a command
 is intentionally unavailable during an early implementation slice, the task list
 must document the gap and the replacement validation.
 
+Validation evidence:
+
+- Last full validation: 2026-06-22.
+- `pnpm format:check`: passed.
+- `pnpm lint`: passed.
+- `pnpm typecheck`: passed.
+- `pnpm test:unit`: 19 files and 33 tests passed.
+- `pnpm build`: passed.
+- `pnpm test:e2e`: 10 tests passed.
+
 ## Scenario 1: Configure Monthly Budget
 
 1. Open `Orçamento`.
@@ -52,6 +62,11 @@ Expected results:
 - Unallocated total is `R$ 200,00`.
 - No over-allocation warning appears.
 
+Validation evidence:
+
+- Automated Playwright coverage: `tests/e2e/monthly-budget.spec.ts`
+- Last validated command: `pnpm test:e2e` with Scenario 1 passing on 2026-06-22.
+
 ## Scenario 2: Percentage Allocation Recalculation
 
 1. Open the current budget.
@@ -63,6 +78,11 @@ Expected results:
 - `Investir` recalculates from `R$ 100,00` to `R$ 150,00`.
 - Fixed categories keep their fixed values.
 - Allocated, unallocated, and over-allocated totals update immediately.
+
+Validation evidence:
+
+- Automated Playwright coverage: `tests/e2e/monthly-budget.spec.ts`
+- Last validated command: `pnpm test:e2e` with Scenario 2 passing on 2026-06-22.
 
 ## Scenario 3: Track Expense and Card State
 
@@ -89,7 +109,7 @@ Expected results:
 Validation evidence:
 
 - Automated Playwright coverage: `tests/e2e/expense-progress.spec.ts`
-- Last validated command: `pnpm test:e2e` with Scenario 3 passing on 2026-06-21.
+- Last validated command: `pnpm test:e2e` with Scenario 3 passing on 2026-06-22.
 
 ## Scenario 4: Monthly Balance Snapshot
 
@@ -108,7 +128,7 @@ Expected results:
 Validation evidence:
 
 - Automated Playwright coverage: `tests/e2e/balance-snapshot.spec.ts`
-- Last validated command: `pnpm test:e2e` with Scenario 4 passing on 2026-06-21.
+- Last validated command: `pnpm test:e2e` with Scenario 4 passing on 2026-06-22.
 
 ## Scenario 5: Financial Evolution
 
@@ -125,7 +145,7 @@ Expected results:
 Validation evidence:
 
 - Automated Playwright coverage: `tests/e2e/financial-evolution.spec.ts`
-- Last validated command: `pnpm test:e2e` with Scenario 5 passing on 2026-06-21.
+- Last validated command: `pnpm test:e2e` with Scenario 5 passing on 2026-06-22.
 
 ## Scenario 6: Historical Preservation
 
@@ -156,6 +176,12 @@ Expected results:
 - Current-month dashboard appears within 1 second.
 - Expense/category edits update visible totals within 100 ms.
 - Evolution charts remain interactive and readable.
+
+Validation evidence:
+
+- Automated Playwright coverage: `tests/e2e/performance-history.spec.ts`
+- Seed fixture: `tests/fixtures/five-year-history.ts`
+- Last validated command: `pnpm test:e2e` with Scenario 7 passing on 2026-06-22.
 
 ## Scenario 8: Export and Import
 

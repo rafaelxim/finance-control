@@ -169,3 +169,15 @@ Before applying imported data, the app must validate:
 
 Export/import handles financial data and visual preferences only. It must not
 embed decorative media or external brand assets.
+
+## Compliance Review
+
+Reviewed on 2026-06-22:
+
+- IndexedDB indexes match the required collections in `src/storage/database.ts`.
+- Monetary values are persisted as decimal strings through domain schemas,
+  repository normalization, and export/import validation.
+- Export/import validates references for categories, expenses, and balance items
+  before replacing local data.
+- Visual preferences are exported as local configuration only; decorative media
+  and external brand assets remain outside the backup boundary.

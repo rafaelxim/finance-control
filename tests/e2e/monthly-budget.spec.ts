@@ -19,3 +19,20 @@ test('creates a monthly budget with fixed category cards', async ({ page }) => {
     /R\$\s*1\.000,00/
   )
 })
+
+test('recalculates percentage allocations when monthly amount changes before saving', async ({
+  page
+}) => {
+  await page.goto('/orcamento')
+
+  await page.getByRole('button', { name: 'Adicionar categoria' }).click()
+  await page.locator('#category-name-3').fill('Investir')
+  await page.locator('#category-type-3').selectOption('percentage')
+  await page.locator('#category-percent-3').fill('10')
+
+  await expect(page.getByRole('article', { name: /Investir/ })).toContainText(/R\$\s*100,00/)
+
+  await page.getByLabel('Valor mensal disponível').fill('1500,00')
+  await expect(page.getByRole('article', { name: /Investir/ })).toContainText(/R\$\s*150,00/)
+  await expect(page.getByRole('article', { name: /Aluguel/ })).toContainText(/R\$\s*400,00/)
+})

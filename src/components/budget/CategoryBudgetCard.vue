@@ -11,7 +11,7 @@ defineProps<{
 </script>
 
 <template>
-  <article class="category-card">
+  <article class="category-card" :aria-label="name || 'Nova categoria'">
     <div class="category-card__media">
       <span aria-hidden="true">{{ (name || 'FC').slice(0, 2).toUpperCase() }}</span>
     </div>

@@ -13,13 +13,13 @@ const links = [
 
 <template>
   <div class="app-shell">
-    <aside class="app-shell__sidebar" aria-label="Navegação principal">
+    <aside class="app-shell__sidebar">
       <div class="brand">
         <span class="brand__mark">FC</span>
         <span class="brand__text">Finance Control</span>
       </div>
 
-      <nav class="nav-list">
+      <nav class="nav-list" aria-label="Navegação principal">
         <RouterLink v-for="link in links" :key="link.to" :to="link.to" class="nav-link">
           <component :is="link.icon" :size="18" aria-hidden="true" />
           <span>{{ link.label }}</span>

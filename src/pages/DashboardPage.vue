@@ -28,7 +28,7 @@ onMounted(async () => {
   <section class="page">
     <header class="page__header">
       <h1>Dashboard</h1>
-      <p>Resumo do orçamento atual e dos cards iniciais por categoria.</p>
+      <p>Resumo do orçamento atual, gastos por categoria e patrimônio recente.</p>
     </header>
 
     <LoadingState v-if="budgetStore.loading || expensesStore.loading" />

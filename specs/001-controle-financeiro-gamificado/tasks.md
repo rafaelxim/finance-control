@@ -206,15 +206,15 @@ implemented and tested as an independent increment.
 
 **Purpose**: Finish quality, performance, accessibility, documentation, and full quickstart validation across all stories.
 
-- [ ] T103 [P] Seed five-year performance fixture data for budgets, categories, expenses, and snapshots in tests/fixtures/five-year-history.ts
-- [ ] T104 Add performance validation test for current-month dashboard and evolution charts in tests/e2e/performance-history.spec.ts
-- [ ] T105 Add accessibility checks for navigation, forms, card states, and image alt text in tests/e2e/accessibility.spec.ts
-- [ ] T106 [P] Add README setup, asset placement, and private-study usage instructions in README.md
-- [ ] T107 [P] Add developer notes for DESIGN-binance.md usage and export boundary in README.md
-- [ ] T108 Run lint, formatting, typecheck, unit, integration, and e2e commands and record results in specs/001-controle-financeiro-gamificado/quickstart.md
-- [ ] T109 Validate all quickstart scenarios 1 through 8 manually or through Playwright and record evidence in specs/001-controle-financeiro-gamificado/quickstart.md
-- [ ] T110 Review UI terminology, loading states, empty states, validation states, and error states for consistency in src/pages/DashboardPage.vue
-- [ ] T111 Review local data contract compliance for indexes, decimal strings, and preference export boundary in specs/001-controle-financeiro-gamificado/contracts/local-data-contract.md
+- [X] T103 [P] Seed five-year performance fixture data for budgets, categories, expenses, and snapshots in tests/fixtures/five-year-history.ts
+- [X] T104 Add performance validation test for current-month dashboard and evolution charts in tests/e2e/performance-history.spec.ts
+- [X] T105 Add accessibility checks for navigation, forms, card states, and image alt text in tests/e2e/accessibility.spec.ts
+- [X] T106 [P] Add README setup, asset placement, and private-study usage instructions in README.md
+- [X] T107 [P] Add developer notes for DESIGN-binance.md usage and export boundary in README.md
+- [X] T108 Run lint, formatting, typecheck, unit, integration, and e2e commands and record results in specs/001-controle-financeiro-gamificado/quickstart.md
+- [X] T109 Validate all quickstart scenarios 1 through 8 manually or through Playwright and record evidence in specs/001-controle-financeiro-gamificado/quickstart.md
+- [X] T110 Review UI terminology, loading states, empty states, validation states, and error states for consistency in src/pages/DashboardPage.vue
+- [X] T111 Review local data contract compliance for indexes, decimal strings, and preference export boundary in specs/001-controle-financeiro-gamificado/contracts/local-data-contract.md
 
 ---
 

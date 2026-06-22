@@ -22,9 +22,11 @@ const swatches = ['#fcd535', '#0ecb81', '#f6465d', '#3b82f6']
 
     <div v-if="categories.length" class="visual-selector__list">
       <label v-for="category in categories" :key="category.id" class="visual-selector__item">
-        <span>{{ category.name }}</span>
+        <span :id="`visual-category-${category.id}`">{{ category.name }}</span>
         <select
+          :id="`visual-category-color-${category.id}`"
           class="input"
+          :aria-labelledby="`visual-category-${category.id}`"
           :value="modelValue[category.id] ?? swatches[0]"
           @change="
             $emit('update:modelValue', {
