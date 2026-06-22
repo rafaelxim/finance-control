@@ -11,6 +11,7 @@ export const router = createRouter({
   history: createWebHistory(),
   routes: [
     { path: '/', name: 'dashboard', component: DashboardPage },
+    { path: '/dashboard', redirect: '/' },
     { path: '/orcamento', name: 'budget', component: BudgetPage },
     { path: '/despesas', name: 'expenses', component: ExpensesPage },
     { path: '/balanco', name: 'balance', component: BalancePage },

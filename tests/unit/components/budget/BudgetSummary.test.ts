@@ -16,7 +16,11 @@ describe('BudgetSummary', () => {
 
     expect(wrapper.text()).toContain('Disponível')
     expect(wrapper.text()).toContain('Alocado')
+    expect(wrapper.text()).toContain('Não alocado')
     expect(wrapper.text()).toContain('Excedente')
     expect(wrapper.text()).toContain('200')
+    expect(wrapper.get('section').attributes('aria-labelledby')).toBe('budget-summary-title')
+    expect(wrapper.find('.danger').exists()).toBe(true)
+    expect(wrapper.findAll('.money--primary').length).toBe(4)
   })
 })

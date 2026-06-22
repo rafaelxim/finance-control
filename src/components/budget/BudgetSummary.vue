@@ -1,31 +1,40 @@
 <script setup lang="ts">
 import { formatBRL } from '@/domain/shared/money'
 
-defineProps<{
-  availableAmount: string
-  allocated: string
-  unallocated: string
-  overAllocated: string
-}>()
+withDefaults(
+  defineProps<{
+    availableAmount: string
+    allocated: string
+    unallocated: string
+    overAllocated: string
+    title?: string
+  }>(),
+  {
+    title: 'Resumo do orçamento'
+  }
+)
 </script>
 
 <template>
-  <section class="budget-summary panel" aria-label="Resumo do orçamento">
-    <div>
-      <span>Disponível</span>
-      <strong>{{ formatBRL(availableAmount) }}</strong>
-    </div>
-    <div>
-      <span>Alocado</span>
-      <strong>{{ formatBRL(allocated) }}</strong>
-    </div>
-    <div>
-      <span>Não alocado</span>
-      <strong>{{ formatBRL(unallocated) }}</strong>
-    </div>
-    <div :class="{ danger: overAllocated !== '0.00' }">
-      <span>Excedente</span>
-      <strong>{{ formatBRL(overAllocated) }}</strong>
+  <section class="budget-summary panel" aria-labelledby="budget-summary-title">
+    <h2 id="budget-summary-title" class="panel__heading">{{ title }}</h2>
+    <div class="metric-grid">
+      <div class="metric positive">
+        <span class="metric__label">Disponível</span>
+        <strong class="money money--primary">{{ formatBRL(availableAmount) }}</strong>
+      </div>
+      <div class="metric">
+        <span class="metric__label">Alocado</span>
+        <strong class="money money--primary">{{ formatBRL(allocated) }}</strong>
+      </div>
+      <div class="metric positive">
+        <span class="metric__label">Não alocado</span>
+        <strong class="money money--primary">{{ formatBRL(unallocated) }}</strong>
+      </div>
+      <div class="metric" :class="{ danger: overAllocated !== '0.00' }">
+        <span class="metric__label">Excedente</span>
+        <strong class="money money--primary">{{ formatBRL(overAllocated) }}</strong>
+      </div>
     </div>
   </section>
 </template>
@@ -33,24 +42,11 @@ defineProps<{
 <style scoped>
 .budget-summary {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-  gap: 14px;
+  gap: 16px;
 }
 
-.budget-summary div {
-  display: grid;
-  gap: 4px;
-}
-
-.budget-summary span {
-  color: var(--color-muted);
-  font-size: 0.9rem;
-}
-
-.budget-summary strong {
-  font-family: var(--font-number);
-  font-variant-numeric: tabular-nums;
-  font-size: 1.25rem;
+.positive strong {
+  color: var(--color-up);
 }
 
 .danger strong {

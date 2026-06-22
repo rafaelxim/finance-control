@@ -56,6 +56,9 @@ test('exposes consistent navigation, headings, labels, and non-color state text'
   }
 
   await page.goto('/')
+  await expect(page.getByRole('region', { name: /Resumo principal/ })).toBeVisible()
+  await expect(page.getByRole('region', { name: 'Patrimônio' })).toBeVisible()
+  await expect(page.getByRole('region', { name: 'Orçamento do mês' })).toBeVisible()
   await expect(page.getByRole('article', { name: /Categoria 01/ })).toContainText(
     /Seguro|Atenção|Limite atingido|Limite excedido/
   )

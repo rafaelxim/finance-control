@@ -34,6 +34,10 @@ const stateDescription = computed(() => {
 })
 
 const progressWidth = computed(() => `${Math.min(Number(props.progress.usagePercent), 100)}%`)
+const usageLabel = computed(() => `${Number(props.progress.usagePercent).toFixed(0)}% usado`)
+const remainingLabel = computed(() =>
+  toDecimal(props.progress.remaining).lt(0) ? 'Déficit' : 'Restante'
+)
 </script>
 
 <template>
@@ -50,6 +54,14 @@ const progressWidth = computed(() => `${Math.min(Number(props.progress.usagePerc
       <span class="market-card__badge">{{ stateLabel }}</span>
     </header>
 
+    <div class="market-card__focus">
+      <div>
+        <span>{{ remainingLabel }}</span>
+        <strong class="money money--primary">{{ formatBRL(progress.remaining) }}</strong>
+      </div>
+      <span class="market-card__usage">{{ usageLabel }}</span>
+    </div>
+
     <div class="market-card__track" aria-hidden="true">
       <span :style="{ width: progressWidth }" />
     </div>
@@ -57,15 +69,15 @@ const progressWidth = computed(() => `${Math.min(Number(props.progress.usagePerc
     <dl class="market-card__metrics">
       <div>
         <dt>Limite</dt>
-        <dd>{{ formatBRL(progress.limit) }}</dd>
+        <dd class="money money--secondary">{{ formatBRL(progress.limit) }}</dd>
       </div>
       <div>
         <dt>Gasto</dt>
-        <dd>{{ formatBRL(progress.spent) }}</dd>
+        <dd class="money money--secondary">{{ formatBRL(progress.spent) }}</dd>
       </div>
       <div>
-        <dt>Restante</dt>
-        <dd>{{ formatBRL(progress.remaining) }}</dd>
+        <dt>Uso</dt>
+        <dd class="money money--secondary">{{ usageLabel }}</dd>
       </div>
     </dl>
   </article>
@@ -74,8 +86,8 @@ const progressWidth = computed(() => `${Math.min(Number(props.progress.usagePerc
 <style scoped>
 .market-card {
   display: grid;
-  gap: 14px;
-  min-height: 184px;
+  gap: 12px;
+  min-height: 194px;
   border: 1px solid var(--color-border);
   border-radius: var(--radius);
   background: var(--color-surface);
@@ -115,6 +127,38 @@ const progressWidth = computed(() => `${Math.min(Number(props.progress.usagePerc
   padding: 4px 8px;
 }
 
+.market-card__focus {
+  display: flex;
+  min-width: 0;
+  align-items: end;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.market-card__focus div {
+  display: grid;
+  min-width: 0;
+  gap: 3px;
+}
+
+.market-card__focus span {
+  color: var(--color-muted);
+  font-size: 0.78rem;
+}
+
+.market-card__focus strong {
+  color: var(--state-color);
+}
+
+.market-card__usage {
+  flex: 0 0 auto;
+  color: var(--state-color) !important;
+  font-family: var(--font-number);
+  font-size: 0.86rem !important;
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+}
+
 .market-card__track {
   height: 8px;
   overflow: hidden;
@@ -142,10 +186,6 @@ const progressWidth = computed(() => `${Math.min(Number(props.progress.usagePerc
 
 .market-card dd {
   margin: 3px 0 0;
-  font-family: var(--font-number);
-  font-size: 0.96rem;
-  font-variant-numeric: tabular-nums;
-  font-weight: 800;
 }
 
 .market-card[data-state='safe'] {
@@ -166,5 +206,11 @@ const progressWidth = computed(() => `${Math.min(Number(props.progress.usagePerc
 .market-card[data-state='overLimit'] {
   --state-color: var(--color-state-over);
   --state-border: rgba(246, 70, 93, 0.42);
+}
+
+@media (max-width: 420px) {
+  .market-card__metrics {
+    grid-template-columns: 1fr;
+  }
 }
 </style>

@@ -14,7 +14,8 @@ test('keeps dashboard and evolution responsive with five years of local history'
   const dashboardStartedAt = Date.now()
   await page.goto('/')
   await expect(page.getByRole('heading', { name: 'Dashboard' })).toBeVisible()
-  await expect(page.getByRole('region', { name: 'Resumo do orçamento' })).toContainText(
+  await expect(page.getByRole('region', { name: /Resumo principal/ })).toBeVisible()
+  await expect(page.getByRole('region', { name: 'Orçamento do mês' })).toContainText(
     /R\$\s*10\.475,00/
   )
   await expect(page.getByRole('article', { name: /Categoria 01/ })).toContainText('Seguro')

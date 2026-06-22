@@ -17,6 +17,7 @@ test('tracks expenses and updates category progress cards', async ({ page }) => 
   await expect(page.getByLabel('Comida: Seguro')).toBeVisible()
   await expect(page.getByText(/R\$\s*75,00/)).toBeVisible()
   await expect(page.getByText(/R\$\s*225,00/)).toBeVisible()
+  await expect(page.getByLabel('Comida: Seguro')).toContainText('25% usado')
 
   await page.goto('/despesas')
   await page.getByLabel('Valor').fill('250,00')
@@ -30,4 +31,6 @@ test('tracks expenses and updates category progress cards', async ({ page }) => 
   await expect(page.getByLabel('Comida: Limite excedido')).toBeVisible()
   await expect(page.getByText(/R\$\s*325,00/)).toBeVisible()
   await expect(page.getByText(/-R\$\s*25,00/)).toBeVisible()
+  await expect(page.getByLabel('Comida: Limite excedido')).toContainText('108% usado')
+  await expect(page.getByLabel('Comida: Limite excedido')).toContainText('Déficit')
 })

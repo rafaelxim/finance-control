@@ -18,10 +18,10 @@
 
 **Purpose**: Confirm the active feature context and inspect current dashboard behavior before changing code.
 
-- [ ] T001 Verify `.specify/feature.json` points to `specs/002-dashboard-visual-hierarchy` and update it if necessary
-- [ ] T002 Review current dashboard route behavior in `src/app/router/index.ts` and current dashboard composition in `src/pages/DashboardPage.vue`
-- [ ] T003 [P] Review existing dashboard summary styling tokens in `src/app/styles/main.css`
-- [ ] T004 [P] Review existing component tests for summary and category cards under `tests/unit/components/`
+- [X] T001 Verify `.specify/feature.json` points to `specs/002-dashboard-visual-hierarchy` and update it if necessary
+- [X] T002 Review current dashboard route behavior in `src/app/router/index.ts` and current dashboard composition in `src/pages/DashboardPage.vue`
+- [X] T003 [P] Review existing dashboard summary styling tokens in `src/app/styles/main.css`
+- [X] T004 [P] Review existing component tests for summary and category cards under `tests/unit/components/`
 
 ---
 
@@ -31,10 +31,10 @@
 
 **CRITICAL**: No user story work should begin until this phase is complete.
 
-- [ ] T005 Add shared dashboard value/state CSS utilities and tighten card radius tokens in `src/app/styles/main.css`
-- [ ] T006 Add dashboard route handling so `/dashboard` cannot render an empty main area in `src/app/router/index.ts`
-- [ ] T007 [P] Add a focused route regression test for `/dashboard` behavior in `tests/e2e/dashboard-visual-hierarchy.spec.ts`
-- [ ] T008 Define dashboard financial state helper types or local view-model interfaces in `src/pages/DashboardPage.vue`
+- [X] T005 Add shared dashboard value/state CSS utilities and tighten card radius tokens in `src/app/styles/main.css`
+- [X] T006 Add dashboard route handling so `/dashboard` cannot render an empty main area in `src/app/router/index.ts`
+- [X] T007 [P] Add a focused route regression test for `/dashboard` behavior in `tests/e2e/dashboard-visual-hierarchy.spec.ts`
+- [X] T008 Define dashboard financial state helper types or local view-model interfaces in `src/pages/DashboardPage.vue`
 
 **Checkpoint**: Shared dashboard route and styling foundation are ready.
 
@@ -48,16 +48,16 @@
 
 ### Tests for User Story 1
 
-- [ ] T009 [P] [US1] Add component tests for balance-backed and budget-backed top summary selection in `tests/unit/components/dashboard/DashboardFinancialSummary.test.ts`
-- [ ] T010 [P] [US1] Add Playwright coverage for top summary visibility before detailed sections in `tests/e2e/dashboard-visual-hierarchy.spec.ts`
+- [X] T009 [P] [US1] Add component tests for balance-backed and budget-backed top summary selection in `tests/unit/components/dashboard/DashboardFinancialSummary.test.ts`
+- [X] T010 [P] [US1] Add Playwright coverage for top summary visibility before detailed sections in `tests/e2e/dashboard-visual-hierarchy.spec.ts`
 
 ### Implementation for User Story 1
 
-- [ ] T011 [US1] Create `src/components/finance/DashboardFinancialSummary.vue` to render primary amount, comparison/context, source label, and state text
-- [ ] T012 [US1] Add computed dashboard financial summary selection in `src/pages/DashboardPage.vue` using existing balance, budget, and expense store data
-- [ ] T013 [US1] Place `DashboardFinancialSummary` before patrimony, budget, and category sections in `src/pages/DashboardPage.vue`
-- [ ] T014 [US1] Style top summary states and monetary hierarchy in `src/components/finance/DashboardFinancialSummary.vue`
-- [ ] T015 [US1] Run focused unit and e2e checks for US1 paths documented in `specs/002-dashboard-visual-hierarchy/quickstart.md`
+- [X] T011 [US1] Create `src/components/finance/DashboardFinancialSummary.vue` to render primary amount, comparison/context, source label, and state text
+- [X] T012 [US1] Add computed dashboard financial summary selection in `src/pages/DashboardPage.vue` using existing balance, budget, and expense store data
+- [X] T013 [US1] Place `DashboardFinancialSummary` before patrimony, budget, and category sections in `src/pages/DashboardPage.vue`
+- [X] T014 [US1] Style top summary states and monetary hierarchy in `src/components/finance/DashboardFinancialSummary.vue`
+- [X] T015 [US1] Run focused unit and e2e checks for US1 paths documented in `specs/002-dashboard-visual-hierarchy/quickstart.md`
 
 **Checkpoint**: User Story 1 is independently functional and testable as the MVP.
 
@@ -71,17 +71,17 @@
 
 ### Tests for User Story 2
 
-- [ ] T016 [P] [US2] Update or add BudgetSummary component tests for available, allocated, unallocated, and excess state labels in `tests/unit/components/budget/BudgetSummary.test.ts`
-- [ ] T017 [P] [US2] Add NetWorthSummary component tests for assets, debts, net worth, positive variation, negative variation, and neutral variation in `tests/unit/components/finance/NetWorthSummary.test.ts`
-- [ ] T018 [P] [US2] Add Playwright assertions for separate patrimony and budget section labels in `tests/e2e/dashboard-visual-hierarchy.spec.ts`
+- [X] T016 [P] [US2] Update or add BudgetSummary component tests for available, allocated, unallocated, and excess state labels in `tests/unit/components/budget/BudgetSummary.test.ts`
+- [X] T017 [P] [US2] Add NetWorthSummary component tests for assets, debts, net worth, positive variation, negative variation, and neutral variation in `tests/unit/components/finance/NetWorthSummary.test.ts`
+- [X] T018 [P] [US2] Add Playwright assertions for separate patrimony and budget section labels in `tests/e2e/dashboard-visual-hierarchy.spec.ts`
 
 ### Implementation for User Story 2
 
-- [ ] T019 [US2] Update `src/components/finance/NetWorthSummary.vue` to include visible section heading, metric roles, and non-color state indicators
-- [ ] T020 [US2] Update `src/components/budget/BudgetSummary.vue` to include visible section heading, metric roles, and excess/unallocated state treatments
-- [ ] T021 [US2] Update dashboard section ordering and spacing around summary sections in `src/pages/DashboardPage.vue`
-- [ ] T022 [US2] Refine summary panel density and responsive grid behavior in `src/app/styles/main.css`
-- [ ] T023 [US2] Run focused unit and e2e checks for US2 paths documented in `specs/002-dashboard-visual-hierarchy/quickstart.md`
+- [X] T019 [US2] Update `src/components/finance/NetWorthSummary.vue` to include visible section heading, metric roles, and non-color state indicators
+- [X] T020 [US2] Update `src/components/budget/BudgetSummary.vue` to include visible section heading, metric roles, and excess/unallocated state treatments
+- [X] T021 [US2] Update dashboard section ordering and spacing around summary sections in `src/pages/DashboardPage.vue`
+- [X] T022 [US2] Refine summary panel density and responsive grid behavior in `src/app/styles/main.css`
+- [X] T023 [US2] Run focused unit and e2e checks for US2 paths documented in `specs/002-dashboard-visual-hierarchy/quickstart.md`
 
 **Checkpoint**: User Stories 1 and 2 work independently and together.
 
@@ -95,17 +95,17 @@
 
 ### Tests for User Story 3
 
-- [ ] T024 [P] [US3] Expand MarketCategoryCard tests for usage percentage, remaining-first hierarchy, and safe/warning/limit/over-limit labels in `tests/unit/components/budget/MarketCategoryCard.test.ts`
-- [ ] T025 [P] [US3] Add Playwright assertions for warning and over-limit categories being identifiable without manual subtraction in `tests/e2e/expense-progress.spec.ts`
-- [ ] T026 [P] [US3] Add mobile category-card fit assertions in `tests/e2e/dashboard-visual-hierarchy.spec.ts`
+- [X] T024 [P] [US3] Expand MarketCategoryCard tests for usage percentage, remaining-first hierarchy, and safe/warning/limit/over-limit labels in `tests/unit/components/budget/MarketCategoryCard.test.ts`
+- [X] T025 [P] [US3] Add Playwright assertions for warning and over-limit categories being identifiable without manual subtraction in `tests/e2e/expense-progress.spec.ts`
+- [X] T026 [P] [US3] Add mobile category-card fit assertions in `tests/e2e/dashboard-visual-hierarchy.spec.ts`
 
 ### Implementation for User Story 3
 
-- [ ] T027 [US3] Reorder `src/components/budget/MarketCategoryCard.vue` markup to prioritize remaining amount, usage percentage, and state before supporting metrics
-- [ ] T028 [US3] Update `src/components/budget/MarketCategoryCard.vue` copy for no-limit spending, exact-limit, warning, safe, and over-limit states
-- [ ] T029 [US3] Refine `src/components/budget/MarketCategoryCard.vue` styles for denser layout, state badges, progress track, and mobile text fit
-- [ ] T030 [US3] Ensure `src/domain/gamification/category-progress.ts` exposes enough state data for no-limit, exact-limit, and over-limit card states without adding persistence
-- [ ] T031 [US3] Run focused unit and e2e checks for US3 paths documented in `specs/002-dashboard-visual-hierarchy/quickstart.md`
+- [X] T027 [US3] Reorder `src/components/budget/MarketCategoryCard.vue` markup to prioritize remaining amount, usage percentage, and state before supporting metrics
+- [X] T028 [US3] Update `src/components/budget/MarketCategoryCard.vue` copy for no-limit spending, exact-limit, warning, safe, and over-limit states
+- [X] T029 [US3] Refine `src/components/budget/MarketCategoryCard.vue` styles for denser layout, state badges, progress track, and mobile text fit
+- [X] T030 [US3] Ensure `src/domain/gamification/category-progress.ts` exposes enough state data for no-limit, exact-limit, and over-limit card states without adding persistence
+- [X] T031 [US3] Run focused unit and e2e checks for US3 paths documented in `specs/002-dashboard-visual-hierarchy/quickstart.md`
 
 **Checkpoint**: Category risk can be scanned directly from dashboard cards.
 
@@ -119,17 +119,17 @@
 
 ### Tests for User Story 4
 
-- [ ] T032 [P] [US4] Add component assertions for long BRL values in `tests/unit/components/dashboard/DashboardFinancialSummary.test.ts`
-- [ ] T033 [P] [US4] Add responsive no-overlap assertions for dashboard monetary values in `tests/e2e/dashboard-visual-hierarchy.spec.ts`
+- [X] T032 [P] [US4] Add component assertions for long BRL values in `tests/unit/components/dashboard/DashboardFinancialSummary.test.ts`
+- [X] T033 [P] [US4] Add responsive no-overlap assertions for dashboard monetary values in `tests/e2e/dashboard-visual-hierarchy.spec.ts`
 
 ### Implementation for User Story 4
 
-- [ ] T034 [US4] Add shared monetary typography utility classes in `src/app/styles/main.css`
-- [ ] T035 [US4] Apply shared monetary typography classes in `src/components/finance/DashboardFinancialSummary.vue`
-- [ ] T036 [US4] Apply shared monetary typography classes in `src/components/finance/NetWorthSummary.vue`
-- [ ] T037 [US4] Apply shared monetary typography classes in `src/components/budget/BudgetSummary.vue`
-- [ ] T038 [US4] Apply shared monetary typography classes in `src/components/budget/MarketCategoryCard.vue`
-- [ ] T039 [US4] Run focused mobile and desktop visual validation from `specs/002-dashboard-visual-hierarchy/quickstart.md`
+- [X] T034 [US4] Add shared monetary typography utility classes in `src/app/styles/main.css`
+- [X] T035 [US4] Apply shared monetary typography classes in `src/components/finance/DashboardFinancialSummary.vue`
+- [X] T036 [US4] Apply shared monetary typography classes in `src/components/finance/NetWorthSummary.vue`
+- [X] T037 [US4] Apply shared monetary typography classes in `src/components/budget/BudgetSummary.vue`
+- [X] T038 [US4] Apply shared monetary typography classes in `src/components/budget/MarketCategoryCard.vue`
+- [X] T039 [US4] Run focused mobile and desktop visual validation from `specs/002-dashboard-visual-hierarchy/quickstart.md`
 
 **Checkpoint**: Dashboard values are consistently readable across viewport sizes.
 
@@ -139,15 +139,15 @@
 
 **Purpose**: Validate the full feature, clean up implementation, and ensure no regressions in related flows.
 
-- [ ] T040 [P] Update accessibility checks for dashboard headings, regions, and state labels in `tests/e2e/accessibility.spec.ts`
-- [ ] T041 [P] Verify seeded-history dashboard performance remains within expectation using `tests/e2e/performance-history.spec.ts`
-- [ ] T042 Run `npm run typecheck` and fix any type errors in affected `src/` and `tests/` files
-- [ ] T043 Run `npm run lint` and fix lint issues in affected `src/` and `tests/` files
-- [ ] T044 Run `npm run format:check` and format affected files if needed
-- [ ] T045 Run `npm run test:unit` and fix unit/component regressions
-- [ ] T046 Run `npm run test:e2e` and fix dashboard, expense-progress, accessibility, or performance regressions
-- [ ] T047 Perform manual desktop review of `/` against `specs/002-dashboard-visual-hierarchy/contracts/dashboard-ui-contract.md`
-- [ ] T048 Perform manual 360px mobile review of `/` against `specs/002-dashboard-visual-hierarchy/contracts/dashboard-ui-contract.md`
+- [X] T040 [P] Update accessibility checks for dashboard headings, regions, and state labels in `tests/e2e/accessibility.spec.ts`
+- [X] T041 [P] Verify seeded-history dashboard performance remains within expectation using `tests/e2e/performance-history.spec.ts`
+- [X] T042 Run `npm run typecheck` and fix any type errors in affected `src/` and `tests/` files
+- [X] T043 Run `npm run lint` and fix lint issues in affected `src/` and `tests/` files
+- [X] T044 Run `npm run format:check` and format affected files if needed
+- [X] T045 Run `npm run test:unit` and fix unit/component regressions
+- [X] T046 Run `npm run test:e2e` and fix dashboard, expense-progress, accessibility, or performance regressions
+- [X] T047 Perform manual desktop review of `/` against `specs/002-dashboard-visual-hierarchy/contracts/dashboard-ui-contract.md`
+- [X] T048 Perform manual 360px mobile review of `/` against `specs/002-dashboard-visual-hierarchy/contracts/dashboard-ui-contract.md`
 
 ---
 
