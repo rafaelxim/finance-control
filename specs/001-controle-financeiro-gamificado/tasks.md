@@ -179,24 +179,24 @@ implemented and tested as an independent increment.
 
 ### Tests for User Story 4
 
-- [ ] T088 [P] [US4] Add unit tests for historical month preservation when categories are renamed or archived in tests/unit/domain/budget/history-preservation.test.ts
-- [ ] T089 [P] [US4] Add unit tests for export/import validation and missing reference errors in tests/unit/domain/shared/data-export.test.ts
-- [ ] T090 [P] [US4] Add integration tests for local data export and import round trip in tests/integration/storage/data-export.test.ts
-- [ ] T091 [US4] Add Playwright scenario for historical preservation from quickstart scenario 6 in tests/e2e/history-preservation.spec.ts
-- [ ] T092 [US4] Add Playwright scenario for export and import from quickstart scenario 8 in tests/e2e/export-import.spec.ts
+- [X] T088 [P] [US4] Add unit tests for historical month preservation when categories are renamed or archived in tests/unit/domain/budget/history-preservation.test.ts
+- [X] T089 [P] [US4] Add unit tests for export/import validation and missing reference errors in tests/unit/domain/shared/data-export.test.ts
+- [X] T090 [P] [US4] Add integration tests for local data export and import round trip in tests/integration/storage/data-export.test.ts
+- [X] T091 [US4] Add Playwright scenario for historical preservation from quickstart scenario 6 in tests/e2e/history-preservation.spec.ts
+- [X] T092 [US4] Add Playwright scenario for export and import from quickstart scenario 8 in tests/e2e/export-import.spec.ts
 
 ### Implementation for User Story 4
 
-- [ ] T093 [P] [US4] Define export schema version, export payload types, and visual preference types in src/domain/shared/data-export.ts
-- [ ] T094 [US4] Implement historical budget copy and archive rules in src/domain/budget/history.ts
-- [ ] T095 [US4] Implement export/import validation with Zod and reference checks in src/domain/shared/data-export.validation.ts
-- [ ] T096 [US4] Implement data export/import repository orchestration in src/storage/data-export.repository.ts
-- [ ] T097 [US4] Extend budget store with rename, archive, and copy-forward behavior in src/stores/budget.store.ts
-- [ ] T098 [US4] Create settings page for visual preferences, export, and import actions in src/pages/SettingsPage.vue
-- [ ] T099 [P] [US4] Create export/import panel component with validation results in src/components/finance/DataBackupPanel.vue
-- [ ] T100 [P] [US4] Create category visual preference selector component in src/components/budget/CategoryVisualSelector.vue
-- [ ] T101 [US4] Wire settings route import and navigation state in src/app/router/index.ts
-- [ ] T102 [US4] Validate US4 against quickstart scenarios 6 and 8 in specs/001-controle-financeiro-gamificado/quickstart.md
+- [X] T093 [P] [US4] Define export schema version, export payload types, and visual preference types in src/domain/shared/data-export.ts
+- [X] T094 [US4] Implement historical budget copy and archive rules in src/domain/budget/history.ts
+- [X] T095 [US4] Implement export/import validation with Zod and reference checks in src/domain/shared/data-export.validation.ts
+- [X] T096 [US4] Implement data export/import repository orchestration in src/storage/data-export.repository.ts
+- [X] T097 [US4] Extend budget store with rename, archive, and copy-forward behavior in src/stores/budget.store.ts
+- [X] T098 [US4] Create settings page for visual preferences, export, and import actions in src/pages/SettingsPage.vue
+- [X] T099 [P] [US4] Create export/import panel component with validation results in src/components/finance/DataBackupPanel.vue
+- [X] T100 [P] [US4] Create category visual preference selector component in src/components/budget/CategoryVisualSelector.vue
+- [X] T101 [US4] Wire settings route import and navigation state in src/app/router/index.ts
+- [X] T102 [US4] Validate US4 against quickstart scenarios 6 and 8 in specs/001-controle-financeiro-gamificado/quickstart.md
 
 **Checkpoint**: Historical editing, theme assignment, and local backup workflows work independently.
 

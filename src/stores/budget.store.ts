@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 
 import { calculateBudgetTotals, withComputedLimits } from '@/domain/budget/allocation'
+import { createHistoricalBudgetCopy } from '@/domain/budget/history'
 import type { BudgetCategory, BudgetDraftCategoryInput, MonthlyBudget } from '@/domain/budget/types'
 import type { Expense } from '@/domain/expenses/types'
 import { calculateCategoryProgress } from '@/domain/gamification/category-progress'
@@ -118,6 +119,22 @@ export const useBudgetStore = defineStore('budget', {
         ...category,
         allocationValue: category.allocationValue || '0.00'
       }
+    },
+    renameCategory(index: number, name: string) {
+      const category = this.draftCategories[index]
+      if (!category) return
+      this.updateCategory(index, { ...category, name })
+    },
+    archiveCategory(index: number) {
+      this.removeCategory(index)
+    },
+    async copyFromMonth(month: MonthKey) {
+      const { budget, categories } = await getBudgetByMonth(month)
+      if (!budget) return false
+
+      this.draftAvailableAmount = budget.availableAmount
+      this.draftCategories = createHistoricalBudgetCopy(categories)
+      return true
     },
     removeCategory(index: number) {
       this.draftCategories.splice(index, 1)

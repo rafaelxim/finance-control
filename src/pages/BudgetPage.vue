@@ -11,6 +11,7 @@ import FormError from '@/components/ui/FormError.vue'
 import LoadingState from '@/components/ui/LoadingState.vue'
 import { budgetCategorySchema } from '@/domain/budget/schemas'
 import type { BudgetDraftCategoryInput } from '@/domain/budget/types'
+import type { MonthKey } from '@/domain/shared/types'
 import { flattenZodErrors } from '@/domain/shared/validation'
 import { useBudgetStore } from '@/stores/budget.store'
 
@@ -30,6 +31,11 @@ onMounted(() => {
 function updateCategory(index: number, category: BudgetDraftCategoryInput) {
   budgetStore.updateCategory(index, category)
   saved.value = false
+}
+
+async function updateMonth(month: MonthKey) {
+  saved.value = false
+  await budgetStore.loadMonth(month)
 }
 
 function validateBudget() {
@@ -79,8 +85,9 @@ async function saveBudget() {
 
     <template v-else>
       <MonthlyBudgetForm
-        v-model:month="budgetStore.draftMonth"
+        :month="budgetStore.draftMonth"
         :available-amount="budgetStore.draftAvailableAmount"
+        @update:month="updateMonth"
         @update:available-amount="budgetStore.setAvailableAmount"
       />
 

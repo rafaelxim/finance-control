@@ -1,8 +1,90 @@
+<script setup lang="ts">
+import { onMounted, ref } from 'vue'
+
+import CategoryVisualSelector from '@/components/budget/CategoryVisualSelector.vue'
+import DataBackupPanel from '@/components/finance/DataBackupPanel.vue'
+import {
+  clearLocalData,
+  exportLocalData,
+  importLocalData,
+  saveVisualPreferences
+} from '@/storage/data-export.repository'
+import { useBalanceStore } from '@/stores/balance.store'
+import { useBudgetStore } from '@/stores/budget.store'
+import { useExpensesStore } from '@/stores/expenses.store'
+
+const budgetStore = useBudgetStore()
+const expensesStore = useExpensesStore()
+const balanceStore = useBalanceStore()
+const exportJson = ref('')
+const importText = ref('')
+const errors = ref<string[]>([])
+const status = ref('')
+const categoryVisuals = ref<Record<string, string>>({})
+
+onMounted(async () => {
+  await budgetStore.loadMonth(budgetStore.draftMonth)
+})
+
+async function exportData() {
+  errors.value = []
+  const payload = await exportLocalData()
+  exportJson.value = JSON.stringify(payload, null, 2)
+  status.value = 'Exportação gerada.'
+}
+
+async function importData() {
+  errors.value = []
+  status.value = ''
+  try {
+    const result = await importLocalData(JSON.parse(importText.value))
+    errors.value = result.errors
+    if (!result.errors.length) {
+      status.value = 'Importação concluída.'
+      await budgetStore.loadMonth(budgetStore.draftMonth)
+      await expensesStore.loadForBudget(budgetStore.budget?.id ?? null, budgetStore.draftMonth)
+      await balanceStore.loadHistory()
+    }
+  } catch {
+    errors.value = ['JSON inválido']
+  }
+}
+
+async function clearData() {
+  await clearLocalData()
+  status.value = 'Dados locais limpos.'
+  await budgetStore.loadMonth(budgetStore.draftMonth)
+  await expensesStore.loadForBudget(null, budgetStore.draftMonth)
+  await balanceStore.loadHistory()
+}
+
+function updateVisuals(value: Record<string, string>) {
+  categoryVisuals.value = value
+  saveVisualPreferences({ categoryVisuals: value })
+}
+</script>
+
 <template>
   <section class="page">
     <header class="page__header">
       <h1>Configurações</h1>
-      <p>Preferências visuais e backup serão implementados em fases posteriores.</p>
+      <p>Preferências locais, exportação e importação de backup.</p>
     </header>
+
+    <CategoryVisualSelector
+      v-model="categoryVisuals"
+      :categories="budgetStore.activeCategories"
+      @update:model-value="updateVisuals"
+    />
+
+    <DataBackupPanel
+      v-model:import-text="importText"
+      :export-json="exportJson"
+      :errors="errors"
+      :status="status"
+      @export="exportData"
+      @import="importData"
+      @clear="clearData"
+    />
   </section>
 </template>

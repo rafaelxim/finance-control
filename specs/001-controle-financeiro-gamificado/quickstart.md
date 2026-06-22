@@ -140,6 +140,11 @@ Expected results:
 - Historical totals do not silently change.
 - Current-month changes are visible only where expected.
 
+Validation evidence:
+
+- Automated Playwright coverage: `tests/e2e/history-preservation.spec.ts`
+- Last validated command: `pnpm test:e2e` with Scenario 6 passing on 2026-06-22.
+
 ## Scenario 7: Five-Year History Performance
 
 1. Seed or create 60 monthly budgets.
@@ -164,6 +169,11 @@ Expected results:
 - Budgets, categories, expenses, snapshots, and balance items are restored.
 - Visual preferences are restored when present.
 - Export file contains financial data and preferences only.
+
+Validation evidence:
+
+- Automated Playwright coverage: `tests/e2e/export-import.spec.ts`
+- Last validated command: `pnpm test:e2e` with Scenario 8 passing on 2026-06-22.
 
 ## Reference Contracts
 
