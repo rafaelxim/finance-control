@@ -39,6 +39,22 @@ export async function getBalanceSnapshotByMonth(
   return { snapshot, items }
 }
 
+export async function getLatestBalanceSnapshotWithItems(): Promise<BalanceSnapshotWithItems | null> {
+  const snapshots = await db.balanceSnapshots.orderBy('month').reverse().toArray()
+
+  for (const snapshot of snapshots) {
+    const items = (await db.balanceItems.where('snapshotId').equals(snapshot.id).toArray())
+      .map(normalizeBalanceItem)
+      .sort((left, right) => left.sortOrder - right.sortOrder)
+
+    if (items.length) {
+      return { snapshot, items }
+    }
+  }
+
+  return null
+}
+
 export async function saveBalanceSnapshot(input: {
   month: MonthKey
   notes?: string

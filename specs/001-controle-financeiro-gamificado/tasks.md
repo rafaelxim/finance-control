@@ -313,3 +313,9 @@ pnpm typecheck
 pnpm test:unit
 pnpm test:e2e
 ```
+
+## Phase 8: Convergence
+
+- [X] T112 [P] Add unit coverage for balance item carry-over from the latest saved snapshot into an empty month with zeroed amounts per Constitution II (missing)
+- [X] T113 Add Playwright coverage for changing the Balanço month and seeing previous item names/types imported with editable zero values per US3/AC1 (missing)
+- [X] T114 Implement balance item carry-over when opening an empty month by copying names, kinds, institutions, notes, and sort order from the latest saved snapshot while resetting amounts to zero per FR-009 (partial)

@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 
+import { createBalanceCarryOverDraft } from '@/domain/balance/carry-over'
 import { calculateBalanceTotals, calculateFinancialEvolution } from '@/domain/balance/evolution'
 import type {
   BalanceDraftItemInput,
@@ -11,6 +12,7 @@ import type { MonthKey } from '@/domain/shared/types'
 import { currentMonthKey } from '@/domain/shared/types'
 import {
   getBalanceHistory,
+  getLatestBalanceSnapshotWithItems,
   getBalanceSnapshotByMonth,
   saveBalanceSnapshot
 } from '@/storage/balance.repository'
@@ -68,6 +70,7 @@ export const useBalanceStore = defineStore('balance', {
       this.loading = true
       try {
         const { snapshot, items } = await getBalanceSnapshotByMonth(month)
+        const latestSnapshot = items.length ? null : await getLatestBalanceSnapshotWithItems()
         this.snapshot = snapshot
         this.items = items
         this.draftMonth = month
@@ -82,7 +85,9 @@ export const useBalanceStore = defineStore('balance', {
               notes: item.notes,
               sortOrder: item.sortOrder
             }))
-          : defaultDraftItems()
+          : latestSnapshot
+            ? createBalanceCarryOverDraft(latestSnapshot.items)
+            : defaultDraftItems()
       } finally {
         this.loading = false
       }
