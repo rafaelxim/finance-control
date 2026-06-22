@@ -76,8 +76,8 @@ const remainingLabel = computed(() =>
         <dd class="money money--secondary">{{ formatBRL(progress.spent) }}</dd>
       </div>
       <div>
-        <dt>Uso</dt>
-        <dd class="money money--secondary">{{ usageLabel }}</dd>
+        <dt>Status</dt>
+        <dd class="market-card__state">{{ stateLabel }}</dd>
       </div>
     </dl>
   </article>
@@ -86,8 +86,8 @@ const remainingLabel = computed(() =>
 <style scoped>
 .market-card {
   display: grid;
-  gap: 12px;
-  min-height: 194px;
+  gap: 10px;
+  min-height: 182px;
   border: 1px solid var(--color-border);
   border-radius: var(--radius);
   background: var(--color-surface);
@@ -186,6 +186,12 @@ const remainingLabel = computed(() =>
 
 .market-card dd {
   margin: 3px 0 0;
+}
+
+.market-card__state {
+  color: var(--state-color);
+  font-size: 0.9rem;
+  font-weight: 700;
 }
 
 .market-card[data-state='safe'] {

@@ -16,7 +16,10 @@ withDefaults(
 </script>
 
 <template>
-  <section class="net-worth-summary panel" aria-labelledby="net-worth-summary-title">
+  <section
+    class="net-worth-summary panel panel--support panel--patrimony"
+    aria-labelledby="net-worth-summary-title"
+  >
     <h2 id="net-worth-summary-title" class="panel__heading">{{ title }}</h2>
     <div class="metric-grid">
       <div class="metric positive">
@@ -27,13 +30,13 @@ withDefaults(
         <span class="metric__label">Dívidas</span>
         <strong class="money money--primary">{{ formatBRL(totals.debtsTotal) }}</strong>
       </div>
-      <div class="metric">
+      <div class="metric metric--featured">
         <span class="metric__label">Patrimônio líquido</span>
         <strong class="money money--primary">{{ formatBRL(totals.netWorth) }}</strong>
       </div>
       <div
         v-if="change !== undefined"
-        class="metric"
+        class="metric metric--featured"
         :class="{ positive: Number(change) >= 0, negative: Number(change) < 0 }"
       >
         <span class="metric__label">Variação</span>

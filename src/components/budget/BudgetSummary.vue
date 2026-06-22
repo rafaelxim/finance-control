@@ -16,7 +16,10 @@ withDefaults(
 </script>
 
 <template>
-  <section class="budget-summary panel" aria-labelledby="budget-summary-title">
+  <section
+    class="budget-summary panel panel--support panel--budget"
+    aria-labelledby="budget-summary-title"
+  >
     <h2 id="budget-summary-title" class="panel__heading">{{ title }}</h2>
     <div class="metric-grid">
       <div class="metric positive">
@@ -27,11 +30,11 @@ withDefaults(
         <span class="metric__label">Alocado</span>
         <strong class="money money--primary">{{ formatBRL(allocated) }}</strong>
       </div>
-      <div class="metric positive">
+      <div class="metric metric--featured positive">
         <span class="metric__label">Não alocado</span>
         <strong class="money money--primary">{{ formatBRL(unallocated) }}</strong>
       </div>
-      <div class="metric" :class="{ danger: overAllocated !== '0.00' }">
+      <div class="metric metric--featured" :class="{ danger: overAllocated !== '0.00' }">
         <span class="metric__label">Excedente</span>
         <strong class="money money--primary">{{ formatBRL(overAllocated) }}</strong>
       </div>

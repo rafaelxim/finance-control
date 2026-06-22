@@ -21,6 +21,8 @@ describe('BudgetSummary', () => {
     expect(wrapper.text()).toContain('200')
     expect(wrapper.get('section').attributes('aria-labelledby')).toBe('budget-summary-title')
     expect(wrapper.find('.danger').exists()).toBe(true)
+    expect(wrapper.find('.panel--budget').exists()).toBe(true)
+    expect(wrapper.findAll('.metric--featured')).toHaveLength(2)
     expect(wrapper.findAll('.money--primary').length).toBe(4)
   })
 })

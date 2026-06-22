@@ -57,9 +57,19 @@ test('exposes consistent navigation, headings, labels, and non-color state text'
 
   await page.goto('/')
   await expect(page.getByRole('region', { name: /Resumo principal/ })).toBeVisible()
+  await expect(
+    page.getByRole('link', { name: /Atualizar balanço|Ajustar orçamento/ })
+  ).toBeVisible()
   await expect(page.getByRole('region', { name: 'Patrimônio' })).toBeVisible()
   await expect(page.getByRole('region', { name: 'Orçamento do mês' })).toBeVisible()
+  await expect(page.getByRole('region', { name: 'Uso por categoria' })).toBeVisible()
   await expect(page.getByRole('article', { name: /Categoria 01/ })).toContainText(
     /Seguro|Atenção|Limite atingido|Limite excedido/
   )
+
+  const activeIndicatorWidth = await page
+    .getByRole('navigation', { name: 'Navegação principal' })
+    .getByRole('link', { name: 'Dashboard', exact: true })
+    .evaluate((link) => Number.parseFloat(getComputedStyle(link, '::before').width))
+  expect(activeIndicatorWidth).toBeGreaterThan(0)
 })

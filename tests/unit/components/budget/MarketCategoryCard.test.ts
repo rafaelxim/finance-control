@@ -24,6 +24,8 @@ describe('MarketCategoryCard', () => {
     expect(wrapper.text()).toContain('Gasto')
     expect(wrapper.text()).toContain('Restante')
     expect(wrapper.text()).toContain('25% usado')
+    expect(wrapper.text().match(/25% usado/g)).toHaveLength(1)
+    expect(wrapper.text()).toContain('Status')
     expect(wrapper.text()).toContain('R$')
   })
 
@@ -75,6 +77,7 @@ describe('MarketCategoryCard', () => {
     expect(wrapper.text()).toContain('Limite excedido')
     expect(wrapper.text()).toContain('Déficit')
     expect(wrapper.text()).toContain('108% usado')
+    expect(wrapper.text().match(/108% usado/g)).toHaveLength(1)
     expect(wrapper.text()).toContain('-R$')
   })
 })

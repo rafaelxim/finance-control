@@ -22,6 +22,8 @@ describe('NetWorthSummary', () => {
     expect(wrapper.text()).toContain('Dívidas')
     expect(wrapper.text()).toContain('Patrimônio líquido')
     expect(wrapper.find('.positive').exists()).toBe(true)
+    expect(wrapper.find('.panel--patrimony').exists()).toBe(true)
+    expect(wrapper.findAll('.metric--featured')).toHaveLength(2)
   })
 
   it('renders negative and neutral variation states', () => {

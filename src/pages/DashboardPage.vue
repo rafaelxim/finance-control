@@ -23,13 +23,44 @@ const latestNetWorth = computed(() => balanceStore.latestEvolution)
 const dashboardSummary = computed<DashboardFinancialSummaryViewModel>(() => {
   if (latestNetWorth.value) {
     const change = toDecimal(latestNetWorth.value.netWorthChange)
+    const netWorth = toDecimal(latestNetWorth.value.netWorth)
+    const isZeroNetWorth = netWorth.eq(0)
+
+    if (change.lt(0)) {
+      return {
+        label: isZeroNetWorth ? 'Patrimônio zerado' : 'Patrimônio líquido',
+        primaryAmount: latestNetWorth.value.netWorth,
+        comparisonLabel: 'Variação mais recente',
+        comparisonAmount: latestNetWorth.value.netWorthChange,
+        state: 'negative',
+        stateLabel: 'Patrimônio caiu',
+        stateDescription: 'A variação mais recente está negativa.',
+        primaryAmountEmphasis: isZeroNetWorth ? 'reduced' : 'standard',
+        actionLabel: 'Atualizar balanço',
+        actionTarget: '/balanco',
+        source: 'balance'
+      }
+    }
 
     return {
-      label: 'Patrimônio líquido',
+      label: isZeroNetWorth ? 'Patrimônio zerado' : 'Patrimônio líquido',
       primaryAmount: latestNetWorth.value.netWorth,
       comparisonLabel: 'Variação mais recente',
       comparisonAmount: latestNetWorth.value.netWorthChange,
-      state: change.gt(0) ? 'positive' : change.lt(0) ? 'negative' : 'neutral',
+      state: change.gt(0) ? 'positive' : 'neutral',
+      stateLabel: change.gt(0)
+        ? 'Patrimônio subiu'
+        : isZeroNetWorth
+          ? 'Patrimônio zerado'
+          : 'Sem variação',
+      stateDescription: change.gt(0)
+        ? 'O último balanço aumentou seu patrimônio.'
+        : isZeroNetWorth
+          ? 'Cadastre ativos ou dívidas para acompanhar a evolução.'
+          : 'O último balanço manteve o patrimônio estável.',
+      primaryAmountEmphasis: isZeroNetWorth ? 'reduced' : 'standard',
+      actionLabel: 'Atualizar balanço',
+      actionTarget: '/balanco',
       source: 'balance'
     }
   }
@@ -44,6 +75,10 @@ const dashboardSummary = computed<DashboardFinancialSummaryViewModel>(() => {
       comparisonLabel: 'Orçamento acima do disponível',
       comparisonAmount: budgetStore.totals.overAllocated,
       state: 'negative',
+      stateLabel: 'Orçamento excedido',
+      stateDescription: 'O planejamento passou do valor disponível.',
+      actionLabel: 'Ajustar orçamento',
+      actionTarget: '/orcamento',
       source: 'budget'
     }
   }
@@ -54,6 +89,13 @@ const dashboardSummary = computed<DashboardFinancialSummaryViewModel>(() => {
     comparisonLabel: unallocated.gt(0) ? 'Ainda não alocado' : 'Orçamento totalmente alocado',
     comparisonAmount: budgetStore.totals.unallocated,
     state: unallocated.gt(0) ? 'positive' : 'neutral',
+    stateLabel: unallocated.gt(0) ? 'Saldo disponível' : 'Orçamento alocado',
+    stateDescription: unallocated.gt(0)
+      ? 'Ainda há verba para distribuir no mês.'
+      : 'Todo o valor disponível já foi distribuído.',
+    primaryAmountEmphasis: unallocated.eq(0) ? 'reduced' : 'standard',
+    actionLabel: unallocated.gt(0) ? 'Ajustar orçamento' : 'Registrar despesa',
+    actionTarget: unallocated.gt(0) ? '/orcamento' : '/despesas',
     source: 'budget'
   }
 })
@@ -75,47 +117,58 @@ onMounted(async () => {
     <LoadingState v-if="budgetStore.loading || expensesStore.loading" />
 
     <template v-else>
-      <DashboardFinancialSummary :summary="dashboardSummary" />
+      <div class="dashboard-layout">
+        <div class="dashboard-layout__main">
+          <DashboardFinancialSummary :summary="dashboardSummary" />
 
-      <NetWorthSummary
-        v-if="latestNetWorth"
-        :totals="latestNetWorth"
-        :change="latestNetWorth.netWorthChange"
-        title="Patrimônio"
-      />
+          <EmptyState
+            v-if="!cards.length"
+            title="Configure seu primeiro orçamento"
+            description="Crie categorias para visualizar seus cards mensais."
+          >
+            <RouterLink class="button button--primary" to="/orcamento">Abrir orçamento</RouterLink>
+          </EmptyState>
 
-      <BudgetSummary
-        :available-amount="budgetStore.draftAvailableAmount"
-        :allocated="budgetStore.totals.allocated"
-        :unallocated="budgetStore.totals.unallocated"
-        :over-allocated="budgetStore.totals.overAllocated"
-        title="Orçamento do mês"
-      />
-
-      <EmptyState
-        v-if="!cards.length"
-        title="Configure seu primeiro orçamento"
-        description="Crie categorias para visualizar seus cards mensais."
-      >
-        <RouterLink class="button button--primary" to="/orcamento">Abrir orçamento</RouterLink>
-      </EmptyState>
-
-      <section v-else class="dashboard-categories" aria-labelledby="dashboard-categories-title">
-        <h2 id="dashboard-categories-title" class="panel__heading">Categorias em atenção</h2>
-        <div class="grid grid--cards">
-          <MarketCategoryCard
-            v-for="progress in cards"
-            :key="progress.categoryId"
-            :progress="progress"
-          />
+          <section v-else class="dashboard-categories" aria-labelledby="dashboard-categories-title">
+            <h2 id="dashboard-categories-title" class="panel__heading">Uso por categoria</h2>
+            <div class="dashboard-categories__list">
+              <MarketCategoryCard
+                v-for="progress in cards"
+                :key="progress.categoryId"
+                :progress="progress"
+              />
+            </div>
+          </section>
         </div>
-      </section>
+
+        <aside class="dashboard-layout__support" aria-label="Resumo financeiro">
+          <NetWorthSummary
+            v-if="latestNetWorth"
+            :totals="latestNetWorth"
+            :change="latestNetWorth.netWorthChange"
+            title="Patrimônio"
+          />
+
+          <BudgetSummary
+            :available-amount="budgetStore.draftAvailableAmount"
+            :allocated="budgetStore.totals.allocated"
+            :unallocated="budgetStore.totals.unallocated"
+            :over-allocated="budgetStore.totals.overAllocated"
+            title="Orçamento do mês"
+          />
+        </aside>
+      </div>
     </template>
   </section>
 </template>
 
 <style scoped>
 .dashboard-categories {
+  display: grid;
+  gap: 12px;
+}
+
+.dashboard-categories__list {
   display: grid;
   gap: 12px;
 }
