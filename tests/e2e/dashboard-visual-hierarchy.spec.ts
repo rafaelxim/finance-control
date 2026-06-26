@@ -3,37 +3,15 @@ import { expect, test } from '@playwright/test'
 import { FIVE_YEAR_CURRENT_MONTH, seedFiveYearHistory } from '../fixtures/five-year-history'
 
 async function forceLatestBalanceDecline(page: Parameters<typeof seedFiveYearHistory>[0]) {
-  await page.evaluate(async (month) => {
-    const database = await new Promise<IDBDatabase>((resolve, reject) => {
-      const request = indexedDB.open('finance-control')
-      request.onerror = () => reject(request.error)
-      request.onsuccess = () => resolve(request.result)
-    })
+  await page.goto('/balanco')
+  await page.locator('#balance-month').fill(FIVE_YEAR_CURRENT_MONTH)
 
-    await new Promise<void>((resolve, reject) => {
-      const transaction = database.transaction(['balanceItems'], 'readwrite')
-      transaction.onerror = () => reject(transaction.error)
-      transaction.oncomplete = () => resolve()
+  for (let index = 0; index < 12; index += 1) {
+    await page.locator(`#balance-item-amount-${index}`).fill('0.00')
+  }
 
-      const store = transaction.objectStore('balanceItems')
-      const request = store.openCursor()
-      request.onsuccess = () => {
-        const cursor = request.result
-        if (!cursor) {
-          return
-        }
-
-        const item = cursor.value as { snapshotId: string; kind: string; amount: string }
-        if (item.snapshotId === `snapshot_${month}` && item.kind === 'asset') {
-          item.amount = '0.00'
-          cursor.update(item)
-        }
-        cursor.continue()
-      }
-    })
-
-    database.close()
-  }, FIVE_YEAR_CURRENT_MONTH)
+  await page.getByRole('button', { name: 'Salvar fechamento' }).click()
+  await expect(page.getByText('Fechamento salvo com sucesso.')).toBeVisible()
 }
 
 test('redirects /dashboard to the canonical dashboard route', async ({ page }) => {

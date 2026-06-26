@@ -18,16 +18,16 @@ defineEmits<{
 </script>
 
 <template>
-  <section class="backup-panel panel" aria-label="Backup local">
+  <section class="backup-panel panel" aria-label="Backup remoto">
     <header>
-      <h2>Backup local</h2>
-      <p>Exporte ou restaure os dados financeiros locais em JSON.</p>
+      <h2>Backup remoto</h2>
+      <p>Exporte ou restaure os dados financeiros remotos em JSON.</p>
     </header>
 
     <div class="backup-panel__actions">
       <BaseButton @click="$emit('export')">Exportar JSON</BaseButton>
       <BaseButton variant="secondary" @click="$emit('import')">Importar JSON</BaseButton>
-      <BaseButton variant="ghost" @click="$emit('clear')">Limpar dados locais</BaseButton>
+      <BaseButton variant="ghost" @click="$emit('clear')">Limpar dados remotos</BaseButton>
     </div>
 
     <FormError :errors="errors" />

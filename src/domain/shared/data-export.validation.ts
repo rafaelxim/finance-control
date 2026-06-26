@@ -9,7 +9,7 @@ import {
   requiredTextSchema
 } from '@/domain/shared/validation'
 
-const timestampSchema = z.string().datetime()
+const timestampSchema = z.string().datetime({ offset: true })
 
 const timestampedEntitySchema = z.object({
   id: z.string(),

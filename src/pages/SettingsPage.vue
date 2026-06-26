@@ -7,6 +7,7 @@ import {
   clearLocalData,
   exportLocalData,
   importLocalData,
+  readVisualPreferences,
   saveVisualPreferences
 } from '@/storage/data-export.repository'
 import { useBalanceStore } from '@/stores/balance.store'
@@ -23,6 +24,7 @@ const status = ref('')
 const categoryVisuals = ref<Record<string, string>>({})
 
 onMounted(async () => {
+  categoryVisuals.value = (await readVisualPreferences()).categoryVisuals ?? {}
   await budgetStore.loadMonth(budgetStore.draftMonth)
 })
 
@@ -36,8 +38,16 @@ async function exportData() {
 async function importData() {
   errors.value = []
   status.value = ''
+  let parsed: unknown
   try {
-    const result = await importLocalData(JSON.parse(importText.value))
+    parsed = JSON.parse(importText.value)
+  } catch {
+    errors.value = ['JSON inválido']
+    return
+  }
+
+  try {
+    const result = await importLocalData(parsed)
     errors.value = result.errors
     if (!result.errors.length) {
       status.value = 'Importação concluída.'
@@ -45,22 +55,22 @@ async function importData() {
       await expensesStore.loadForBudget(budgetStore.budget?.id ?? null, budgetStore.draftMonth)
       await balanceStore.loadHistory()
     }
-  } catch {
-    errors.value = ['JSON inválido']
+  } catch (error) {
+    errors.value = [error instanceof Error ? error.message : 'Falha ao importar dados remotos']
   }
 }
 
 async function clearData() {
   await clearLocalData()
-  status.value = 'Dados locais limpos.'
+  status.value = 'Dados remotos limpos.'
   await budgetStore.loadMonth(budgetStore.draftMonth)
   await expensesStore.loadForBudget(null, budgetStore.draftMonth)
   await balanceStore.loadHistory()
 }
 
-function updateVisuals(value: Record<string, string>) {
+async function updateVisuals(value: Record<string, string>) {
   categoryVisuals.value = value
-  saveVisualPreferences({ categoryVisuals: value })
+  await saveVisualPreferences({ categoryVisuals: value })
 }
 </script>
 
@@ -68,7 +78,7 @@ function updateVisuals(value: Record<string, string>) {
   <section class="page">
     <header class="page__header">
       <h1>Configurações</h1>
-      <p>Preferências locais, exportação e importação de backup.</p>
+      <p>Preferências remotas, exportação e importação de backup.</p>
     </header>
 
     <CategoryVisualSelector

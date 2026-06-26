@@ -2,8 +2,7 @@ import { defineStore } from 'pinia'
 
 import { createDefaultProfile, type UserProfile } from '@/domain/shared/profile'
 import type { MonthKey } from '@/domain/shared/types'
-import { db } from '@/storage/database'
-import { touchEntity } from '@/storage/repository'
+import { getOrCreateProfile, setProfileActiveMonth } from '@/storage/profile.repository'
 
 interface ProfileState {
   profile: UserProfile | null
@@ -23,15 +22,7 @@ export const useProfileStore = defineStore('profile', {
     async load() {
       this.loading = true
       try {
-        const existing = await db.profiles.limit(1).first()
-        if (existing) {
-          this.profile = existing
-          return
-        }
-
-        const profile = createDefaultProfile()
-        await db.profiles.put(profile)
-        this.profile = profile
+        this.profile = await getOrCreateProfile()
       } finally {
         this.loading = false
       }
@@ -40,9 +31,7 @@ export const useProfileStore = defineStore('profile', {
       if (!this.profile) await this.load()
       if (!this.profile) return
 
-      const updated = touchEntity({ ...this.profile, activeMonth: month })
-      await db.profiles.put(updated)
-      this.profile = updated
+      this.profile = await setProfileActiveMonth(this.profile, month)
     }
   }
 })

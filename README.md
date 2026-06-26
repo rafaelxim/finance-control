@@ -1,13 +1,14 @@
 # Finance Control
 
-Aplicação local-first para controle financeiro pessoal com Vue 3, TypeScript,
-Pinia, Dexie/IndexedDB e visual inspirado no arquivo `DESIGN-binance.md`.
+Aplicação para controle financeiro pessoal com Vue 3, TypeScript, Pinia,
+Supabase Postgres/Data API e visual inspirado no arquivo `DESIGN-binance.md`.
 
 ## Requisitos
 
 - Node.js LTS
 - pnpm
-- Navegador moderno com IndexedDB
+- Projeto Supabase com as migrations deste repositório aplicadas
+- `VITE_SUPABASE_URL` e `VITE_SUPABASE_PUBLISHABLE_KEY` configurados em `.env`
 
 ## Rodando Localmente
 
@@ -17,6 +18,14 @@ pnpm dev
 ```
 
 Abra a URL local exibida pelo Vite, normalmente `http://127.0.0.1:5173`.
+
+Para semear o Supabase com o `backup.json` do repositório:
+
+```bash
+pnpm run migrate:backup
+```
+
+O script carrega `.env`, valida o payload e faz upserts idempotentes.
 
 ## Testes e Qualidade
 
@@ -31,13 +40,18 @@ pnpm build
 
 Use `pnpm format` para aplicar Prettier.
 
-## Dados Locais
+## Dados Remotos
 
-Os dados ficam no IndexedDB do navegador, no banco `finance-control`. A tela
-`Configurações` permite exportar, importar e limpar os dados locais. O backup
-JSON inclui orçamento, categorias, despesas, balanços, itens de balanço e
+Os dados ficam no Supabase configurado para o cliente público da aplicação. A
+tela `Configurações` permite exportar, importar e limpar os dados remotos. O
+backup JSON inclui orçamento, categorias, despesas, balanços, itens de balanço e
 preferências visuais. Ele não inclui imagens, assets decorativos ou dados de
 serviços externos.
+
+Esta fase não usa autenticação. As políticas RLS permitem CRUD para o papel
+`anon`, então qualquer pessoa com a URL e a publishable key do projeto acessa o
+mesmo conjunto compartilhado de dados. Isso é intencional para a migração atual
+e deve ser revisto antes de uso multiusuário ou público.
 
 ## Fontes e Assets
 
@@ -58,6 +72,6 @@ semântica financeira, sem copiar marca, nomes ou assets licenciados.
 
 ## Escopo
 
-Esta versão é um estudo privado, sem backend, autenticação, sincronização,
+Esta versão é um estudo privado, sem autenticação, sincronização offline,
 integrações bancárias, corretoras ou cartões. O objetivo é manter uma aplicação
 pequena, auditável e fácil de evoluir.

@@ -1,6 +1,10 @@
 import { expect, test } from '@playwright/test'
 
-test('exports and imports local finance data', async ({ page }) => {
+test('exports and imports remote finance data', async ({ page }) => {
+  await page.goto('/configuracoes')
+  await page.getByRole('button', { name: 'Limpar dados remotos' }).click()
+  await expect(page.getByText('Dados remotos limpos.')).toBeVisible()
+
   await page.goto('/orcamento')
   await page.locator('#budget-month').fill('2026-06')
   await page.getByRole('button', { name: 'Salvar orçamento' }).click()
@@ -13,8 +17,8 @@ test('exports and imports local finance data', async ({ page }) => {
   expect(exported).toContain('monthlyBudgets')
   expect(exported).not.toContain('data:image')
 
-  await page.getByRole('button', { name: 'Limpar dados locais' }).click()
-  await expect(page.getByText('Dados locais limpos.')).toBeVisible()
+  await page.getByRole('button', { name: 'Limpar dados remotos' }).click()
+  await expect(page.getByText('Dados remotos limpos.')).toBeVisible()
 
   await page.locator('#import-json').fill(exported)
   await page.getByRole('button', { name: 'Importar JSON' }).click()

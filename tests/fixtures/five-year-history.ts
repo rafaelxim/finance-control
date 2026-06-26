@@ -124,56 +124,8 @@ export const fiveYearHistoryPayload: DataExportPayload = {
 }
 
 export async function seedFiveYearHistory(page: Page) {
-  await page.goto('/')
-  await page.evaluate(async (payload) => {
-    const database = await new Promise<IDBDatabase>((resolve, reject) => {
-      const request = indexedDB.open('finance-control')
-      request.onerror = () => reject(request.error)
-      request.onsuccess = () => resolve(request.result)
-    })
-
-    await new Promise<void>((resolve, reject) => {
-      const stores = [
-        'profiles',
-        'monthlyBudgets',
-        'budgetCategories',
-        'expenses',
-        'balanceSnapshots',
-        'balanceItems'
-      ]
-      const transaction = database.transaction(stores, 'readwrite')
-      transaction.onerror = () => reject(transaction.error)
-      transaction.oncomplete = () => resolve()
-
-      for (const storeName of stores) {
-        transaction.objectStore(storeName).clear()
-      }
-
-      if (payload.profile) {
-        transaction.objectStore('profiles').put(payload.profile)
-      }
-
-      for (const budget of payload.monthlyBudgets) {
-        transaction.objectStore('monthlyBudgets').put(budget)
-      }
-      for (const category of payload.budgetCategories) {
-        transaction.objectStore('budgetCategories').put(category)
-      }
-      for (const expense of payload.expenses) {
-        transaction.objectStore('expenses').put(expense)
-      }
-      for (const snapshot of payload.balanceSnapshots) {
-        transaction.objectStore('balanceSnapshots').put(snapshot)
-      }
-      for (const item of payload.balanceItems) {
-        transaction.objectStore('balanceItems').put(item)
-      }
-    })
-
-    localStorage.setItem(
-      'finance-control:visual-preferences',
-      JSON.stringify(payload.visualPreferences)
-    )
-    database.close()
-  }, fiveYearHistoryPayload)
+  await page.goto('/configuracoes')
+  await page.locator('#import-json').fill(JSON.stringify(fiveYearHistoryPayload))
+  await page.getByRole('button', { name: 'Importar JSON' }).click()
+  await page.getByText('Importação concluída.').waitFor()
 }

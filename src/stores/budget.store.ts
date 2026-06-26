@@ -89,7 +89,7 @@ export const useBudgetStore = defineStore('budget', {
         this.budget = budget
         this.categories = categories
         this.draftMonth = month
-        this.draftAvailableAmount = budget?.availableAmount ?? this.draftAvailableAmount
+        this.draftAvailableAmount = budget?.availableAmount ?? '1000.00'
         this.draftCategories = categories.length
           ? categories
               .filter((category) => category.status === 'active')
@@ -99,7 +99,7 @@ export const useBudgetStore = defineStore('budget', {
                 allocationType: category.allocationType,
                 allocationValue: category.allocationValue
               }))
-          : this.draftCategories
+          : initialCategories()
       } finally {
         this.loading = false
       }
