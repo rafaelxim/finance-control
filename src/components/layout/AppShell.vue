@@ -27,16 +27,6 @@ const links = [
 const profileStore = useProfileStore()
 const monthUpdating = ref(false)
 const activeMonth = computed(() => profileStore.activeMonth)
-const activeMonthLabel = computed(() => {
-  const [year, month] = activeMonth.value.split('-').map(Number)
-  const date = new Date(year, month - 1)
-
-  return new Intl.DateTimeFormat('pt-BR', {
-    month: 'long',
-    year: 'numeric'
-  }).format(date)
-})
-
 onMounted(() => {
   void profileStore.load()
 })
@@ -89,7 +79,6 @@ function updateMonth(value: string) {
             <ChevronLeft :size="16" aria-hidden="true" />
           </button>
           <label class="month-context__field" for="global-active-month">
-            <span>{{ activeMonthLabel }}</span>
             <input
               id="global-active-month"
               type="month"
