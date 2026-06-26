@@ -2,6 +2,7 @@
 import { computed, onMounted } from 'vue'
 
 import BudgetSummary from '@/components/budget/BudgetSummary.vue'
+import CategoryUsageExportButton from '@/components/budget/CategoryUsageExportButton.vue'
 import MarketCategoryCard from '@/components/budget/MarketCategoryCard.vue'
 import DashboardFinancialSummary, {
   type DashboardFinancialSummaryViewModel
@@ -130,7 +131,10 @@ onMounted(async () => {
           </EmptyState>
 
           <section v-else class="dashboard-categories" aria-labelledby="dashboard-categories-title">
-            <h2 id="dashboard-categories-title" class="panel__heading">Uso por categoria</h2>
+            <div class="section-heading">
+              <h2 id="dashboard-categories-title" class="panel__heading">Uso por categoria</h2>
+              <CategoryUsageExportButton :progress="cards" :month="budgetStore.draftMonth" />
+            </div>
             <div class="dashboard-categories__list">
               <MarketCategoryCard
                 v-for="progress in cards"

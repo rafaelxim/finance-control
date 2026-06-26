@@ -149,6 +149,14 @@ select {
   color: var(--color-muted);
 }
 
+.section-heading {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
 .grid {
   display: grid;
   gap: 16px;
@@ -156,6 +164,11 @@ select {
 
 .grid--cards {
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+}
+
+.expense-category-progress {
+  display: grid;
+  gap: 12px;
 }
 
 .dashboard-layout {

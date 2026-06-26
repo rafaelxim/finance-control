@@ -2,6 +2,7 @@
 import { computed, onMounted, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 
+import CategoryUsageExportButton from '@/components/budget/CategoryUsageExportButton.vue'
 import MarketCategoryCard from '@/components/budget/MarketCategoryCard.vue'
 import ExpenseForm from '@/components/finance/ExpenseForm.vue'
 import ExpenseList from '@/components/finance/ExpenseList.vue'
@@ -94,12 +95,27 @@ function createCategory() {
 
         <FormError :errors="errors" />
 
-        <section class="grid grid--cards" aria-label="Progresso por categoria">
-          <MarketCategoryCard
-            v-for="progress in expensesStore.categoryProgress"
-            :key="progress.categoryId"
-            :progress="progress"
-          />
+        <section
+          class="expense-category-progress"
+          aria-labelledby="expense-category-progress-title"
+        >
+          <div class="section-heading">
+            <h2 id="expense-category-progress-title" class="panel__heading">
+              Progresso por categoria
+            </h2>
+            <CategoryUsageExportButton
+              :progress="expensesStore.categoryProgress"
+              :month="budgetStore.draftMonth"
+            />
+          </div>
+
+          <div class="grid grid--cards">
+            <MarketCategoryCard
+              v-for="progress in expensesStore.categoryProgress"
+              :key="progress.categoryId"
+              :progress="progress"
+            />
+          </div>
         </section>
 
         <EmptyState
