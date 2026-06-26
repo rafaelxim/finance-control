@@ -6,7 +6,7 @@ test('exports and imports remote finance data', async ({ page }) => {
   await expect(page.getByText('Dados remotos limpos.')).toBeVisible()
 
   await page.goto('/orcamento')
-  await page.locator('#budget-month').fill('2026-06')
+  await page.locator('#global-active-month').fill('2026-06')
   await page.getByRole('button', { name: 'Salvar orçamento' }).click()
   await expect(page.getByText('Orçamento salvo com sucesso.')).toBeVisible()
 
@@ -25,6 +25,6 @@ test('exports and imports remote finance data', async ({ page }) => {
   await expect(page.getByText('Importação concluída.')).toBeVisible()
 
   await page.goto('/orcamento')
-  await page.locator('#budget-month').fill('2026-06')
+  await page.locator('#global-active-month').fill('2026-06')
   await expect(page.locator('#category-name-0')).toHaveValue('Aluguel')
 })

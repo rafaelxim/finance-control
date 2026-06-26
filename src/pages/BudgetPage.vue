@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 
 import BudgetSummary from '@/components/budget/BudgetSummary.vue'
 import CategoryAllocationForm from '@/components/budget/CategoryAllocationForm.vue'
@@ -11,11 +11,12 @@ import FormError from '@/components/ui/FormError.vue'
 import LoadingState from '@/components/ui/LoadingState.vue'
 import { budgetCategorySchema } from '@/domain/budget/schemas'
 import type { BudgetDraftCategoryInput } from '@/domain/budget/types'
-import type { MonthKey } from '@/domain/shared/types'
 import { flattenZodErrors } from '@/domain/shared/validation'
 import { useBudgetStore } from '@/stores/budget.store'
+import { useProfileStore } from '@/stores/profile.store'
 
 const budgetStore = useBudgetStore()
+const profileStore = useProfileStore()
 const saving = ref(false)
 const saved = ref(false)
 const errors = ref<string[]>([])
@@ -25,17 +26,20 @@ const activeCategories = computed(() =>
 )
 
 onMounted(() => {
-  void budgetStore.loadMonth(budgetStore.draftMonth)
+  void budgetStore.loadMonth(profileStore.activeMonth)
 })
+
+watch(
+  () => profileStore.activeMonth,
+  (month) => {
+    saved.value = false
+    void budgetStore.loadMonth(month)
+  }
+)
 
 function updateCategory(index: number, category: BudgetDraftCategoryInput) {
   budgetStore.updateCategory(index, category)
   saved.value = false
-}
-
-async function updateMonth(month: MonthKey) {
-  saved.value = false
-  await budgetStore.loadMonth(month)
 }
 
 function validateBudget() {
@@ -85,9 +89,7 @@ async function saveBudget() {
 
     <template v-else>
       <MonthlyBudgetForm
-        :month="budgetStore.draftMonth"
         :available-amount="budgetStore.draftAvailableAmount"
-        @update:month="updateMonth"
         @update:available-amount="budgetStore.setAvailableAmount"
       />
 

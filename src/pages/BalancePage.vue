@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, watch } from 'vue'
 
 import BalanceItemTable from '@/components/finance/BalanceItemTable.vue'
 import BalanceSnapshotForm from '@/components/finance/BalanceSnapshotForm.vue'
@@ -8,23 +8,28 @@ import FormError from '@/components/ui/FormError.vue'
 import LoadingState from '@/components/ui/LoadingState.vue'
 import { validateBalanceSnapshotDraft } from '@/domain/balance/schemas'
 import type { BalanceDraftItemInput } from '@/domain/balance/types'
-import type { MonthKey } from '@/domain/shared/types'
 import { useBalanceStore } from '@/stores/balance.store'
+import { useProfileStore } from '@/stores/profile.store'
 
 const balanceStore = useBalanceStore()
+const profileStore = useProfileStore()
 const saving = ref(false)
 const saved = ref(false)
 const errors = ref<string[]>([])
 
 onMounted(async () => {
-  await balanceStore.loadMonth(balanceStore.draftMonth)
+  await balanceStore.loadMonth(profileStore.activeMonth)
   await balanceStore.loadHistory()
 })
 
-async function updateMonth(month: MonthKey) {
-  saved.value = false
-  await balanceStore.loadMonth(month)
-}
+watch(
+  () => profileStore.activeMonth,
+  async (month) => {
+    saved.value = false
+    await balanceStore.loadMonth(month)
+    await balanceStore.loadHistory()
+  }
+)
 
 function updateItem(index: number, item: BalanceDraftItemInput) {
   saved.value = false
@@ -61,12 +66,10 @@ async function saveSnapshot() {
 
     <template v-else>
       <BalanceSnapshotForm
-        :month="balanceStore.draftMonth"
         :notes="balanceStore.draftNotes"
         :items="balanceStore.draftItems"
         :totals="balanceStore.draftTotals"
         :saving="saving"
-        @update:month="updateMonth"
         @update:notes="balanceStore.draftNotes = $event"
         @update-item="updateItem"
         @add-item="balanceStore.addItem"

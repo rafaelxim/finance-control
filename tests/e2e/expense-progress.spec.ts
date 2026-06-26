@@ -13,7 +13,7 @@ test('tracks expenses and updates category progress cards', async ({ page }) => 
   })
 
   await page.goto('/orcamento')
-  await page.locator('#budget-month').fill('2027-05')
+  await page.locator('#global-active-month').fill('2027-05')
   await page.getByRole('button', { name: 'Salvar orçamento' }).click()
   await expect(page.getByText('Orçamento salvo com sucesso.')).toBeVisible()
 

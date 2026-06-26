@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted } from 'vue'
+import { computed, onMounted, watch } from 'vue'
 
 import BudgetSummary from '@/components/budget/BudgetSummary.vue'
 import CategoryUsageExportButton from '@/components/budget/CategoryUsageExportButton.vue'
@@ -14,10 +14,12 @@ import LoadingState from '@/components/ui/LoadingState.vue'
 import { useBalanceStore } from '@/stores/balance.store'
 import { useBudgetStore } from '@/stores/budget.store'
 import { useExpensesStore } from '@/stores/expenses.store'
+import { useProfileStore } from '@/stores/profile.store'
 
 const budgetStore = useBudgetStore()
 const expensesStore = useExpensesStore()
 const balanceStore = useBalanceStore()
+const profileStore = useProfileStore()
 
 const cards = computed(() => expensesStore.categoryProgress)
 const latestNetWorth = computed(() => balanceStore.latestEvolution)
@@ -102,10 +104,19 @@ const dashboardSummary = computed<DashboardFinancialSummaryViewModel>(() => {
 })
 
 onMounted(async () => {
-  await budgetStore.loadMonth(budgetStore.draftMonth)
+  await budgetStore.loadMonth(profileStore.activeMonth)
   await expensesStore.loadForBudget(budgetStore.budget?.id ?? null, budgetStore.draftMonth)
   await balanceStore.loadHistory()
 })
+
+watch(
+  () => profileStore.activeMonth,
+  async (month) => {
+    await budgetStore.loadMonth(month)
+    await expensesStore.loadForBudget(budgetStore.budget?.id ?? null, budgetStore.draftMonth)
+    await balanceStore.loadHistory()
+  }
+)
 </script>
 
 <template>

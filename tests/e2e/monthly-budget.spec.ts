@@ -2,7 +2,7 @@ import { expect, test } from '@playwright/test'
 
 test('creates a monthly budget with fixed category cards', async ({ page }) => {
   await page.goto('/orcamento')
-  await page.locator('#budget-month').fill('2027-03')
+  await page.locator('#global-active-month').fill('2027-03')
 
   await expect(page.getByRole('heading', { name: 'Orçamento mensal' })).toBeVisible()
   await expect(page.getByText('Aluguel')).toBeVisible()
@@ -25,7 +25,7 @@ test('recalculates percentage allocations when monthly amount changes before sav
   page
 }) => {
   await page.goto('/orcamento')
-  await page.locator('#budget-month').fill('2027-04')
+  await page.locator('#global-active-month').fill('2027-04')
 
   await page.getByRole('button', { name: 'Adicionar categoria' }).click()
   await page.locator('#category-name-3').fill('Investir')

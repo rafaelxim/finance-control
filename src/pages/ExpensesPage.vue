@@ -14,10 +14,12 @@ import type { Expense, ExpenseDraftInput } from '@/domain/expenses/types'
 import type { MonthKey } from '@/domain/shared/types'
 import { useBudgetStore } from '@/stores/budget.store'
 import { useExpensesStore } from '@/stores/expenses.store'
+import { useProfileStore } from '@/stores/profile.store'
 
 const router = useRouter()
 const budgetStore = useBudgetStore()
 const expensesStore = useExpensesStore()
+const profileStore = useProfileStore()
 const errors = ref<string[]>([])
 const saving = ref(false)
 const editingExpense = ref<Expense | null>(null)
@@ -26,12 +28,12 @@ const defaultDate = computed(() => `${budgetStore.draftMonth}-01`)
 const activeCategories = computed(() => budgetStore.activeCategories)
 
 onMounted(async () => {
-  await budgetStore.loadMonth(budgetStore.draftMonth)
+  await budgetStore.loadMonth(profileStore.activeMonth)
   await expensesStore.loadForBudget(budgetStore.budget?.id ?? null, budgetStore.draftMonth)
 })
 
 watch(
-  () => budgetStore.draftMonth,
+  () => profileStore.activeMonth,
   async (month) => {
     await budgetStore.loadMonth(month as MonthKey)
     await expensesStore.loadForBudget(budgetStore.budget?.id ?? null, budgetStore.draftMonth)

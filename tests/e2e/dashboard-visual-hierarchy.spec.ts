@@ -4,7 +4,7 @@ import { FIVE_YEAR_CURRENT_MONTH, seedFiveYearHistory } from '../fixtures/five-y
 
 async function forceLatestBalanceDecline(page: Parameters<typeof seedFiveYearHistory>[0]) {
   await page.goto('/balanco')
-  await page.locator('#balance-month').fill(FIVE_YEAR_CURRENT_MONTH)
+  await page.locator('#global-active-month').fill(FIVE_YEAR_CURRENT_MONTH)
 
   for (let index = 0; index < 12; index += 1) {
     await page.locator(`#balance-item-amount-${index}`).fill('0.00')

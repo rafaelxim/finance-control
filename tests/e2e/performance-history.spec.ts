@@ -23,7 +23,7 @@ test('keeps dashboard and evolution responsive with five years of local history'
   expect(Date.now() - dashboardStartedAt).toBeLessThan(1000)
 
   await page.goto('/orcamento')
-  await expect(page.locator('#budget-month')).toHaveValue(FIVE_YEAR_CURRENT_MONTH)
+  await expect(page.locator('#global-active-month')).toHaveValue(FIVE_YEAR_CURRENT_MONTH)
   await expect(page.getByText(FIVE_YEAR_FIRST_CATEGORY_NAME).first()).toBeVisible()
 
   await page.goto('/evolucao')

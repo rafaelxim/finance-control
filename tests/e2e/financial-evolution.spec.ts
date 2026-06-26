@@ -6,7 +6,7 @@ async function saveSnapshot(
   amounts: string[]
 ) {
   await page.goto('/balanco')
-  await page.locator('#balance-month').fill(month)
+  await page.locator('#global-active-month').fill(month)
   await page.locator('#balance-item-amount-0').fill(amounts[0])
   await page.locator('#balance-item-amount-1').fill(amounts[1])
   await page.getByRole('button', { name: 'Salvar fechamento' }).click()

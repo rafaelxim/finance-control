@@ -13,10 +13,12 @@ import {
 import { useBalanceStore } from '@/stores/balance.store'
 import { useBudgetStore } from '@/stores/budget.store'
 import { useExpensesStore } from '@/stores/expenses.store'
+import { useProfileStore } from '@/stores/profile.store'
 
 const budgetStore = useBudgetStore()
 const expensesStore = useExpensesStore()
 const balanceStore = useBalanceStore()
+const profileStore = useProfileStore()
 const exportJson = ref('')
 const importText = ref('')
 const errors = ref<string[]>([])
@@ -25,7 +27,7 @@ const categoryVisuals = ref<Record<string, string>>({})
 
 onMounted(async () => {
   categoryVisuals.value = (await readVisualPreferences()).categoryVisuals ?? {}
-  await budgetStore.loadMonth(budgetStore.draftMonth)
+  await budgetStore.loadMonth(profileStore.activeMonth)
 })
 
 async function exportData() {
@@ -51,8 +53,9 @@ async function importData() {
     errors.value = result.errors
     if (!result.errors.length) {
       status.value = 'Importação concluída.'
-      await budgetStore.loadMonth(budgetStore.draftMonth)
-      await expensesStore.loadForBudget(budgetStore.budget?.id ?? null, budgetStore.draftMonth)
+      await profileStore.load()
+      await budgetStore.loadMonth(profileStore.activeMonth)
+      await expensesStore.loadForBudget(budgetStore.budget?.id ?? null, profileStore.activeMonth)
       await balanceStore.loadHistory()
     }
   } catch (error) {
@@ -62,9 +65,10 @@ async function importData() {
 
 async function clearData() {
   await clearLocalData()
+  await profileStore.load()
   status.value = 'Dados remotos limpos.'
-  await budgetStore.loadMonth(budgetStore.draftMonth)
-  await expensesStore.loadForBudget(null, budgetStore.draftMonth)
+  await budgetStore.loadMonth(profileStore.activeMonth)
+  await expensesStore.loadForBudget(null, profileStore.activeMonth)
   await balanceStore.loadHistory()
 }
 

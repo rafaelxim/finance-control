@@ -12,10 +12,10 @@ test('navigates migrated backup months after remote import', async ({ page }) =>
   await expect(page.getByText('Importação concluída.')).toBeVisible()
 
   await page.goto('/orcamento')
-  await page.locator('#budget-month').fill('2025-08')
+  await page.locator('#global-active-month').fill('2025-08')
   await expect(page.locator('#category-name-0')).not.toHaveValue('')
 
   await page.goto('/balanco')
-  await page.locator('#balance-month').fill('2025-08')
+  await page.locator('#global-active-month').fill('2025-08')
   await expect(page.getByRole('heading', { name: 'Balanço' })).toBeVisible()
 })

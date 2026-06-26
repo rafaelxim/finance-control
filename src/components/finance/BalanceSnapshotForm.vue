@@ -3,15 +3,12 @@ import BaseButton from '@/components/ui/BaseButton.vue'
 import BaseInput from '@/components/ui/BaseInput.vue'
 import BaseSelect from '@/components/ui/BaseSelect.vue'
 import CurrencyInput from '@/components/ui/CurrencyInput.vue'
-import MonthPicker from '@/components/ui/MonthPicker.vue'
 import type { BalanceDraftItemInput, BalanceTotals } from '@/domain/balance/types'
-import type { MonthKey } from '@/domain/shared/types'
 
 import NetWorthSummary from './NetWorthSummary.vue'
 
 const props = withDefaults(
   defineProps<{
-    month: MonthKey
     notes: string
     items: BalanceDraftItemInput[]
     totals: BalanceTotals
@@ -23,7 +20,6 @@ const props = withDefaults(
 )
 
 const emit = defineEmits<{
-  'update:month': [value: MonthKey]
   'update:notes': [value: string]
   'update-item': [index: number, item: BalanceDraftItemInput]
   'add-item': []
@@ -48,12 +44,6 @@ function patchItem(index: number, patch: Partial<BalanceDraftItemInput>) {
 <template>
   <form class="balance-form panel" aria-label="Fechamento mensal" @submit.prevent="emit('save')">
     <div class="balance-form__header">
-      <MonthPicker
-        id="balance-month"
-        :model-value="month"
-        label="Mês"
-        @update:model-value="emit('update:month', $event as MonthKey)"
-      />
       <BaseInput
         id="balance-notes"
         :model-value="notes"
@@ -126,7 +116,7 @@ function patchItem(index: number, patch: Partial<BalanceDraftItemInput>) {
 
 .balance-form__header {
   display: grid;
-  grid-template-columns: minmax(160px, 220px) minmax(220px, 1fr);
+  grid-template-columns: minmax(220px, 1fr);
   gap: 14px;
 }
 
