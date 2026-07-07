@@ -140,20 +140,6 @@ watch(
           >
             <RouterLink class="button button--primary" to="/orcamento">Abrir orçamento</RouterLink>
           </EmptyState>
-
-          <section v-else class="dashboard-categories" aria-labelledby="dashboard-categories-title">
-            <div class="section-heading">
-              <h2 id="dashboard-categories-title" class="panel__heading">Uso por categoria</h2>
-              <CategoryUsageExportButton :progress="cards" :month="budgetStore.draftMonth" />
-            </div>
-            <div class="dashboard-categories__list">
-              <MarketCategoryCard
-                v-for="progress in cards"
-                :key="progress.categoryId"
-                :progress="progress"
-              />
-            </div>
-          </section>
         </div>
 
         <aside class="dashboard-layout__support" aria-label="Resumo financeiro">
@@ -173,19 +159,43 @@ watch(
             title="Orçamento do mês"
           />
         </aside>
+
+        <section
+          v-if="cards.length"
+          class="dashboard-categories"
+          aria-labelledby="dashboard-categories-title"
+        >
+          <div class="section-heading">
+            <h2 id="dashboard-categories-title" class="panel__heading">Uso por categoria</h2>
+            <CategoryUsageExportButton :progress="cards" :month="budgetStore.draftMonth" />
+          </div>
+          <div class="dashboard-categories__list">
+            <MarketCategoryCard
+              v-for="progress in cards"
+              :key="progress.categoryId"
+              :progress="progress"
+            />
+          </div>
+        </section>
       </div>
     </template>
   </section>
 </template>
 
 <style scoped>
+.page {
+  max-width: 1600px;
+}
+
 .dashboard-categories {
   display: grid;
+  grid-column: 1 / -1;
   gap: 12px;
 }
 
 .dashboard-categories__list {
   display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 500px), 1fr));
   gap: 12px;
 }
 </style>

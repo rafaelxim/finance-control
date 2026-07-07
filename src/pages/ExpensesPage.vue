@@ -111,7 +111,7 @@ function createCategory() {
             />
           </div>
 
-          <div class="grid grid--cards">
+          <div class="expense-category-progress__cards">
             <MarketCategoryCard
               v-for="progress in expensesStore.categoryProgress"
               :key="progress.categoryId"
@@ -137,3 +137,15 @@ function createCategory() {
     </template>
   </section>
 </template>
+
+<style scoped>
+.page {
+  max-width: 1600px;
+}
+
+.expense-category-progress__cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 500px), 1fr));
+  gap: 16px;
+}
+</style>

@@ -124,7 +124,7 @@ async function saveBudget() {
         />
       </section>
 
-      <section class="grid grid--cards" aria-label="Prévia dos cards">
+      <section class="budget-card-preview" aria-label="Prévia dos cards">
         <CategoryBudgetCard
           v-for="category in activeCategories"
           :key="category.id ?? category.name"
@@ -149,6 +149,10 @@ async function saveBudget() {
 </template>
 
 <style scoped>
+.page {
+  max-width: 1600px;
+}
+
 .save-success {
   border: 1px solid #9ae6b4;
   border-radius: var(--radius);
@@ -175,6 +179,12 @@ async function saveBudget() {
 .budget-save-actions span {
   color: var(--color-muted);
   font-size: 0.9rem;
+}
+
+.budget-card-preview {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 500px), 1fr));
+  gap: 16px;
 }
 
 @media (max-width: 640px) {
