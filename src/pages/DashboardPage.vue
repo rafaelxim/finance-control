@@ -169,6 +169,7 @@ watch(
             :allocated="budgetStore.totals.allocated"
             :unallocated="budgetStore.totals.unallocated"
             :over-allocated="budgetStore.totals.overAllocated"
+            :total-spent="expensesStore.totalSpent"
             title="Orçamento do mês"
           />
         </aside>

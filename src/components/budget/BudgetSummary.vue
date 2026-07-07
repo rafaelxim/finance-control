@@ -7,6 +7,7 @@ withDefaults(
     allocated: string
     unallocated: string
     overAllocated: string
+    totalSpent?: string
     title?: string
   }>(),
   {
@@ -30,11 +31,19 @@ withDefaults(
         <span class="metric__label">Alocado</span>
         <strong class="money money--primary">{{ formatBRL(allocated) }}</strong>
       </div>
-      <div class="metric metric--featured positive">
+      <div v-if="totalSpent !== undefined" class="metric metric--featured metric--spent">
+        <span class="metric__label">Total gasto</span>
+        <strong class="money money--primary">{{ formatBRL(totalSpent) }}</strong>
+      </div>
+      <div v-else class="metric metric--featured positive">
         <span class="metric__label">Não alocado</span>
         <strong class="money money--primary">{{ formatBRL(unallocated) }}</strong>
       </div>
-      <div class="metric metric--featured" :class="{ danger: overAllocated !== '0.00' }">
+      <div
+        v-if="totalSpent === undefined"
+        class="metric metric--featured"
+        :class="{ danger: overAllocated !== '0.00' }"
+      >
         <span class="metric__label">Excedente</span>
         <strong class="money money--primary">{{ formatBRL(overAllocated) }}</strong>
       </div>
@@ -54,5 +63,20 @@ withDefaults(
 
 .danger strong {
   color: var(--color-danger);
+}
+
+.metric--spent {
+  --panel-accent: var(--color-primary);
+  grid-column: 1 / -1;
+  border-color: color-mix(in srgb, var(--color-primary) 35%, var(--color-border));
+  border-left-width: 4px;
+  border-radius: var(--radius);
+  background: color-mix(in srgb, var(--color-primary) 8%, transparent);
+  padding: 10px 12px;
+}
+
+.metric--spent strong {
+  color: var(--color-primary);
+  font-size: 1.28rem;
 }
 </style>
