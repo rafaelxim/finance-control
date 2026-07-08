@@ -1,9 +1,12 @@
 <script setup lang="ts">
 import { computed, onMounted, ref, watch } from 'vue'
+import { Plus } from 'lucide-vue-next'
 import { useRouter } from 'vue-router'
 
 import ExpenseForm from '@/components/finance/ExpenseForm.vue'
 import ExpenseList from '@/components/finance/ExpenseList.vue'
+import BaseButton from '@/components/ui/BaseButton.vue'
+import BaseModal from '@/components/ui/BaseModal.vue'
 import EmptyState from '@/components/ui/EmptyState.vue'
 import FormError from '@/components/ui/FormError.vue'
 import LoadingState from '@/components/ui/LoadingState.vue'
@@ -21,6 +24,7 @@ const profileStore = useProfileStore()
 const errors = ref<string[]>([])
 const saving = ref(false)
 const editingExpense = ref<Expense | null>(null)
+const expenseModalOpen = ref(false)
 
 const defaultDate = computed(() => `${budgetStore.draftMonth}-01`)
 const activeCategories = computed(() => budgetStore.activeCategories)
@@ -45,7 +49,7 @@ async function saveExpense(expense: ExpenseDraftInput) {
   saving.value = true
   try {
     await expensesStore.save(expense)
-    editingExpense.value = null
+    closeExpenseModal()
   } finally {
     saving.value = false
   }
@@ -59,16 +63,46 @@ async function deleteExpense(expenseId: string) {
 }
 
 function createCategory() {
+  closeExpenseModal()
   budgetStore.addCategory()
   void router.push('/orcamento')
+}
+
+function openCreateExpenseModal() {
+  errors.value = []
+  editingExpense.value = null
+  expenseModalOpen.value = true
+}
+
+function openEditExpenseModal(expense: Expense) {
+  errors.value = []
+  editingExpense.value = expense
+  expenseModalOpen.value = true
+}
+
+function closeExpenseModal() {
+  if (saving.value) return
+  expenseModalOpen.value = false
+  editingExpense.value = null
+  errors.value = []
 }
 </script>
 
 <template>
   <section class="page">
-    <header class="page__header">
-      <h1>Despesas</h1>
-      <p>Registre e revise os gastos do mês.</p>
+    <header class="page__header expenses-header">
+      <div>
+        <h1>Despesas</h1>
+        <p>Registre e revise os gastos do mês.</p>
+      </div>
+      <BaseButton
+        v-if="budgetStore.budget && !budgetStore.loading && !expensesStore.loading"
+        class="expenses-header__action"
+        @click="openCreateExpenseModal"
+      >
+        <Plus :size="18" aria-hidden="true" />
+        Registrar despesa
+      </BaseButton>
     </header>
 
     <LoadingState v-if="budgetStore.loading || expensesStore.loading" />
@@ -83,18 +117,6 @@ function createCategory() {
       </EmptyState>
 
       <template v-else>
-        <ExpenseForm
-          :budget-id="budgetStore.budget.id"
-          :categories="activeCategories"
-          :default-date="defaultDate"
-          :editing-expense="editingExpense"
-          :saving="saving"
-          @submit="saveExpense"
-          @create-category="createCategory"
-        />
-
-        <FormError :errors="errors" />
-
         <EmptyState
           v-if="!expensesStore.expenses.length"
           title="Nenhuma despesa registrada"
@@ -105,9 +127,29 @@ function createCategory() {
           v-else
           :expenses="expensesStore.sortedExpenses"
           :categories="activeCategories"
-          @edit="editingExpense = $event"
+          @edit="openEditExpenseModal"
           @delete="deleteExpense"
         />
+
+        <BaseModal
+          :open="expenseModalOpen"
+          :title="editingExpense ? 'Editar despesa' : 'Registrar despesa'"
+          description="Informe os dados do gasto para atualizar o acompanhamento do mês."
+          @close="closeExpenseModal"
+        >
+          <FormError :errors="errors" />
+          <ExpenseForm
+            v-if="expenseModalOpen"
+            class="expense-modal__form"
+            :budget-id="budgetStore.budget.id"
+            :categories="activeCategories"
+            :default-date="defaultDate"
+            :editing-expense="editingExpense"
+            :saving="saving"
+            @submit="saveExpense"
+            @create-category="createCategory"
+          />
+        </BaseModal>
       </template>
     </template>
   </section>
@@ -116,5 +158,30 @@ function createCategory() {
 <style scoped>
 .page {
   max-width: 1600px;
+}
+
+.expenses-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.expenses-header > div {
+  display: grid;
+  gap: 6px;
+}
+
+.expenses-header__action {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.expense-modal__form {
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  padding: 0;
 }
 </style>

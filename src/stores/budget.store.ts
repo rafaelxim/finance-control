@@ -55,22 +55,15 @@ export const useBudgetStore = defineStore('budget', {
       return withComputedLimits(state.draftAvailableAmount || '0', state.draftCategories)
     },
     totals(state): ReturnType<typeof calculateBudgetTotals> {
-      const source = state.budget
-        ? state.categories
-        : withComputedLimits(state.draftAvailableAmount || '0', state.draftCategories).map(
-            (category) => ({
-              ...category,
-              status: 'active' as const
-            })
-          )
+      const source = withComputedLimits(
+        state.draftAvailableAmount || '0',
+        state.draftCategories
+      ).map((category) => ({
+        ...category,
+        status: 'active' as const
+      }))
 
-      return calculateBudgetTotals(
-        state.budget?.availableAmount ?? state.draftAvailableAmount ?? '0',
-        source
-      )
-    },
-    summaryAvailableAmount(state): string {
-      return state.budget?.availableAmount ?? state.draftAvailableAmount
+      return calculateBudgetTotals(state.draftAvailableAmount || '0', source)
     },
     activeCategories(state): BudgetCategory[] {
       return state.categories.filter((category) => category.status === 'active')

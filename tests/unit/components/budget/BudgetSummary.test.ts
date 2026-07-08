@@ -14,7 +14,7 @@ describe('BudgetSummary', () => {
       }
     })
 
-    expect(wrapper.text()).toContain('Disponível')
+    expect(wrapper.text()).toContain('Valor mensal disponível')
     expect(wrapper.text()).toContain('Alocado')
     expect(wrapper.text()).toContain('Não alocado')
     expect(wrapper.text()).toContain('Excedente')
@@ -23,30 +23,43 @@ describe('BudgetSummary', () => {
     expect(wrapper.find('.danger').exists()).toBe(true)
     expect(wrapper.find('.panel--budget').exists()).toBe(true)
     expect(wrapper.findAll('.metric--featured')).toHaveLength(2)
-    expect(wrapper.findAll('.money--primary').length).toBe(4)
+    expect(wrapper.findAll('.money--primary').length).toBe(3)
   })
 
-  it('renders total spent mode without allocation balance indicators', () => {
+  it('renders the unallocated amount without an excess metric', () => {
     const wrapper = mount(BudgetSummary, {
       props: {
         availableAmount: '1000.00',
         allocated: '800.00',
         unallocated: '200.00',
         overAllocated: '0.00',
-        totalSpent: '350.50',
         title: 'Orçamento do mês'
       }
     })
 
     expect(wrapper.text()).toContain('Orçamento do mês')
-    expect(wrapper.text()).toContain('Disponível')
+    expect(wrapper.text()).toContain('Valor mensal disponível')
     expect(wrapper.text()).toContain('Alocado')
-    expect(wrapper.text()).toContain('Total gasto')
-    expect(wrapper.text()).toContain('350')
-    expect(wrapper.text()).not.toContain('Não alocado')
+    expect(wrapper.text()).toContain('Não alocado')
+    expect(wrapper.text()).toContain('200')
+    expect(wrapper.text()).not.toContain('Total gasto')
     expect(wrapper.text()).not.toContain('Excedente')
-    expect(wrapper.find('.metric--spent').exists()).toBe(true)
     expect(wrapper.findAll('.metric--featured')).toHaveLength(1)
-    expect(wrapper.findAll('.money--primary').length).toBe(3)
+    expect(wrapper.findAll('.money--primary').length).toBe(2)
+  })
+
+  it('emits available amount edits', async () => {
+    const wrapper = mount(BudgetSummary, {
+      props: {
+        availableAmount: '1000.00',
+        allocated: '800.00',
+        unallocated: '200.00',
+        overAllocated: '0.00'
+      }
+    })
+
+    await wrapper.get('#available-amount').setValue('2500')
+
+    expect(wrapper.emitted('update:availableAmount')?.[0]).toEqual(['2500'])
   })
 })

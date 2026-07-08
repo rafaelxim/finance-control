@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import CurrencyInput from '@/components/ui/CurrencyInput.vue'
 import { formatBRL } from '@/domain/shared/money'
 
 withDefaults(
@@ -7,13 +8,16 @@ withDefaults(
     allocated: string
     unallocated: string
     overAllocated: string
-    totalSpent?: string
     title?: string
   }>(),
   {
     title: 'Resumo do orçamento'
   }
 )
+
+defineEmits<{
+  'update:availableAmount': [value: string]
+}>()
 </script>
 
 <template>
@@ -23,24 +27,23 @@ withDefaults(
   >
     <h2 id="budget-summary-title" class="panel__heading">{{ title }}</h2>
     <div class="metric-grid">
-      <div class="metric positive">
-        <span class="metric__label">Disponível</span>
-        <strong class="money money--primary">{{ formatBRL(availableAmount) }}</strong>
-      </div>
+      <CurrencyInput
+        id="available-amount"
+        class="budget-summary__available"
+        :model-value="availableAmount"
+        label="Valor mensal disponível"
+        @update:model-value="$emit('update:availableAmount', $event)"
+      />
       <div class="metric">
         <span class="metric__label">Alocado</span>
         <strong class="money money--primary">{{ formatBRL(allocated) }}</strong>
       </div>
-      <div v-if="totalSpent !== undefined" class="metric metric--featured metric--spent">
-        <span class="metric__label">Total gasto</span>
-        <strong class="money money--primary">{{ formatBRL(totalSpent) }}</strong>
-      </div>
-      <div v-else class="metric metric--featured positive">
+      <div class="metric metric--featured positive">
         <span class="metric__label">Não alocado</span>
         <strong class="money money--primary">{{ formatBRL(unallocated) }}</strong>
       </div>
       <div
-        v-if="totalSpent === undefined"
+        v-if="overAllocated !== '0.00'"
         class="metric metric--featured"
         :class="{ danger: overAllocated !== '0.00' }"
       >
@@ -57,6 +60,15 @@ withDefaults(
   gap: 16px;
 }
 
+.budget-summary .metric-grid {
+  grid-template-columns: minmax(240px, 1.2fr) repeat(2, minmax(180px, 1fr));
+  align-items: end;
+}
+
+.budget-summary__available {
+  min-width: 0;
+}
+
 .positive strong {
   color: var(--color-up);
 }
@@ -65,18 +77,4 @@ withDefaults(
   color: var(--color-danger);
 }
 
-.metric--spent {
-  --panel-accent: var(--color-primary);
-  grid-column: 1 / -1;
-  border-color: color-mix(in srgb, var(--color-primary) 35%, var(--color-border));
-  border-left-width: 4px;
-  border-radius: var(--radius);
-  background: color-mix(in srgb, var(--color-primary) 8%, transparent);
-  padding: 10px 12px;
-}
-
-.metric--spent strong {
-  color: var(--color-primary);
-  font-size: 1.28rem;
-}
 </style>
