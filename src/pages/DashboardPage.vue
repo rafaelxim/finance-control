@@ -132,9 +132,7 @@ watch(
         <div class="dashboard-layout__main">
           <DashboardFinancialSummary :summary="dashboardSummary" />
           <DashboardBudgetSummary
-            :available-amount="budgetStore.totals.unallocated"
             :allocated-amount="budgetStore.totals.allocated"
-            :budget-amount="budgetStore.summaryAvailableAmount"
             :expenses="expensesStore.sortedExpenses"
             :month="budgetStore.draftMonth"
             :over-allocated-amount="budgetStore.totals.overAllocated"

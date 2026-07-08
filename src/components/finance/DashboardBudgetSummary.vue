@@ -20,8 +20,6 @@ ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend)
 const props = defineProps<{
   title?: string
   month: MonthKey
-  budgetAmount: string
-  availableAmount: string
   allocatedAmount: string
   spentAmount: string
   overAllocatedAmount: string
@@ -34,20 +32,19 @@ function formatPercent(value: number) {
   }).format(value)}%`
 }
 
-const budgetAmount = computed(() => toDecimal(props.budgetAmount))
 const spentAmount = computed(() => toDecimal(props.spentAmount))
-const availableAmount = computed(() => toDecimal(props.availableAmount))
 const allocatedAmount = computed(() => toDecimal(props.allocatedAmount))
 const overAllocatedAmount = computed(() => toDecimal(props.overAllocatedAmount))
+const availableAmount = computed(() => allocatedAmount.value.minus(spentAmount.value))
 
 const spentPercent = computed(() => {
-  if (budgetAmount.value.lte(0)) return 0
-  return spentAmount.value.div(budgetAmount.value).times(100).toNumber()
+  if (allocatedAmount.value.lte(0)) return 0
+  return spentAmount.value.div(allocatedAmount.value).times(100).toNumber()
 })
 
 const availablePercent = computed(() => {
-  if (budgetAmount.value.lte(0)) return 0
-  return availableAmount.value.div(budgetAmount.value).times(100).toNumber()
+  if (allocatedAmount.value.lte(0)) return 0
+  return availableAmount.value.div(allocatedAmount.value).times(100).toNumber()
 })
 
 const progressWidth = computed(() => `${Math.max(0, Math.min(spentPercent.value, 100))}%`)
@@ -133,9 +130,9 @@ const chartOptions = {
 }
 
 const summaryState = computed(() => {
-  if (overAllocatedAmount.value.gt(0)) return 'negative'
+  if (availableAmount.value.lt(0) || overAllocatedAmount.value.gt(0)) return 'negative'
   if (spentPercent.value >= 85) return 'warning'
-  if (spentPercent.value > 0) return 'positive'
+  if (availableAmount.value.gt(0)) return 'positive'
   return 'neutral'
 })
 
