@@ -13,8 +13,6 @@
     "typecheck": "vue-tsc --noEmit",
     "test:unit": "vitest run",
     "test:unit:watch": "vitest",
-    "test:e2e": "playwright test",
-    "test:e2e:basic": "playwright test tests/e2e/no-auth-supabase.spec.ts tests/e2e/backup-migration.spec.ts tests/e2e/remote-persistence.spec.ts",
     "migrate:backup": "tsx --tsconfig tsconfig.app.json scripts/migrate-backup-to-supabase.ts"
   },
   "dependencies": {

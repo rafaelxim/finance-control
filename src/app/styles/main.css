@@ -239,27 +239,21 @@ select {
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
 }
 
-.expense-category-progress {
-  display: grid;
-  gap: 12px;
-}
-
 .dashboard-layout {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(300px, 360px);
+  grid-template-columns: minmax(0, 1fr);
   gap: 16px;
   align-items: start;
 }
 
-.dashboard-layout__main,
-.dashboard-layout__support {
+.dashboard-layout__main {
   display: grid;
   min-width: 0;
   gap: 16px;
 }
 
-.dashboard-layout__support {
-  align-content: start;
+.dashboard-layout__main > * {
+  width: 100%;
 }
 
 .panel {

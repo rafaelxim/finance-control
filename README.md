@@ -34,7 +34,6 @@ pnpm format:check
 pnpm lint
 pnpm typecheck
 pnpm test:unit
-pnpm test:e2e
 pnpm build
 ```
 

@@ -2,8 +2,6 @@
 import { computed, onMounted, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 
-import CategoryUsageExportButton from '@/components/budget/CategoryUsageExportButton.vue'
-import MarketCategoryCard from '@/components/budget/MarketCategoryCard.vue'
 import ExpenseForm from '@/components/finance/ExpenseForm.vue'
 import ExpenseList from '@/components/finance/ExpenseList.vue'
 import EmptyState from '@/components/ui/EmptyState.vue'
@@ -70,7 +68,7 @@ function createCategory() {
   <section class="page">
     <header class="page__header">
       <h1>Despesas</h1>
-      <p>Registre gastos do mês e acompanhe o consumo por categoria.</p>
+      <p>Registre e revise os gastos do mês.</p>
     </header>
 
     <LoadingState v-if="budgetStore.loading || expensesStore.loading" />
@@ -97,29 +95,6 @@ function createCategory() {
 
         <FormError :errors="errors" />
 
-        <section
-          class="expense-category-progress"
-          aria-labelledby="expense-category-progress-title"
-        >
-          <div class="section-heading">
-            <h2 id="expense-category-progress-title" class="panel__heading">
-              Progresso por categoria
-            </h2>
-            <CategoryUsageExportButton
-              :progress="expensesStore.categoryProgress"
-              :month="budgetStore.draftMonth"
-            />
-          </div>
-
-          <div class="expense-category-progress__cards">
-            <MarketCategoryCard
-              v-for="progress in expensesStore.categoryProgress"
-              :key="progress.categoryId"
-              :progress="progress"
-            />
-          </div>
-        </section>
-
         <EmptyState
           v-if="!expensesStore.expenses.length"
           title="Nenhuma despesa registrada"
@@ -141,11 +116,5 @@ function createCategory() {
 <style scoped>
 .page {
   max-width: 1600px;
-}
-
-.expense-category-progress__cards {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 460px), 1fr));
-  gap: 16px;
 }
 </style>

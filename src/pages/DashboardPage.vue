@@ -1,13 +1,12 @@
 <script setup lang="ts">
 import { computed, onMounted, watch } from 'vue'
 
-import BudgetSummary from '@/components/budget/BudgetSummary.vue'
 import CategoryUsageExportButton from '@/components/budget/CategoryUsageExportButton.vue'
 import MarketCategoryCard from '@/components/budget/MarketCategoryCard.vue'
+import DashboardBudgetSummary from '@/components/finance/DashboardBudgetSummary.vue'
 import DashboardFinancialSummary, {
   type DashboardFinancialSummaryViewModel
 } from '@/components/finance/DashboardFinancialSummary.vue'
-import NetWorthSummary from '@/components/finance/NetWorthSummary.vue'
 import { toDecimal } from '@/domain/shared/money'
 import EmptyState from '@/components/ui/EmptyState.vue'
 import LoadingState from '@/components/ui/LoadingState.vue'
@@ -132,6 +131,15 @@ watch(
       <div class="dashboard-layout">
         <div class="dashboard-layout__main">
           <DashboardFinancialSummary :summary="dashboardSummary" />
+          <DashboardBudgetSummary
+            :available-amount="budgetStore.totals.unallocated"
+            :allocated-amount="budgetStore.totals.allocated"
+            :budget-amount="budgetStore.summaryAvailableAmount"
+            :expenses="expensesStore.sortedExpenses"
+            :month="budgetStore.draftMonth"
+            :over-allocated-amount="budgetStore.totals.overAllocated"
+            :spent-amount="expensesStore.totalSpent"
+          />
 
           <EmptyState
             v-if="!cards.length"
@@ -141,24 +149,6 @@ watch(
             <RouterLink class="button button--primary" to="/orcamento">Abrir orçamento</RouterLink>
           </EmptyState>
         </div>
-
-        <aside class="dashboard-layout__support" aria-label="Resumo financeiro">
-          <NetWorthSummary
-            v-if="latestNetWorth"
-            :totals="latestNetWorth"
-            :change="latestNetWorth.netWorthChange"
-            title="Patrimônio"
-          />
-
-          <BudgetSummary
-            :available-amount="budgetStore.draftAvailableAmount"
-            :allocated="budgetStore.totals.allocated"
-            :unallocated="budgetStore.totals.unallocated"
-            :over-allocated="budgetStore.totals.overAllocated"
-            :total-spent="expensesStore.totalSpent"
-            title="Orçamento do mês"
-          />
-        </aside>
 
         <section
           v-if="cards.length"
