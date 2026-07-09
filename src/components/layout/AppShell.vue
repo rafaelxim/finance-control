@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue'
 import {
-  BarChart3,
   CalendarDays,
   ChevronLeft,
   ChevronRight,
@@ -20,7 +19,6 @@ const links = [
   { to: '/orcamento', label: 'Orçamento', icon: Tags },
   { to: '/despesas', label: 'Despesas', icon: WalletCards },
   { to: '/balanco', label: 'Balanço', icon: CreditCard },
-  { to: '/evolucao', label: 'Evolução', icon: BarChart3 },
   { to: '/configuracoes', label: 'Configurações', icon: Settings }
 ]
 

@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { Pencil, Plus, Trash2 } from 'lucide-vue-next'
-import { computed, ref } from 'vue'
+import { ArrowDown, ArrowUp, Pencil, Plus, Trash2 } from 'lucide-vue-next'
+import { computed, ref, watch } from 'vue'
 
 import BaseButton from '@/components/ui/BaseButton.vue'
 import BaseSelect from '@/components/ui/BaseSelect.vue'
@@ -11,6 +11,7 @@ import { formatBRL, toDecimal } from '@/domain/shared/money'
 const props = defineProps<{
   expenses: Expense[]
   categories: BudgetCategory[]
+  categoryFilter?: string
 }>()
 
 const emit = defineEmits<{
@@ -31,13 +32,15 @@ function formatExpenseDate(date: string) {
   return `${day}/${month}/${year}`
 }
 
-const categoryFilter = ref('all')
-const sortMode = ref('date-desc')
+const selectedCategoryFilter = ref('all')
+type SortKey = 'description' | 'date' | 'amount'
+type SortDirection = 'asc' | 'desc'
+
+const sortKey = ref<SortKey>('date')
+const sortDirection = ref<SortDirection>('desc')
 
 const categoryOptions = computed(() => {
-  const options = props.categories
-    .filter((category) => props.expenses.some((expense) => expense.categoryId === category.id))
-    .map((category) => ({ value: category.id, label: category.name }))
+  const options = props.categories.map((category) => ({ value: category.id, label: category.name }))
 
   const hasRemovedCategories = props.expenses.some(
     (expense) => !props.categories.some((category) => category.id === expense.categoryId)
@@ -50,27 +53,31 @@ const categoryOptions = computed(() => {
   return [{ value: 'all', label: 'Todas as categorias' }, ...options]
 })
 
-const sortOptions = [
-  { value: 'date-desc', label: 'Data: mais recentes' },
-  { value: 'date-asc', label: 'Data: mais antigas' },
-  { value: 'amount-desc', label: 'Valor: maior primeiro' },
-  { value: 'amount-asc', label: 'Valor: menor primeiro' }
-]
-
 const visibleExpenses = computed(() => {
   const filtered = props.expenses.filter((expense) => {
-    if (categoryFilter.value === 'all') return true
-    if (categoryFilter.value === 'removed') {
+    if (selectedCategoryFilter.value === 'all') return true
+    if (selectedCategoryFilter.value === 'removed') {
       return !props.categories.some((category) => category.id === expense.categoryId)
     }
-    return expense.categoryId === categoryFilter.value
+    return expense.categoryId === selectedCategoryFilter.value
   })
 
   return [...filtered].sort((left, right) => {
-    if (sortMode.value === 'date-asc') return left.date.localeCompare(right.date)
-    if (sortMode.value === 'amount-desc') return toDecimal(right.amount).cmp(toDecimal(left.amount))
-    if (sortMode.value === 'amount-asc') return toDecimal(left.amount).cmp(toDecimal(right.amount))
-    return right.date.localeCompare(left.date)
+    let comparison = 0
+
+    if (sortKey.value === 'description') {
+      comparison = `${categoryName(left.categoryId)} ${left.description}`.localeCompare(
+        `${categoryName(right.categoryId)} ${right.description}`,
+        'pt-BR',
+        { sensitivity: 'base' }
+      )
+    } else if (sortKey.value === 'amount') {
+      comparison = toDecimal(left.amount).cmp(toDecimal(right.amount))
+    } else {
+      comparison = left.date.localeCompare(right.date)
+    }
+
+    return sortDirection.value === 'asc' ? comparison : comparison * -1
   })
 })
 
@@ -96,6 +103,29 @@ function requestDelete(expense: Expense) {
   if (!window.confirm(`Excluir ${description}?`)) return
   emit('delete', expense.id)
 }
+
+function sortBy(key: SortKey) {
+  if (sortKey.value === key) {
+    sortDirection.value = sortDirection.value === 'asc' ? 'desc' : 'asc'
+    return
+  }
+
+  sortKey.value = key
+  sortDirection.value = 'asc'
+}
+
+function ariaSort(key: SortKey) {
+  if (sortKey.value !== key) return 'none'
+  return sortDirection.value === 'asc' ? 'ascending' : 'descending'
+}
+
+watch(
+  () => props.categoryFilter,
+  (value) => {
+    selectedCategoryFilter.value = value || 'all'
+  },
+  { immediate: true }
+)
 </script>
 
 <template>
@@ -120,11 +150,10 @@ function requestDelete(expense: Expense) {
     <div v-if="expenses.length" class="expense-list__filters" aria-label="Filtros de despesas">
       <BaseSelect
         id="expense-category-filter"
-        v-model="categoryFilter"
+        v-model="selectedCategoryFilter"
         label="Categoria"
         :options="categoryOptions"
       />
-      <BaseSelect id="expense-sort" v-model="sortMode" label="Ordenar" :options="sortOptions" />
     </div>
 
     <p v-if="expenses.length && !visibleExpenses.length" class="expense-list__empty" role="status">
@@ -140,9 +169,43 @@ function requestDelete(expense: Expense) {
       <table class="expense-list__table">
         <thead>
           <tr>
-            <th scope="col">Categoria / Descrição</th>
-            <th scope="col">Data</th>
-            <th scope="col">Valor</th>
+            <th scope="col" :aria-sort="ariaSort('description')">
+              <button class="expense-list__sort" type="button" @click="sortBy('description')">
+                Categoria / Descrição
+                <ArrowUp
+                  v-if="sortKey === 'description' && sortDirection === 'asc'"
+                  :size="14"
+                  aria-hidden="true"
+                />
+                <ArrowDown v-else-if="sortKey === 'description'" :size="14" aria-hidden="true" />
+              </button>
+            </th>
+            <th scope="col" :aria-sort="ariaSort('date')">
+              <button class="expense-list__sort" type="button" @click="sortBy('date')">
+                Data
+                <ArrowUp
+                  v-if="sortKey === 'date' && sortDirection === 'asc'"
+                  :size="14"
+                  aria-hidden="true"
+                />
+                <ArrowDown v-else-if="sortKey === 'date'" :size="14" aria-hidden="true" />
+              </button>
+            </th>
+            <th scope="col" :aria-sort="ariaSort('amount')">
+              <button
+                class="expense-list__sort expense-list__sort--right"
+                type="button"
+                @click="sortBy('amount')"
+              >
+                Valor
+                <ArrowUp
+                  v-if="sortKey === 'amount' && sortDirection === 'asc'"
+                  :size="14"
+                  aria-hidden="true"
+                />
+                <ArrowDown v-else-if="sortKey === 'amount'" :size="14" aria-hidden="true" />
+              </button>
+            </th>
             <th scope="col">Ações</th>
           </tr>
         </thead>
@@ -277,7 +340,7 @@ function requestDelete(expense: Expense) {
 
 .expense-list__filters {
   display: grid;
-  grid-template-columns: minmax(220px, 392px) minmax(220px, 382px);
+  grid-template-columns: minmax(220px, 392px);
   gap: 24px;
   border-top: 1px solid var(--color-border);
   padding: 28px 40px 32px;
@@ -291,10 +354,18 @@ function requestDelete(expense: Expense) {
 .expense-list__filters :deep(.input) {
   min-height: 56px;
   border-color: color-mix(in srgb, var(--color-muted) 32%, var(--color-border));
-  background: color-mix(in srgb, var(--color-bg) 58%, var(--color-surface));
+  background-color: color-mix(in srgb, var(--color-bg) 58%, var(--color-surface));
   color: var(--color-text);
   font-size: 1rem;
   padding-inline: 18px;
+}
+
+.expense-list__filters :deep(select.input) {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 24 24' fill='none' stroke='%23929aa5' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-position: right 18px center;
+  background-repeat: no-repeat;
+  background-size: 16px;
+  padding-right: 48px;
 }
 
 .expense-list__filters :deep(.input:hover),
@@ -326,6 +397,33 @@ function requestDelete(expense: Expense) {
   text-transform: uppercase;
 }
 
+.expense-list__sort {
+  display: inline-flex;
+  min-height: 28px;
+  align-items: center;
+  gap: 6px;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 800;
+  letter-spacing: inherit;
+  padding: 0;
+  text-transform: inherit;
+}
+
+.expense-list__sort:hover,
+.expense-list__sort:focus-visible {
+  color: var(--color-primary);
+  outline: none;
+}
+
+.expense-list__sort--right {
+  justify-content: flex-end;
+  width: 100%;
+}
+
 .expense-list__table th:nth-child(1) {
   width: 40%;
   padding-left: 40px;
@@ -342,6 +440,7 @@ function requestDelete(expense: Expense) {
 
 .expense-list__table th:nth-child(4) {
   width: 25%;
+  text-align: right;
 }
 
 .expense-list__table td {

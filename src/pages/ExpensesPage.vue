@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, onMounted, ref, watch } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 
 import ExpenseForm from '@/components/finance/ExpenseForm.vue'
 import ExpenseList from '@/components/finance/ExpenseList.vue'
@@ -16,6 +16,7 @@ import { useExpensesStore } from '@/stores/expenses.store'
 import { useProfileStore } from '@/stores/profile.store'
 
 const router = useRouter()
+const route = useRoute()
 const budgetStore = useBudgetStore()
 const expensesStore = useExpensesStore()
 const profileStore = useProfileStore()
@@ -26,6 +27,10 @@ const expenseModalOpen = ref(false)
 
 const defaultDate = computed(() => `${budgetStore.draftMonth}-01`)
 const activeCategories = computed(() => budgetStore.activeCategories)
+const categoryFilter = computed(() => {
+  const value = route.query.categoria
+  return typeof value === 'string' ? value : 'all'
+})
 
 onMounted(async () => {
   await budgetStore.loadMonth(profileStore.activeMonth)
@@ -103,6 +108,7 @@ function closeExpenseModal() {
         <ExpenseList
           :expenses="expensesStore.sortedExpenses"
           :categories="activeCategories"
+          :category-filter="categoryFilter"
           @create="openCreateExpenseModal"
           @edit="openEditExpenseModal"
           @delete="deleteExpense"

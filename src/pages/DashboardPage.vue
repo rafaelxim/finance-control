@@ -7,6 +7,7 @@ import DashboardBudgetSummary from '@/components/finance/DashboardBudgetSummary.
 import DashboardFinancialSummary, {
   type DashboardFinancialSummaryViewModel
 } from '@/components/finance/DashboardFinancialSummary.vue'
+import FinancialEvolutionChart from '@/components/finance/FinancialEvolutionChart.vue'
 import { toDecimal } from '@/domain/shared/money'
 import EmptyState from '@/components/ui/EmptyState.vue'
 import LoadingState from '@/components/ui/LoadingState.vue'
@@ -138,6 +139,10 @@ watch(
             :over-allocated-amount="budgetStore.totals.overAllocated"
             :spent-amount="expensesStore.totalSpent"
           />
+          <FinancialEvolutionChart
+            v-if="balanceStore.evolution.length"
+            :evolution="balanceStore.evolution"
+          />
 
           <EmptyState
             v-if="!cards.length"
@@ -158,11 +163,15 @@ watch(
             <CategoryUsageExportButton :progress="cards" :month="budgetStore.draftMonth" />
           </div>
           <div class="dashboard-categories__list">
-            <MarketCategoryCard
+            <RouterLink
               v-for="progress in cards"
               :key="progress.categoryId"
-              :progress="progress"
-            />
+              class="dashboard-categories__link"
+              :to="{ path: '/despesas', query: { categoria: progress.categoryId } }"
+              :aria-label="`Ver despesas da categoria ${progress.categoryName}`"
+            >
+              <MarketCategoryCard :progress="progress" />
+            </RouterLink>
           </div>
         </section>
       </div>
@@ -185,5 +194,17 @@ watch(
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 460px), 1fr));
   gap: 12px;
+}
+
+.dashboard-categories__link {
+  display: block;
+  color: inherit;
+  text-decoration: none;
+}
+
+.dashboard-categories__link:focus-visible {
+  border-radius: 14px;
+  outline: 2px solid var(--color-primary);
+  outline-offset: 3px;
 }
 </style>
