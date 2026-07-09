@@ -1,5 +1,7 @@
 <script setup lang="ts">
-import CurrencyInput from '@/components/ui/CurrencyInput.vue'
+import { Pencil } from 'lucide-vue-next'
+
+import BaseButton from '@/components/ui/BaseButton.vue'
 import { formatBRL } from '@/domain/shared/money'
 
 withDefaults(
@@ -16,7 +18,7 @@ withDefaults(
 )
 
 defineEmits<{
-  'update:availableAmount': [value: string]
+  editAvailableAmount: []
 }>()
 </script>
 
@@ -27,13 +29,18 @@ defineEmits<{
   >
     <h2 id="budget-summary-title" class="panel__heading">{{ title }}</h2>
     <div class="metric-grid">
-      <CurrencyInput
-        id="available-amount"
-        class="budget-summary__available"
-        :model-value="availableAmount"
-        label="Valor mensal disponível"
-        @update:model-value="$emit('update:availableAmount', $event)"
-      />
+      <div class="metric budget-summary__available">
+        <span class="metric__label">Valor mensal disponível</span>
+        <strong class="money money--primary">{{ formatBRL(availableAmount) }}</strong>
+        <BaseButton
+          class="budget-summary__edit"
+          variant="secondary"
+          @click="$emit('editAvailableAmount')"
+        >
+          <Pencil :size="17" aria-hidden="true" />
+          Editar valor mensal disponível
+        </BaseButton>
+      </div>
       <div class="metric">
         <span class="metric__label">Alocado</span>
         <strong class="money money--primary">{{ formatBRL(allocated) }}</strong>
@@ -62,11 +69,18 @@ defineEmits<{
 
 .budget-summary .metric-grid {
   grid-template-columns: minmax(240px, 1.2fr) repeat(2, minmax(180px, 1fr));
-  align-items: end;
+  align-items: center;
 }
 
 .budget-summary__available {
+  display: grid;
   min-width: 0;
+  gap: 8px;
+  align-items: start;
+}
+
+.budget-summary__edit {
+  justify-self: start;
 }
 
 .positive strong {
@@ -76,5 +90,4 @@ defineEmits<{
 .danger strong {
   color: var(--color-danger);
 }
-
 </style>

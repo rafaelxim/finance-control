@@ -11,3 +11,8 @@ Supabase data unless the user explicitly requests that specific action and
 approves it before execution. Prefer read-only inspection by default, and ask
 for confirmation before running any command, test, migration helper, UI flow, or
 script that may change already-registered Supabase records.
+
+## Test Execution
+
+Do not create, modify, or execute tests unless the user explicitly requests
+tests for the current task.

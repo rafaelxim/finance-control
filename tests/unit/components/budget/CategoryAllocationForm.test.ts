@@ -4,7 +4,7 @@ import { describe, expect, it } from 'vitest'
 import CategoryAllocationForm from '@/components/budget/CategoryAllocationForm.vue'
 
 describe('CategoryAllocationForm', () => {
-  it('renders a compact summary and emits updates for the editable fields', async () => {
+  it('renders a compact summary and emits edit and remove actions', async () => {
     const wrapper = mount(CategoryAllocationForm, {
       props: {
         index: 0,
@@ -19,13 +19,12 @@ describe('CategoryAllocationForm', () => {
 
     expect(wrapper.text()).toContain('Limite calculado')
     expect(wrapper.text().replace(/\s+/g, ' ')).toContain('R$ 300,00')
-    expect(wrapper.find('details').attributes('open')).toBeUndefined()
+    expect(wrapper.find('details').exists()).toBe(false)
 
-    await wrapper.get('summary').trigger('click')
-    await wrapper.get('#category-name-0').setValue('Mercado')
-    await wrapper.get('#category-type-0').setValue('percentage')
+    await wrapper.get('[aria-label="Editar categoria"]').trigger('click')
+    await wrapper.get('[aria-label="Remover categoria"]').trigger('click')
 
-    expect(wrapper.emitted('update')).toHaveLength(2)
-    expect(wrapper.text()).not.toContain('Clique para editar ou recolher')
+    expect(wrapper.emitted('edit')?.[0]).toEqual([0])
+    expect(wrapper.emitted('remove')?.[0]).toEqual([0])
   })
 })

@@ -13,6 +13,7 @@ import {
 
 import type { MonthKey } from '@/domain/shared/types'
 import { useProfileStore } from '@/stores/profile.store'
+import logoUrl from '@/assets/logo.png'
 
 const links = [
   { to: '/', label: 'Dashboard', icon: Gauge },
@@ -56,8 +57,7 @@ function updateMonth(value: string) {
   <div class="app-shell">
     <aside class="app-shell__sidebar">
       <div class="brand">
-        <span class="brand__mark">FC</span>
-        <span class="brand__text">Finance Control</span>
+        <img class="brand__logo" :src="logoUrl" alt="OrganizaGrana" />
       </div>
 
       <section class="month-context" aria-label="Mês ativo global">
