@@ -375,45 +375,120 @@ const remainingLabel = computed(() =>
 @media (max-width: 720px) {
   .market-card {
     min-height: 0;
+    gap: 12px;
+    border-radius: var(--radius-card);
+    padding: 14px;
   }
 
-  .market-card__header,
-  .market-card__focus {
+  .market-card__header {
     align-items: flex-start;
-    flex-direction: column;
+    gap: 10px;
+    padding-bottom: 10px;
+  }
+
+  .market-card__identity {
+    gap: 10px;
+  }
+
+  .market-card__icon {
+    width: 34px;
+    height: 34px;
+  }
+
+  .market-card__icon svg {
+    width: 17px;
+    height: 17px;
+  }
+
+  .market-card h3 {
+    font-size: 1rem;
+  }
+
+  .market-card p {
+    display: none;
   }
 
   .market-card__badge {
-    min-height: 52px;
+    min-height: 28px;
+    gap: 5px;
+    border-radius: 999px;
+    font-size: 0.68rem;
+    padding: 4px 7px;
+  }
+
+  .market-card__badge svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  .market-card__focus {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: end;
+  }
+
+  .market-card__focus strong {
+    font-size: 1.28rem;
+    line-height: 1.05;
+  }
+
+  .market-card__usage strong {
+    font-size: 1.14rem;
   }
 
   .market-card__usage {
-    justify-items: start;
-    text-align: left;
+    justify-items: end;
+    text-align: right;
+  }
+
+  .market-card__scale {
+    display: none;
   }
 
   .market-card__metrics {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+    padding-top: 10px;
+  }
+
+  .market-card__metrics > div {
+    grid-template-columns: 28px minmax(0, 1fr);
+    column-gap: 8px;
   }
 
   .market-card__metrics > div + div {
-    border-top: 1px solid rgba(146, 154, 165, 0.18);
-    border-left: 0;
-    padding-top: 18px;
-    padding-left: 0;
+    border-top: 0;
+    border-left: 1px solid rgba(146, 154, 165, 0.18);
+    padding-top: 0;
+    padding-left: 10px;
+  }
+
+  .market-card__metric-icon {
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+  }
+
+  .market-card__metric-icon svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  .market-card__metrics .money {
+    font-size: 0.72rem;
   }
 }
 
 @media (max-width: 440px) {
   .market-card__identity {
-    align-items: flex-start;
-    flex-direction: column;
+    align-items: center;
+    flex-direction: row;
   }
 
-  .market-card__metric-icon {
-    width: 54px;
-    height: 54px;
-    border-radius: 16px;
+  .market-card__badge {
+    max-width: 116px;
+    justify-content: center;
+    text-align: center;
   }
 }
 </style>

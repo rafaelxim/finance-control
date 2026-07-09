@@ -207,4 +207,18 @@ watch(
   outline: 2px solid var(--color-primary);
   outline-offset: 3px;
 }
+
+@media (max-width: 720px) {
+  .dashboard-categories {
+    gap: 10px;
+  }
+
+  .dashboard-categories .section-heading {
+    align-items: center;
+  }
+
+  .dashboard-categories__list {
+    gap: 10px;
+  }
+}
 </style>
