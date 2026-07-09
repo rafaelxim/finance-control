@@ -169,6 +169,40 @@ watch(
       Nenhuma despesa encontrada para os filtros selecionados.
     </p>
 
+    <div
+      v-if="visibleExpenses.length"
+      class="expense-list__mobile-sort"
+      aria-label="Ordenar despesas"
+    >
+      <button type="button" :aria-sort="ariaSort('description')" @click="sortBy('description')">
+        Item
+        <ArrowUp
+          v-if="sortKey === 'description' && sortDirection === 'asc'"
+          :size="14"
+          aria-hidden="true"
+        />
+        <ArrowDown v-else-if="sortKey === 'description'" :size="14" aria-hidden="true" />
+      </button>
+      <button type="button" :aria-sort="ariaSort('date')" @click="sortBy('date')">
+        Data
+        <ArrowUp
+          v-if="sortKey === 'date' && sortDirection === 'asc'"
+          :size="14"
+          aria-hidden="true"
+        />
+        <ArrowDown v-else-if="sortKey === 'date'" :size="14" aria-hidden="true" />
+      </button>
+      <button type="button" :aria-sort="ariaSort('amount')" @click="sortBy('amount')">
+        Valor
+        <ArrowUp
+          v-if="sortKey === 'amount' && sortDirection === 'asc'"
+          :size="14"
+          aria-hidden="true"
+        />
+        <ArrowDown v-else-if="sortKey === 'amount'" :size="14" aria-hidden="true" />
+      </button>
+    </div>
+
     <div v-if="!expenses.length" class="expense-list__empty-state">
       <strong>Nenhuma despesa registrada</strong>
       <span>Registre o primeiro gasto para acompanhar o progresso do mês.</span>
@@ -391,6 +425,10 @@ watch(
   border-top: 1px solid var(--color-border);
 }
 
+.expense-list__mobile-sort {
+  display: none;
+}
+
 .expense-list__table {
   width: 100%;
   min-width: 860px;
@@ -584,16 +622,111 @@ watch(
 }
 
 @media (max-width: 760px) {
+  .expense-list {
+    border-radius: 8px;
+  }
+
   .expense-list__header {
     align-items: flex-start;
     flex-direction: column;
-    padding: 24px;
+    gap: 14px;
+    padding: 18px 16px 16px;
+  }
+
+  .expense-list__header h2 {
+    font-size: 1.28rem;
+    line-height: 1.1;
+  }
+
+  .expense-list__header p {
+    margin-top: 6px;
+    font-size: 0.86rem;
+  }
+
+  .expense-list__header-actions {
+    width: 100%;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    justify-items: stretch;
+    gap: 10px;
+  }
+
+  .expense-list__create {
+    min-height: 40px;
+    padding-inline: 12px;
+  }
+
+  .expense-list__count {
+    min-height: 36px;
+    gap: 7px;
+    font-size: 0.76rem;
+    padding: 7px 10px;
+    white-space: nowrap;
+  }
+
+  .expense-list__count span {
+    width: 7px;
+    height: 7px;
   }
 
   .expense-list__filters {
     grid-template-columns: 1fr;
-    gap: 14px;
-    padding: 20px 24px 24px;
+    gap: 10px;
+    padding: 14px 16px 16px;
+  }
+
+  .expense-list__filters :deep(.field) {
+    gap: 5px;
+  }
+
+  .expense-list__filters :deep(.field__label) {
+    font-size: 0.76rem;
+  }
+
+  .expense-list__filters :deep(.input) {
+    min-height: 42px;
+    border-radius: 8px;
+    font-size: 0.86rem;
+    padding-inline: 12px;
+  }
+
+  .expense-list__filters :deep(select.input) {
+    background-position: right 14px center;
+    padding-right: 42px;
+  }
+
+  .expense-list__mobile-sort {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+    border-top: 1px solid var(--color-border);
+    padding: 12px 16px;
+  }
+
+  .expense-list__mobile-sort button {
+    display: inline-flex;
+    min-width: 0;
+    min-height: 34px;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    background: color-mix(in srgb, var(--color-surface-muted) 34%, transparent);
+    color: var(--color-muted);
+    cursor: pointer;
+    font: inherit;
+    font-size: 0.74rem;
+    font-weight: 800;
+    letter-spacing: 0;
+    padding: 7px 8px;
+  }
+
+  .expense-list__mobile-sort button[aria-sort='ascending'],
+  .expense-list__mobile-sort button[aria-sort='descending'] {
+    border-color: color-mix(in srgb, var(--color-primary) 58%, var(--color-border));
+    background: color-mix(in srgb, var(--color-primary) 13%, var(--color-surface));
+    color: var(--color-primary);
   }
 
   .expense-list__table {
@@ -613,8 +746,13 @@ watch(
   }
 
   .expense-list__table tr {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    column-gap: 12px;
+    row-gap: 8px;
+    align-items: center;
     border-top: 1px solid var(--color-border);
-    padding: 18px 24px;
+    padding: 13px 16px;
   }
 
   .expense-list__table tbody tr:first-child {
@@ -631,19 +769,100 @@ watch(
   }
 
   .expense-list__table td + td {
-    margin-top: 12px;
+    margin-top: 0;
+  }
+
+  .expense-list__table td:nth-child(1) {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .expense-list__table td:nth-child(2) {
+    grid-column: 1;
+    grid-row: 2;
+  }
+
+  .expense-list__table td:nth-child(3) {
+    grid-column: 2;
+    grid-row: 1;
+    align-self: start;
+    justify-self: end;
+    width: auto;
+    padding-top: 1px;
+    text-align: right;
+  }
+
+  .expense-list__table td:nth-child(4) {
+    grid-column: 2;
+    grid-row: 2;
+    align-self: end;
+    justify-self: end;
+    width: auto;
+    padding-right: 0;
   }
 
   .expense-list__description-cell {
-    grid-template-columns: 10px minmax(0, 1fr);
+    grid-template-columns: 8px minmax(0, 1fr);
+    gap: 10px;
+  }
+
+  .expense-list__dot {
+    width: 8px;
+    height: 8px;
   }
 
   .expense-list__description {
+    font-size: 0.9rem;
+    line-height: 1.2;
     white-space: normal;
   }
 
+  .expense-list__description-stack {
+    gap: 5px;
+  }
+
+  .expense-list__category {
+    min-height: 18px;
+    max-width: 160px;
+    border-radius: 4px;
+    font-size: 0.56rem;
+    letter-spacing: 0.04em;
+    padding: 4px 6px;
+  }
+
+  .expense-list__table time {
+    color: var(--color-muted);
+    font-size: 0.78rem;
+  }
+
+  .expense-list__table b {
+    color: var(--color-primary);
+    font-size: 0.9rem;
+    line-height: 1.15;
+    white-space: nowrap;
+  }
+
   .expense-list__actions {
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
+    gap: 6px;
+    justify-content: flex-end;
+    justify-self: end;
+    width: max-content;
+    margin-left: auto;
+  }
+
+  .expense-list__action {
+    width: 32px;
+    min-height: 32px;
+    border-radius: 8px;
+  }
+
+  .expense-list__actions .expense-list__action:last-child {
+    color: var(--color-danger);
+  }
+
+  .expense-list__empty {
+    padding: 18px 16px;
   }
 }
 </style>
