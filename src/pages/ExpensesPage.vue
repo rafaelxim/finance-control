@@ -11,6 +11,7 @@ import LoadingState from '@/components/ui/LoadingState.vue'
 import { validateExpenseForBudget } from '@/domain/expenses/schemas'
 import type { Expense, ExpenseDraftInput } from '@/domain/expenses/types'
 import type { MonthKey } from '@/domain/shared/types'
+import { readVisualPreferences } from '@/storage/data-export.repository'
 import { useBudgetStore } from '@/stores/budget.store'
 import { useExpensesStore } from '@/stores/expenses.store'
 import { useProfileStore } from '@/stores/profile.store'
@@ -24,6 +25,7 @@ const errors = ref<string[]>([])
 const saving = ref(false)
 const editingExpense = ref<Expense | null>(null)
 const expenseModalOpen = ref(false)
+const categoryVisuals = ref<Record<string, string>>({})
 
 const defaultDate = computed(() => `${budgetStore.draftMonth}-01`)
 const activeCategories = computed(() => budgetStore.activeCategories)
@@ -33,6 +35,8 @@ const categoryFilter = computed(() => {
 })
 
 onMounted(async () => {
+  const visualPreferences = await readVisualPreferences()
+  categoryVisuals.value = visualPreferences.categoryVisuals ?? {}
   await budgetStore.loadMonth(profileStore.activeMonth)
   await expensesStore.loadForBudget(budgetStore.budget?.id ?? null, budgetStore.draftMonth)
 })
@@ -109,6 +113,7 @@ function closeExpenseModal() {
           :expenses="expensesStore.sortedExpenses"
           :categories="activeCategories"
           :category-filter="categoryFilter"
+          :category-visuals="categoryVisuals"
           @create="openCreateExpenseModal"
           @edit="openEditExpenseModal"
           @delete="deleteExpense"

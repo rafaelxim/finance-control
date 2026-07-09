@@ -12,6 +12,7 @@ const props = defineProps<{
   expenses: Expense[]
   categories: BudgetCategory[]
   categoryFilter?: string
+  categoryVisuals?: Record<string, string>
 }>()
 
 const emit = defineEmits<{
@@ -24,6 +25,14 @@ function categoryName(categoryId: string) {
   return (
     props.categories.find((category) => category.id === categoryId)?.name ?? 'Categoria removida'
   )
+}
+
+const defaultCategoryColor = '#fcd535'
+const hexColorPattern = /^#[0-9a-f]{6}$/i
+
+function categoryColor(categoryId: string) {
+  const value = props.categoryVisuals?.[categoryId]
+  return value && hexColorPattern.test(value) ? value : defaultCategoryColor
 }
 
 function formatExpenseDate(date: string) {
@@ -210,7 +219,11 @@ watch(
           </tr>
         </thead>
         <tbody>
-          <tr v-for="expense in visibleExpenses" :key="expense.id">
+          <tr
+            v-for="expense in visibleExpenses"
+            :key="expense.id"
+            :style="{ '--expense-category-color': categoryColor(expense.categoryId) }"
+          >
             <td>
               <div class="expense-list__description-cell">
                 <span class="expense-list__dot" aria-hidden="true"></span>
@@ -480,8 +493,9 @@ watch(
   width: 10px;
   height: 10px;
   border-radius: 50%;
-  background: var(--color-primary);
-  box-shadow: 0 0 12px color-mix(in srgb, var(--color-primary) 70%, transparent);
+  background: var(--expense-category-color, var(--color-primary));
+  box-shadow: 0 0 12px
+    color-mix(in srgb, var(--expense-category-color, var(--color-primary)) 70%, transparent);
 }
 
 .expense-list__description-stack {
@@ -497,10 +511,15 @@ watch(
   min-height: 22px;
   max-width: 210px;
   overflow: hidden;
-  border: 1px solid var(--color-border);
+  border: 1px solid
+    color-mix(in srgb, var(--expense-category-color, var(--color-primary)) 62%, transparent);
   border-radius: 4px;
-  background: color-mix(in srgb, var(--color-surface-muted) 42%, transparent);
-  color: var(--color-primary);
+  background: color-mix(
+    in srgb,
+    var(--expense-category-color, var(--color-primary)) 12%,
+    transparent
+  );
+  color: var(--expense-category-color, var(--color-primary));
   font-size: 0.64rem;
   font-weight: 800;
   letter-spacing: 0.075em;

@@ -1,80 +1,37 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
+import { Save } from 'lucide-vue-next'
 
 import CategoryVisualSelector from '@/components/budget/CategoryVisualSelector.vue'
-import DataBackupPanel from '@/components/finance/DataBackupPanel.vue'
-import {
-  clearLocalData,
-  exportLocalData,
-  importLocalData,
-  readVisualPreferences,
-  saveVisualPreferences
-} from '@/storage/data-export.repository'
-import { useBalanceStore } from '@/stores/balance.store'
+import BaseButton from '@/components/ui/BaseButton.vue'
+import { readVisualPreferences, saveVisualPreferences } from '@/storage/data-export.repository'
 import { useBudgetStore } from '@/stores/budget.store'
-import { useExpensesStore } from '@/stores/expenses.store'
 import { useProfileStore } from '@/stores/profile.store'
 
 const budgetStore = useBudgetStore()
-const expensesStore = useExpensesStore()
-const balanceStore = useBalanceStore()
 const profileStore = useProfileStore()
-const exportJson = ref('')
-const importText = ref('')
-const errors = ref<string[]>([])
-const status = ref('')
 const categoryVisuals = ref<Record<string, string>>({})
+const saving = ref(false)
+const status = ref('')
 
 onMounted(async () => {
   categoryVisuals.value = (await readVisualPreferences()).categoryVisuals ?? {}
   await budgetStore.loadMonth(profileStore.activeMonth)
 })
 
-async function exportData() {
-  errors.value = []
-  const payload = await exportLocalData()
-  exportJson.value = JSON.stringify(payload, null, 2)
-  status.value = 'Exportação gerada.'
-}
-
-async function importData() {
-  errors.value = []
-  status.value = ''
-  let parsed: unknown
-  try {
-    parsed = JSON.parse(importText.value)
-  } catch {
-    errors.value = ['JSON inválido']
-    return
-  }
-
-  try {
-    const result = await importLocalData(parsed)
-    errors.value = result.errors
-    if (!result.errors.length) {
-      status.value = 'Importação concluída.'
-      await profileStore.load()
-      await budgetStore.loadMonth(profileStore.activeMonth)
-      await expensesStore.loadForBudget(budgetStore.budget?.id ?? null, profileStore.activeMonth)
-      await balanceStore.loadHistory()
-    }
-  } catch (error) {
-    errors.value = [error instanceof Error ? error.message : 'Falha ao importar dados remotos']
-  }
-}
-
-async function clearData() {
-  await clearLocalData()
-  await profileStore.load()
-  status.value = 'Dados remotos limpos.'
-  await budgetStore.loadMonth(profileStore.activeMonth)
-  await expensesStore.loadForBudget(null, profileStore.activeMonth)
-  await balanceStore.loadHistory()
-}
-
-async function updateVisuals(value: Record<string, string>) {
+function updateVisuals(value: Record<string, string>) {
   categoryVisuals.value = value
-  await saveVisualPreferences({ categoryVisuals: value })
+  status.value = ''
+}
+
+async function saveVisuals() {
+  saving.value = true
+  try {
+    await saveVisualPreferences({ categoryVisuals: categoryVisuals.value })
+    status.value = 'Preferências visuais salvas.'
+  } finally {
+    saving.value = false
+  }
 }
 </script>
 
@@ -82,7 +39,7 @@ async function updateVisuals(value: Record<string, string>) {
   <section class="page">
     <header class="page__header">
       <h1>Configurações</h1>
-      <p>Preferências remotas, exportação e importação de backup.</p>
+      <p>Preferências visuais para personalizar as categorias do orçamento.</p>
     </header>
 
     <CategoryVisualSelector
@@ -91,14 +48,28 @@ async function updateVisuals(value: Record<string, string>) {
       @update:model-value="updateVisuals"
     />
 
-    <DataBackupPanel
-      v-model:import-text="importText"
-      :export-json="exportJson"
-      :errors="errors"
-      :status="status"
-      @export="exportData"
-      @import="importData"
-      @clear="clearData"
-    />
+    <div class="settings-actions">
+      <BaseButton :disabled="saving" @click="saveVisuals">
+        <Save :size="17" aria-hidden="true" />
+        {{ saving ? 'Salvando...' : 'Salvar preferências visuais' }}
+      </BaseButton>
+      <p v-if="status" class="settings-status" role="status">{{ status }}</p>
+    </div>
   </section>
 </template>
+
+<style scoped>
+.settings-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+}
+
+.settings-status {
+  margin: 0;
+  color: var(--color-up);
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+</style>
