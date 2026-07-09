@@ -1,11 +1,9 @@
 <script setup lang="ts">
 import { computed, onMounted, ref, watch } from 'vue'
-import { Plus } from 'lucide-vue-next'
 import { useRouter } from 'vue-router'
 
 import ExpenseForm from '@/components/finance/ExpenseForm.vue'
 import ExpenseList from '@/components/finance/ExpenseList.vue'
-import BaseButton from '@/components/ui/BaseButton.vue'
 import BaseModal from '@/components/ui/BaseModal.vue'
 import EmptyState from '@/components/ui/EmptyState.vue'
 import FormError from '@/components/ui/FormError.vue'
@@ -90,21 +88,6 @@ function closeExpenseModal() {
 
 <template>
   <section class="page">
-    <header class="page__header expenses-header">
-      <div>
-        <h1>Despesas</h1>
-        <p>Registre e revise os gastos do mês.</p>
-      </div>
-      <BaseButton
-        v-if="budgetStore.budget && !budgetStore.loading && !expensesStore.loading"
-        class="expenses-header__action"
-        @click="openCreateExpenseModal"
-      >
-        <Plus :size="18" aria-hidden="true" />
-        Registrar despesa
-      </BaseButton>
-    </header>
-
     <LoadingState v-if="budgetStore.loading || expensesStore.loading" />
 
     <template v-else>
@@ -117,16 +100,10 @@ function closeExpenseModal() {
       </EmptyState>
 
       <template v-else>
-        <EmptyState
-          v-if="!expensesStore.expenses.length"
-          title="Nenhuma despesa registrada"
-          description="Registre o primeiro gasto para acompanhar o progresso do mês."
-        />
-
         <ExpenseList
-          v-else
           :expenses="expensesStore.sortedExpenses"
           :categories="activeCategories"
+          @create="openCreateExpenseModal"
           @edit="openEditExpenseModal"
           @delete="deleteExpense"
         />
@@ -158,24 +135,6 @@ function closeExpenseModal() {
 <style scoped>
 .page {
   max-width: 1600px;
-}
-
-.expenses-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 24px;
-}
-
-.expenses-header > div {
-  display: grid;
-  gap: 6px;
-}
-
-.expenses-header__action {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
 }
 
 .expense-modal__form {

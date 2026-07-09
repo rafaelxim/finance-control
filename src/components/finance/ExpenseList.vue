@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Pencil, Trash2 } from 'lucide-vue-next'
+import { Pencil, Plus, Trash2 } from 'lucide-vue-next'
 import { computed, ref } from 'vue'
 
 import BaseButton from '@/components/ui/BaseButton.vue'
@@ -14,6 +14,7 @@ const props = defineProps<{
 }>()
 
 const emit = defineEmits<{
+  create: []
   edit: [expense: Expense]
   delete: [expenseId: string]
 }>()
@@ -104,10 +105,16 @@ function requestDelete(expense: Expense) {
         <h2>Despesas do mês</h2>
         <p>{{ visibleTotal }} em despesas</p>
       </div>
-      <span class="expense-list__count">
-        <span aria-hidden="true"></span>
-        {{ visibleCountLabel }}
-      </span>
+      <div class="expense-list__header-actions">
+        <BaseButton class="expense-list__create" @click="emit('create')">
+          <Plus :size="18" aria-hidden="true" />
+          Registrar despesa
+        </BaseButton>
+        <span class="expense-list__count">
+          <span aria-hidden="true"></span>
+          {{ visibleCountLabel }}
+        </span>
+      </div>
     </header>
 
     <div v-if="expenses.length" class="expense-list__filters" aria-label="Filtros de despesas">
@@ -123,6 +130,11 @@ function requestDelete(expense: Expense) {
     <p v-if="expenses.length && !visibleExpenses.length" class="expense-list__empty" role="status">
       Nenhuma despesa encontrada para os filtros selecionados.
     </p>
+
+    <div v-if="!expenses.length" class="expense-list__empty-state">
+      <strong>Nenhuma despesa registrada</strong>
+      <span>Registre o primeiro gasto para acompanhar o progresso do mês.</span>
+    </div>
 
     <div v-if="visibleExpenses.length" class="expense-list__table-wrap">
       <table class="expense-list__table">
@@ -214,6 +226,19 @@ function requestDelete(expense: Expense) {
   font-size: 1rem;
 }
 
+.expense-list__header-actions {
+  display: grid;
+  flex: 0 0 auto;
+  justify-items: end;
+  gap: 10px;
+}
+
+.expense-list__create {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
 .expense-list__count {
   display: inline-flex;
   flex: 0 0 auto;
@@ -226,6 +251,20 @@ function requestDelete(expense: Expense) {
   color: var(--color-muted);
   font-size: 0.95rem;
   padding: 8px 16px;
+}
+
+.expense-list__empty-state {
+  display: grid;
+  justify-items: center;
+  gap: 8px;
+  border-top: 1px solid var(--color-border);
+  color: var(--color-muted);
+  padding: 56px 32px;
+  text-align: center;
+}
+
+.expense-list__empty-state strong {
+  color: var(--color-text);
 }
 
 .expense-list__count span {

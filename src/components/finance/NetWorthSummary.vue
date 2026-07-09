@@ -30,9 +30,9 @@ withDefaults(
         <span class="metric__label">Dívidas</span>
         <strong class="money money--primary">{{ formatBRL(totals.debtsTotal) }}</strong>
       </div>
-      <div class="metric metric--featured">
+      <div class="metric metric--featured metric--net-worth">
         <span class="metric__label">Patrimônio líquido</span>
-        <strong class="money money--primary">{{ formatBRL(totals.netWorth) }}</strong>
+        <strong class="money money--hero">{{ formatBRL(totals.netWorth) }}</strong>
       </div>
       <div
         v-if="change !== undefined"
@@ -52,11 +52,33 @@ withDefaults(
   gap: 16px;
 }
 
+.metric--net-worth {
+  grid-column: span 2;
+  border: 1px solid rgba(59, 130, 246, 0.32);
+  border-left: 3px solid var(--color-info);
+  border-radius: var(--radius);
+  background: rgba(59, 130, 246, 0.08);
+  padding: 14px 16px;
+}
+
+.metric--net-worth .metric__label {
+  color: var(--color-text);
+  font-size: 0.82rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
 .positive strong {
   color: var(--color-up);
 }
 
 .negative strong {
   color: var(--color-danger);
+}
+
+@media (max-width: 680px) {
+  .metric--net-worth {
+    grid-column: auto;
+  }
 }
 </style>
