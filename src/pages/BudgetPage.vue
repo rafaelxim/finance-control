@@ -412,12 +412,32 @@ async function removeCategory(index: number) {
 }
 
 @media (max-width: 760px) {
+  .page {
+    gap: 18px;
+  }
+
+  .budget-layout,
+  .budget-layout__main {
+    gap: 18px;
+  }
+
+  .budget-section {
+    gap: 14px;
+  }
+
   .budget-section__header {
     display: grid;
+    gap: 12px;
   }
 
   .budget-add-button {
-    justify-self: start;
+    width: 100%;
+    justify-self: stretch;
+  }
+
+  .budget-category-list {
+    grid-template-columns: 1fr;
+    gap: 10px;
   }
 }
 </style>

@@ -90,4 +90,43 @@ defineEmits<{
 .danger strong {
   color: var(--color-danger);
 }
+
+@media (max-width: 620px) {
+  .budget-summary {
+    gap: 14px;
+    padding: 16px;
+  }
+
+  .budget-summary .metric-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  .budget-summary__available {
+    grid-column: 1 / -1;
+    grid-template-columns: minmax(0, 1fr);
+    border-bottom: 1px solid var(--color-border);
+    padding-bottom: 12px;
+  }
+
+  .budget-summary__available .money {
+    font-size: 1.34rem;
+  }
+
+  .budget-summary__edit {
+    width: 100%;
+    min-height: 42px;
+  }
+
+  .budget-summary .metric:not(.budget-summary__available) .money {
+    font-size: 1rem;
+    line-height: 1.15;
+  }
+}
+
+@media (max-width: 360px) {
+  .budget-summary .metric-grid {
+    grid-template-columns: 1fr;
+  }
+}
 </style>

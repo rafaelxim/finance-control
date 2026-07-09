@@ -159,10 +159,60 @@ const summaryLabel = () => props.category.name.trim() || 'Nova categoria'
 }
 
 @media (max-width: 520px) {
-  .category-form__topbar,
-  .category-form__snapshot {
+  .category-form {
+    min-height: 0;
+    gap: 0;
+    border-radius: 10px;
+  }
+
+  .category-form::before {
+    width: 4px;
+  }
+
+  .category-form__topbar {
     align-items: flex-start;
-    flex-direction: column;
+    gap: 10px;
+    padding: 14px 12px 12px 16px;
+  }
+
+  .category-form__name {
+    font-size: 1rem;
+    line-height: 1.18;
+  }
+
+  .category-form__actions {
+    flex: 0 0 auto;
+    gap: 6px;
+  }
+
+  .category-form__action {
+    width: 34px;
+    min-height: 34px;
+    border-radius: 9px;
+  }
+
+  .category-form__footer {
+    padding: 11px 12px 12px 16px;
+  }
+
+  .category-form__snapshot {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: end;
+    gap: 8px;
+  }
+
+  .category-form__snapshot-label {
+    width: 7rem;
+    font-size: 0.68rem;
+    line-height: 1.1;
+  }
+
+  .category-form__snapshot strong {
+    max-width: 14ch;
+    font-size: 1rem;
+    line-height: 1.12;
+    text-align: right;
   }
 }
 </style>
