@@ -65,6 +65,36 @@ function ariaSort(key: SortKey) {
       <span>{{ items.length }} item{{ items.length === 1 ? '' : 's' }}</span>
     </header>
 
+    <div class="balance-table__mobile-sort" aria-label="Ordenar itens salvos">
+      <button type="button" :aria-sort="ariaSort('item')" @click="sortBy('item')">
+        Item
+        <ArrowUp
+          v-if="sortKey === 'item' && sortDirection === 'asc'"
+          :size="14"
+          aria-hidden="true"
+        />
+        <ArrowDown v-else-if="sortKey === 'item'" :size="14" aria-hidden="true" />
+      </button>
+      <button type="button" :aria-sort="ariaSort('kind')" @click="sortBy('kind')">
+        Tipo
+        <ArrowUp
+          v-if="sortKey === 'kind' && sortDirection === 'asc'"
+          :size="14"
+          aria-hidden="true"
+        />
+        <ArrowDown v-else-if="sortKey === 'kind'" :size="14" aria-hidden="true" />
+      </button>
+      <button type="button" :aria-sort="ariaSort('amount')" @click="sortBy('amount')">
+        Valor
+        <ArrowUp
+          v-if="sortKey === 'amount' && sortDirection === 'asc'"
+          :size="14"
+          aria-hidden="true"
+        />
+        <ArrowDown v-else-if="sortKey === 'amount'" :size="14" aria-hidden="true" />
+      </button>
+    </div>
+
     <div class="balance-table__wrap">
       <table>
         <thead>
@@ -176,6 +206,10 @@ function ariaSort(key: SortKey) {
 .balance-table__wrap {
   width: 100%;
   overflow-x: auto;
+}
+
+.balance-table__mobile-sort {
+  display: none;
 }
 
 .balance-table table {
@@ -297,7 +331,164 @@ function ariaSort(key: SortKey) {
 
 @media (max-width: 680px) {
   .balance-table {
+    gap: 10px;
+    overflow: hidden;
+    border-radius: 8px;
     padding: 14px;
+  }
+
+  .balance-table header {
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .balance-table header > span {
+    min-height: 28px;
+    border: 1px solid var(--color-border);
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--color-surface-muted) 34%, transparent);
+    font-size: 0.76rem;
+    padding: 6px 10px;
+  }
+
+  .balance-table__mobile-sort {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+    border-top: 1px solid var(--color-border);
+    padding-top: 12px;
+  }
+
+  .balance-table__mobile-sort button {
+    display: inline-flex;
+    min-height: 34px;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    background: color-mix(in srgb, var(--color-surface-muted) 34%, transparent);
+    color: var(--color-muted);
+    cursor: pointer;
+    font: inherit;
+    font-size: 0.74rem;
+    font-weight: 800;
+    letter-spacing: 0;
+    padding: 7px 8px;
+  }
+
+  .balance-table__mobile-sort button[aria-sort='ascending'],
+  .balance-table__mobile-sort button[aria-sort='descending'] {
+    border-color: color-mix(in srgb, var(--color-primary) 58%, var(--color-border));
+    background: color-mix(in srgb, var(--color-primary) 13%, var(--color-surface));
+    color: var(--color-primary);
+  }
+
+  .balance-table__wrap {
+    overflow-x: visible;
+  }
+
+  .balance-table table {
+    min-width: 0;
+  }
+
+  .balance-table thead {
+    display: none;
+  }
+
+  .balance-table table,
+  .balance-table tbody,
+  .balance-table tr,
+  .balance-table td {
+    display: block;
+    width: 100%;
+  }
+
+  .balance-table tr {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    column-gap: 12px;
+    row-gap: 8px;
+    align-items: center;
+    border-top: 1px solid var(--color-border);
+    padding: 12px 0;
+  }
+
+  .balance-table tbody tr:first-child {
+    border-top: 0;
+  }
+
+  .balance-table td {
+    height: auto;
+    border-top: 0;
+    padding: 0;
+  }
+
+  .balance-table td:nth-child(1) {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .balance-table td:nth-child(2) {
+    grid-column: 1;
+    grid-row: 2;
+  }
+
+  .balance-table td:nth-child(3) {
+    grid-column: 2;
+    grid-row: 1;
+    align-self: start;
+    justify-self: end;
+    text-align: right;
+  }
+
+  .balance-table td:nth-child(4) {
+    grid-column: 2;
+    grid-row: 2;
+    align-self: end;
+    justify-self: end;
+    width: auto;
+    text-align: right;
+  }
+
+  .balance-table strong {
+    display: block;
+    max-width: 18ch;
+    overflow: hidden;
+    color: var(--color-text);
+    font-size: 0.94rem;
+    line-height: 1.2;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .balance-table b {
+    color: var(--color-primary);
+    font-size: 0.92rem;
+    line-height: 1.15;
+    white-space: nowrap;
+  }
+
+  .balance-table__badge {
+    min-width: 0;
+    min-height: 20px;
+    border-radius: 4px;
+    font-size: 0.62rem;
+    letter-spacing: 0.03em;
+    padding: 4px 7px;
+  }
+
+  .balance-table__actions {
+    display: flex;
+    width: max-content;
+    gap: 6px;
+    justify-content: flex-end;
+  }
+
+  .balance-table__action {
+    width: 32px;
+    min-height: 32px;
+    border-radius: 8px;
   }
 }
 </style>

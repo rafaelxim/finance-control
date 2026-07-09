@@ -290,6 +290,10 @@ async function removeItem(item: BalanceItem) {
 }
 
 @media (max-width: 720px) {
+  .page {
+    gap: 18px;
+  }
+
   .page__header,
   .balance-summary__notes {
     grid-template-columns: 1fr;
@@ -297,6 +301,41 @@ async function removeItem(item: BalanceItem) {
 
   .page__header {
     display: grid;
+    gap: 12px;
+  }
+
+  .page__header :deep(.button) {
+    width: 100%;
+  }
+
+  .balance-summary {
+    gap: 12px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    box-shadow: none;
+  }
+
+  .balance-summary__notes {
+    display: grid;
+    gap: 10px;
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    background: var(--color-surface);
+    padding: 14px;
+  }
+
+  .balance-summary__notes :deep(.button) {
+    width: 100%;
+  }
+
+  .balance-item-modal__actions {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .balance-item-modal__actions :deep(.button) {
+    width: 100%;
   }
 }
 </style>

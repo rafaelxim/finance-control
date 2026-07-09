@@ -77,8 +77,33 @@ withDefaults(
 }
 
 @media (max-width: 680px) {
+  .net-worth-summary {
+    gap: 12px;
+    padding: 16px;
+  }
+
+  .net-worth-summary :deep(.metric-grid) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+
   .metric--net-worth {
-    grid-column: auto;
+    grid-column: 1 / -1;
+    padding: 12px;
+  }
+
+  .metric--net-worth :deep(.money--hero) {
+    font-size: 1.42rem;
+  }
+
+  .net-worth-summary :deep(.money--primary) {
+    font-size: 0.98rem;
+  }
+}
+
+@media (max-width: 360px) {
+  .net-worth-summary :deep(.metric-grid) {
+    grid-template-columns: 1fr;
   }
 }
 </style>
