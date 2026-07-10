@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted, watch } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 
 import CategoryUsageExportButton from '@/components/budget/CategoryUsageExportButton.vue'
 import MarketCategoryCard from '@/components/budget/MarketCategoryCard.vue'
@@ -7,10 +7,14 @@ import DashboardBudgetSummary from '@/components/finance/DashboardBudgetSummary.
 import DashboardFinancialSummary, {
   type DashboardFinancialSummaryViewModel
 } from '@/components/finance/DashboardFinancialSummary.vue'
+import DashboardSetupChecklist, {
+  type DashboardSetupChecklistItem
+} from '@/components/finance/DashboardSetupChecklist.vue'
 import FinancialEvolutionChart from '@/components/finance/FinancialEvolutionChart.vue'
 import { toDecimal } from '@/domain/shared/money'
 import EmptyState from '@/components/ui/EmptyState.vue'
 import LoadingState from '@/components/ui/LoadingState.vue'
+import { readVisualPreferences } from '@/storage/data-export.repository'
 import { useBalanceStore } from '@/stores/balance.store'
 import { useBudgetStore } from '@/stores/budget.store'
 import { useExpensesStore } from '@/stores/expenses.store'
@@ -20,9 +24,62 @@ const budgetStore = useBudgetStore()
 const expensesStore = useExpensesStore()
 const balanceStore = useBalanceStore()
 const profileStore = useProfileStore()
+const categoryVisuals = ref<Record<string, string>>({})
+const hexColorPattern = /^#[0-9a-f]{6}$/i
 
 const cards = computed(() => expensesStore.categoryProgress)
 const latestNetWorth = computed(() => balanceStore.latestEvolution)
+const hasBudget = computed(() => Boolean(budgetStore.budget))
+const hasActiveCategories = computed(() => budgetStore.activeCategories.length > 0)
+const hasExpenses = computed(() => expensesStore.expenses.length > 0)
+const hasBalanceItems = computed(() => balanceStore.items.length > 0)
+const hasCategoryVisuals = computed(() =>
+  budgetStore.activeCategories.some((category) =>
+    hexColorPattern.test(categoryVisuals.value[category.id] ?? '')
+  )
+)
+const setupChecklistItems = computed<DashboardSetupChecklistItem[]>(() => [
+  {
+    id: 'budget',
+    title: 'Definir orçamento do mês',
+    description: 'Salve o valor mensal disponível para o mês ativo.',
+    actionLabel: 'Abrir orçamento',
+    actionTarget: '/orcamento',
+    completed: hasBudget.value
+  },
+  {
+    id: 'categories',
+    title: 'Revisar categorias',
+    description: 'Confirme as categorias que vão receber seus limites mensais.',
+    actionLabel: 'Revisar categorias',
+    actionTarget: '/orcamento',
+    completed: hasActiveCategories.value
+  },
+  {
+    id: 'expenses',
+    title: 'Registrar primeira despesa',
+    description: 'Adicione um gasto para iniciar o acompanhamento do mês.',
+    actionLabel: 'Registrar despesa',
+    actionTarget: '/despesas',
+    completed: hasExpenses.value
+  },
+  {
+    id: 'balance',
+    title: 'Atualizar balanço patrimonial',
+    description: 'Cadastre ativos e dívidas para calcular seu patrimônio líquido.',
+    actionLabel: 'Atualizar balanço',
+    actionTarget: '/balanco',
+    completed: hasBalanceItems.value
+  },
+  {
+    id: 'visuals',
+    title: 'Personalizar cores das categorias',
+    description: 'Escolha cores para reconhecer categorias nas badges e listas.',
+    actionLabel: 'Personalizar cores',
+    actionTarget: '/configuracoes',
+    completed: hasCategoryVisuals.value
+  }
+])
 const dashboardSummary = computed<DashboardFinancialSummaryViewModel>(() => {
   if (latestNetWorth.value) {
     const change = toDecimal(latestNetWorth.value.netWorthChange)
@@ -104,16 +161,20 @@ const dashboardSummary = computed<DashboardFinancialSummaryViewModel>(() => {
 })
 
 onMounted(async () => {
+  categoryVisuals.value = (await readVisualPreferences()).categoryVisuals ?? {}
   await budgetStore.loadMonth(profileStore.activeMonth)
   await expensesStore.loadForBudget(budgetStore.budget?.id ?? null, budgetStore.draftMonth)
+  await balanceStore.loadMonth(profileStore.activeMonth)
   await balanceStore.loadHistory()
 })
 
 watch(
   () => profileStore.activeMonth,
   async (month) => {
+    categoryVisuals.value = (await readVisualPreferences()).categoryVisuals ?? {}
     await budgetStore.loadMonth(month)
     await expensesStore.loadForBudget(budgetStore.budget?.id ?? null, budgetStore.draftMonth)
+    await balanceStore.loadMonth(month)
     await balanceStore.loadHistory()
   }
 )
@@ -126,11 +187,12 @@ watch(
       <p>Resumo do orçamento atual, gastos por categoria e patrimônio recente.</p>
     </header>
 
-    <LoadingState v-if="budgetStore.loading || expensesStore.loading" />
+    <LoadingState v-if="budgetStore.loading || expensesStore.loading || balanceStore.loading" />
 
     <template v-else>
       <div class="dashboard-layout">
         <div class="dashboard-layout__main">
+          <DashboardSetupChecklist :items="setupChecklistItems" />
           <DashboardFinancialSummary :summary="dashboardSummary" />
           <DashboardBudgetSummary
             :allocated-amount="budgetStore.totals.allocated"

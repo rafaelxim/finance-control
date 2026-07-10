@@ -17,6 +17,9 @@ import {
 
 import type { MonthKey } from '@/domain/shared/types'
 import { useAuthStore } from '@/stores/auth.store'
+import { useBalanceStore } from '@/stores/balance.store'
+import { useBudgetStore } from '@/stores/budget.store'
+import { useExpensesStore } from '@/stores/expenses.store'
 import { useProfileStore } from '@/stores/profile.store'
 import logoUrl from '@/assets/logo.png'
 
@@ -29,6 +32,9 @@ const links = [
 ]
 
 const profileStore = useProfileStore()
+const budgetStore = useBudgetStore()
+const expensesStore = useExpensesStore()
+const balanceStore = useBalanceStore()
 const authStore = useAuthStore()
 const route = useRoute()
 const router = useRouter()
@@ -42,13 +48,22 @@ onMounted(() => {
 
 watch(
   () => authStore.user?.id,
-  (userId) => {
+  (userId, previousUserId) => {
+    if (previousUserId && userId !== previousUserId) {
+      budgetStore.$reset()
+      expensesStore.$reset()
+      balanceStore.$reset()
+    }
+
     if (userId) {
       void profileStore.load()
       return
     }
 
     profileStore.$reset()
+    budgetStore.$reset()
+    expensesStore.$reset()
+    balanceStore.$reset()
   }
 )
 
