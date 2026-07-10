@@ -61,10 +61,31 @@ select {
 .app-shell__sidebar {
   position: sticky;
   top: 0;
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) auto;
+  gap: 18px;
   height: 100vh;
+  min-height: 0;
   border-right: 1px solid var(--color-border);
   background: var(--color-bg);
   padding: 24px 16px;
+}
+
+.app-shell__sidebar-main,
+.app-shell__sidebar-bottom {
+  display: grid;
+  min-width: 0;
+}
+
+.app-shell__sidebar-main {
+  align-content: start;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.app-shell__sidebar-bottom {
+  align-content: end;
+  gap: 10px;
 }
 
 .app-shell__main {
@@ -260,18 +281,20 @@ select {
 
 .nav-list {
   display: grid;
-  gap: 6px;
+  gap: 3px;
 }
 
 .nav-link {
   position: relative;
   display: flex;
-  min-height: 42px;
+  min-height: 34px;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   border-radius: var(--radius);
   color: var(--color-muted);
-  padding: 10px 12px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  padding: 7px 10px;
   text-decoration: none;
 }
 
@@ -288,7 +311,7 @@ select {
   position: absolute;
   left: 0;
   width: 3px;
-  height: 18px;
+  height: 15px;
   border-radius: 999px;
   background: transparent;
   content: '';

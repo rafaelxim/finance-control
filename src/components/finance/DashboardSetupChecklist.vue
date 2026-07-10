@@ -2,17 +2,10 @@
 import { computed } from 'vue'
 import { Check, ChevronRight, Circle, ClipboardCheck } from 'lucide-vue-next'
 
-export interface DashboardSetupChecklistItem {
-  id: string
-  title: string
-  description: string
-  actionLabel: string
-  actionTarget: string
-  completed: boolean
-}
+import type { SetupChecklistItem } from '@/composables/useSetupChecklist'
 
 const props = defineProps<{
-  items: DashboardSetupChecklistItem[]
+  items: SetupChecklistItem[]
 }>()
 
 const completedCount = computed(() => props.items.filter((item) => item.completed).length)

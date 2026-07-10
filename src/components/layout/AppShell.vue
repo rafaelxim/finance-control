@@ -15,6 +15,8 @@ import {
   X
 } from 'lucide-vue-next'
 
+import AppShellSetupProgress from '@/components/layout/AppShellSetupProgress.vue'
+import { useSetupChecklist } from '@/composables/useSetupChecklist'
 import type { MonthKey } from '@/domain/shared/types'
 import { useAuthStore } from '@/stores/auth.store'
 import { useBalanceStore } from '@/stores/balance.store'
@@ -42,8 +44,19 @@ const monthUpdating = ref(false)
 const mobileMenuOpen = ref(false)
 const activeMonth = computed(() => profileStore.activeMonth)
 const isPublicRoute = computed(() => Boolean(route.meta.public))
+const {
+  completedCount: setupCompletedCount,
+  totalCount: setupTotalCount,
+  nextItem: setupNextItem,
+  isComplete: setupIsComplete,
+  progressWidth: setupProgressWidth,
+  loading: setupLoading,
+  loadSetupChecklist,
+  resetSetupChecklist
+} = useSetupChecklist()
+
 onMounted(() => {
-  if (authStore.user) void profileStore.load()
+  if (authStore.user) void loadProfileAndSetup()
 })
 
 watch(
@@ -56,7 +69,7 @@ watch(
     }
 
     if (userId) {
-      void profileStore.load()
+      void loadProfileAndSetup()
       return
     }
 
@@ -64,8 +77,21 @@ watch(
     budgetStore.$reset()
     expensesStore.$reset()
     balanceStore.$reset()
+    resetSetupChecklist()
   }
 )
+
+watch(
+  () => profileStore.activeMonth,
+  (month) => {
+    if (authStore.user) void loadSetupChecklist(month)
+  }
+)
+
+async function loadProfileAndSetup() {
+  await profileStore.load()
+  await loadSetupChecklist(profileStore.activeMonth)
+}
 
 async function saveActiveMonth(month: MonthKey) {
   if (monthUpdating.value) return
@@ -120,61 +146,74 @@ async function signOut() {
     </header>
 
     <aside class="app-shell__sidebar">
-      <div class="brand">
-        <img class="brand__logo" :src="logoUrl" alt="OrganizaGrana" />
+      <div class="app-shell__sidebar-main">
+        <div class="brand">
+          <img class="brand__logo" :src="logoUrl" alt="OrganizaGrana" />
+        </div>
+
+        <section class="month-context" aria-label="Mês ativo global">
+          <div class="month-context__label">
+            <CalendarDays :size="16" aria-hidden="true" />
+            <span>Mês ativo</span>
+          </div>
+          <div class="month-context__controls">
+            <button
+              class="month-context__step"
+              type="button"
+              aria-label="Mês anterior"
+              title="Mês anterior"
+              :disabled="monthUpdating"
+              @click="shiftMonth(-1)"
+            >
+              <ChevronLeft :size="16" aria-hidden="true" />
+            </button>
+            <label class="month-context__field" for="global-active-month">
+              <input
+                id="global-active-month"
+                type="month"
+                :value="activeMonth"
+                aria-label="Selecionar mês ativo"
+                :disabled="monthUpdating"
+                @input="updateMonth(($event.target as HTMLInputElement).value)"
+                @change="updateMonth(($event.target as HTMLInputElement).value)"
+              />
+            </label>
+            <button
+              class="month-context__step"
+              type="button"
+              aria-label="Próximo mês"
+              title="Próximo mês"
+              :disabled="monthUpdating"
+              @click="shiftMonth(1)"
+            >
+              <ChevronRight :size="16" aria-hidden="true" />
+            </button>
+          </div>
+        </section>
+
+        <nav class="nav-list" aria-label="Navegação principal">
+          <RouterLink v-for="link in links" :key="link.to" :to="link.to" class="nav-link">
+            <component :is="link.icon" :size="17" aria-hidden="true" />
+            <span>{{ link.label }}</span>
+          </RouterLink>
+        </nav>
       </div>
 
-      <section class="month-context" aria-label="Mês ativo global">
-        <div class="month-context__label">
-          <CalendarDays :size="16" aria-hidden="true" />
-          <span>Mês ativo</span>
-        </div>
-        <div class="month-context__controls">
-          <button
-            class="month-context__step"
-            type="button"
-            aria-label="Mês anterior"
-            title="Mês anterior"
-            :disabled="monthUpdating"
-            @click="shiftMonth(-1)"
-          >
-            <ChevronLeft :size="16" aria-hidden="true" />
-          </button>
-          <label class="month-context__field" for="global-active-month">
-            <input
-              id="global-active-month"
-              type="month"
-              :value="activeMonth"
-              aria-label="Selecionar mês ativo"
-              :disabled="monthUpdating"
-              @input="updateMonth(($event.target as HTMLInputElement).value)"
-              @change="updateMonth(($event.target as HTMLInputElement).value)"
-            />
-          </label>
-          <button
-            class="month-context__step"
-            type="button"
-            aria-label="Próximo mês"
-            title="Próximo mês"
-            :disabled="monthUpdating"
-            @click="shiftMonth(1)"
-          >
-            <ChevronRight :size="16" aria-hidden="true" />
-          </button>
-        </div>
-      </section>
+      <div class="app-shell__sidebar-bottom">
+        <AppShellSetupProgress
+          :completed-count="setupCompletedCount"
+          :total-count="setupTotalCount"
+          :progress-width="setupProgressWidth"
+          :next-item="setupNextItem"
+          :is-complete="setupIsComplete"
+          :loading="setupLoading"
+        />
 
-      <nav class="nav-list" aria-label="Navegação principal">
-        <RouterLink v-for="link in links" :key="link.to" :to="link.to" class="nav-link">
-          <component :is="link.icon" :size="18" aria-hidden="true" />
-          <span>{{ link.label }}</span>
-        </RouterLink>
-      </nav>
-
-      <button class="nav-link nav-link--button" type="button" @click="signOut">
-        <LogOut :size="18" aria-hidden="true" />
-        <span>Sair</span>
-      </button>
+        <button class="nav-link nav-link--button" type="button" @click="signOut">
+          <LogOut :size="17" aria-hidden="true" />
+          <span>Sair</span>
+        </button>
+      </div>
     </aside>
 
     <Teleport to="body">
@@ -238,6 +277,16 @@ async function signOut() {
               </button>
             </div>
           </section>
+
+          <AppShellSetupProgress
+            :completed-count="setupCompletedCount"
+            :total-count="setupTotalCount"
+            :progress-width="setupProgressWidth"
+            :next-item="setupNextItem"
+            :is-complete="setupIsComplete"
+            :loading="setupLoading"
+            @navigate="closeMobileMenu"
+          />
 
           <nav class="mobile-menu__nav" aria-label="Navegação principal mobile">
             <RouterLink
