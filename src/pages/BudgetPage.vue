@@ -223,7 +223,7 @@ async function removeCategory(index: number) {
             <div class="budget-section__header">
               <div>
                 <h2 id="budget-editor-title">Editor de categorias</h2>
-                <p>Visualize a grade de categorias e edite cada card em uma janela dedicada.</p>
+                <p>Adicione as categorias que vão receber limites dentro do orçamento mensal.</p>
               </div>
               <BaseButton class="budget-add-button" @click="openCreateCategoryModal">
                 <Plus :size="18" aria-hidden="true" />
@@ -235,7 +235,7 @@ async function removeCategory(index: number) {
               <EmptyState
                 v-if="!budgetStore.draftCategories.length"
                 title="Nenhuma categoria"
-                description="Adicione categorias para distribuir o orçamento do mês."
+                description="Adicione sua primeira categoria para distribuir o orçamento do mês."
               />
               <CategoryAllocationForm
                 v-for="(category, index) in budgetStore.draftCategoriesWithLimits"

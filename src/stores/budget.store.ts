@@ -20,33 +20,13 @@ interface BudgetState {
   lastSavedAt: string | null
 }
 
-function initialCategories(): BudgetDraftCategoryInput[] {
-  return [
-    {
-      name: 'Aluguel',
-      allocationType: 'fixed',
-      allocationValue: '400.00'
-    },
-    {
-      name: 'Comida',
-      allocationType: 'fixed',
-      allocationValue: '300.00'
-    },
-    {
-      name: 'Lazer',
-      allocationType: 'fixed',
-      allocationValue: '100.00'
-    }
-  ]
-}
-
 export const useBudgetStore = defineStore('budget', {
   state: (): BudgetState => ({
     budget: null,
     categories: [],
     draftMonth: currentMonthKey(),
     draftAvailableAmount: '1000.00',
-    draftCategories: initialCategories(),
+    draftCategories: [],
     loading: false,
     lastSavedAt: null
   }),
@@ -83,16 +63,14 @@ export const useBudgetStore = defineStore('budget', {
         this.categories = categories
         this.draftMonth = month
         this.draftAvailableAmount = budget?.availableAmount ?? '1000.00'
-        this.draftCategories = categories.length
-          ? categories
-              .filter((category) => category.status === 'active')
-              .map((category) => ({
-                id: category.id,
-                name: category.name,
-                allocationType: category.allocationType,
-                allocationValue: category.allocationValue
-              }))
-          : initialCategories()
+        this.draftCategories = categories
+          .filter((category) => category.status === 'active')
+          .map((category) => ({
+            id: category.id,
+            name: category.name,
+            allocationType: category.allocationType,
+            allocationValue: category.allocationValue
+          }))
       } finally {
         this.loading = false
       }
