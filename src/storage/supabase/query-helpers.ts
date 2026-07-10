@@ -11,6 +11,15 @@ export function assertRemoteSuccess(error: PostgrestError | null, fallback?: str
   assertNoSupabaseError(error, fallback)
 }
 
+export async function getAuthenticatedUserId(client: FinanceSupabaseClient = getSupabaseClient()) {
+  const { data, error } = await client.auth.getUser()
+  if (error) throw error
+  if (!data.user) {
+    throw new Error('Usuário autenticado é obrigatório para acessar os dados.')
+  }
+  return data.user.id
+}
+
 export async function clearRemoteTables(client: FinanceSupabaseClient = getSupabaseClient()) {
   const tables = [
     'expenses',

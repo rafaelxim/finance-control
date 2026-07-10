@@ -13,7 +13,7 @@ import {
   toProfileRow,
   toVisualPreferencesRow
 } from './mappers'
-import { assertRemoteSuccess, supabaseClient } from './query-helpers'
+import { assertRemoteSuccess, getAuthenticatedUserId, supabaseClient } from './query-helpers'
 
 export interface BackupMigrationResult {
   counts: {
@@ -36,6 +36,7 @@ export function validateBackupForMigration(input: unknown): DataExportPayload {
 export async function migrateBackupToSupabase(input: unknown): Promise<BackupMigrationResult> {
   const payload = validateBackupForMigration(input)
   const client = supabaseClient()
+  const userId = await getAuthenticatedUserId(client)
 
   if (payload.profile) {
     const { error } = await client.from('profiles').upsert(toProfileRow(payload.profile))
@@ -45,7 +46,9 @@ export async function migrateBackupToSupabase(input: unknown): Promise<BackupMig
   const visualTimestamp = payload.exportedAt
   const { error: visualError } = await client
     .from('visual_preferences')
-    .upsert(toVisualPreferencesRow(payload.visualPreferences, visualTimestamp), { onConflict: 'id' })
+    .upsert(toVisualPreferencesRow(payload.visualPreferences, visualTimestamp, userId), {
+      onConflict: 'user_id'
+    })
   assertRemoteSuccess(visualError, 'Falha ao migrar preferências visuais')
 
   if (payload.monthlyBudgets.length) {
@@ -123,7 +126,9 @@ export async function verifyBackupMigration(
   for (const [key, value] of Object.entries(expected)) {
     const actual = counts[key as keyof typeof counts]
     if (actual < value) {
-      throw new Error(`Migração incompleta para ${key}: esperado ao menos ${value}, encontrado ${actual}`)
+      throw new Error(
+        `Migração incompleta para ${key}: esperado ao menos ${value}, encontrado ${actual}`
+      )
     }
   }
 

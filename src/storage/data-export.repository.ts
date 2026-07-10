@@ -21,13 +21,17 @@ import {
   toProfileRow,
   toVisualPreferencesRow
 } from './supabase/mappers'
-import { assertRemoteSuccess, clearRemoteTables, supabaseClient } from './supabase/query-helpers'
+import {
+  assertRemoteSuccess,
+  clearRemoteTables,
+  getAuthenticatedUserId,
+  supabaseClient
+} from './supabase/query-helpers'
 
 export async function readVisualPreferences(): Promise<DataExportPayload['visualPreferences']> {
   const { data, error } = await supabaseClient()
     .from('visual_preferences')
     .select('*')
-    .eq('id', 'default')
     .maybeSingle()
   assertRemoteSuccess(error, 'Falha ao carregar preferências visuais')
   return data ? fromVisualPreferencesRow(data) : {}
@@ -36,13 +40,15 @@ export async function readVisualPreferences(): Promise<DataExportPayload['visual
 export async function saveVisualPreferences(preferences: DataExportPayload['visualPreferences']) {
   const timestamp = nowIso()
   const existing = await readVisualPreferences()
+  const userId = await getAuthenticatedUserId()
   const row = toVisualPreferencesRow(
     { categoryVisuals: preferences.categoryVisuals ?? existing.categoryVisuals ?? {} },
-    timestamp
+    timestamp,
+    userId
   )
   const { error } = await supabaseClient()
     .from('visual_preferences')
-    .upsert(row, { onConflict: 'id' })
+    .upsert(row, { onConflict: 'user_id' })
   assertRemoteSuccess(error, 'Falha ao salvar preferências visuais')
 }
 
@@ -57,7 +63,7 @@ export async function exportLocalData(): Promise<DataExportPayload> {
     balanceItems,
     visualPreferences
   ] = await Promise.all([
-    client.from('profiles').select('*').limit(1).maybeSingle(),
+    client.from('profiles').select('*').maybeSingle(),
     client.from('monthly_budgets').select('*').order('month', { ascending: true }),
     client.from('budget_categories').select('*').order('sort_order', { ascending: true }),
     client.from('expenses').select('*').order('date', { ascending: false }),
@@ -107,7 +113,9 @@ export async function importLocalData(input: unknown): Promise<{ errors: string[
     payload.budgetCategories.length
       ? client.from('budget_categories').upsert(payload.budgetCategories.map(toBudgetCategoryRow))
       : null,
-    payload.expenses.length ? client.from('expenses').upsert(payload.expenses.map(toExpenseRow)) : null,
+    payload.expenses.length
+      ? client.from('expenses').upsert(payload.expenses.map(toExpenseRow))
+      : null,
     payload.balanceSnapshots.length
       ? client.from('balance_snapshots').upsert(payload.balanceSnapshots.map(toBalanceSnapshotRow))
       : null,

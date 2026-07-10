@@ -12,6 +12,7 @@ export interface Database {
           theme_mode: 'light' | 'dark' | 'system'
           created_at: string
           updated_at: string
+          user_id: string
         }
         Insert: {
           id: string
@@ -21,6 +22,7 @@ export interface Database {
           theme_mode: 'light' | 'dark' | 'system'
           created_at: string
           updated_at: string
+          user_id?: string
         }
         Update: {
           id?: string
@@ -30,6 +32,7 @@ export interface Database {
           theme_mode?: 'light' | 'dark' | 'system'
           created_at?: string
           updated_at?: string
+          user_id?: string
         }
       }
       monthly_budgets: {
@@ -41,8 +44,11 @@ export interface Database {
           status: 'draft' | 'active' | 'closed'
           created_at: string
           updated_at: string
+          user_id: string
         }
-        Insert: Database['public']['Tables']['monthly_budgets']['Row']
+        Insert: Omit<Database['public']['Tables']['monthly_budgets']['Row'], 'user_id'> & {
+          user_id?: string
+        }
         Update: Partial<Database['public']['Tables']['monthly_budgets']['Row']>
       }
       budget_categories: {
@@ -57,8 +63,11 @@ export interface Database {
           status: 'active' | 'archived'
           created_at: string
           updated_at: string
+          user_id: string
         }
-        Insert: Database['public']['Tables']['budget_categories']['Row']
+        Insert: Omit<Database['public']['Tables']['budget_categories']['Row'], 'user_id'> & {
+          user_id?: string
+        }
         Update: Partial<Database['public']['Tables']['budget_categories']['Row']>
       }
       expenses: {
@@ -71,8 +80,11 @@ export interface Database {
           description: string | null
           created_at: string
           updated_at: string
+          user_id: string
         }
-        Insert: Database['public']['Tables']['expenses']['Row']
+        Insert: Omit<Database['public']['Tables']['expenses']['Row'], 'user_id'> & {
+          user_id?: string
+        }
         Update: Partial<Database['public']['Tables']['expenses']['Row']>
       }
       balance_snapshots: {
@@ -82,8 +94,11 @@ export interface Database {
           notes: string | null
           created_at: string
           updated_at: string
+          user_id: string
         }
-        Insert: Database['public']['Tables']['balance_snapshots']['Row']
+        Insert: Omit<Database['public']['Tables']['balance_snapshots']['Row'], 'user_id'> & {
+          user_id?: string
+        }
         Update: Partial<Database['public']['Tables']['balance_snapshots']['Row']>
       }
       balance_items: {
@@ -98,8 +113,11 @@ export interface Database {
           sort_order: number
           created_at: string
           updated_at: string
+          user_id: string
         }
-        Insert: Database['public']['Tables']['balance_items']['Row']
+        Insert: Omit<Database['public']['Tables']['balance_items']['Row'], 'user_id'> & {
+          user_id?: string
+        }
         Update: Partial<Database['public']['Tables']['balance_items']['Row']>
       }
       visual_preferences: {
@@ -108,8 +126,11 @@ export interface Database {
           category_visuals: Record<string, string>
           created_at: string
           updated_at: string
+          user_id: string
         }
-        Insert: Database['public']['Tables']['visual_preferences']['Row']
+        Insert: Omit<Database['public']['Tables']['visual_preferences']['Row'], 'user_id'> & {
+          user_id?: string
+        }
         Update: Partial<Database['public']['Tables']['visual_preferences']['Row']>
       }
     }

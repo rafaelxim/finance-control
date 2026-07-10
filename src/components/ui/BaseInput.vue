@@ -8,6 +8,7 @@ defineProps<{
   placeholder?: string
   inputClass?: string
   inputMode?: string
+  autocomplete?: string
 }>()
 
 defineEmits<{
@@ -26,6 +27,7 @@ defineEmits<{
       :value="modelValue"
       :placeholder="placeholder"
       :inputmode="inputMode"
+      :autocomplete="autocomplete"
       :aria-invalid="Boolean(error)"
       :aria-describedby="error ? `${id}-error` : undefined"
       @input="$emit('update:modelValue', ($event.target as HTMLInputElement).value)"

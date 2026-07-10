@@ -165,10 +165,12 @@ export function fromBalanceItemRow(row: Tables<'balance_items'>): BalanceItem {
 
 export function toVisualPreferencesRow(
   preferences: VisualPreferences,
-  timestamp: string
+  timestamp: string,
+  userId: string
 ): Inserts<'visual_preferences'> {
   return {
-    id: 'default',
+    id: `visual_preferences_${userId}`,
+    user_id: userId,
     category_visuals: preferences.categoryVisuals ?? {},
     created_at: timestamp,
     updated_at: timestamp

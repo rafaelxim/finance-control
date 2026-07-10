@@ -1,5 +1,5 @@
 .agents
-
+backups
 # Node / Vite
 node_modules/
 dist/

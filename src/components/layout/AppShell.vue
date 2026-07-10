@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import {
   CalendarDays,
   ChevronLeft,
@@ -8,12 +9,14 @@ import {
   Gauge,
   Menu,
   Settings,
+  LogOut,
   Tags,
   WalletCards,
   X
 } from 'lucide-vue-next'
 
 import type { MonthKey } from '@/domain/shared/types'
+import { useAuthStore } from '@/stores/auth.store'
 import { useProfileStore } from '@/stores/profile.store'
 import logoUrl from '@/assets/logo.png'
 
@@ -26,12 +29,28 @@ const links = [
 ]
 
 const profileStore = useProfileStore()
+const authStore = useAuthStore()
+const route = useRoute()
+const router = useRouter()
 const monthUpdating = ref(false)
 const mobileMenuOpen = ref(false)
 const activeMonth = computed(() => profileStore.activeMonth)
+const isPublicRoute = computed(() => Boolean(route.meta.public))
 onMounted(() => {
-  void profileStore.load()
+  if (authStore.user) void profileStore.load()
 })
+
+watch(
+  () => authStore.user?.id,
+  (userId) => {
+    if (userId) {
+      void profileStore.load()
+      return
+    }
+
+    profileStore.$reset()
+  }
+)
 
 async function saveActiveMonth(month: MonthKey) {
   if (monthUpdating.value) return
@@ -58,10 +77,18 @@ function updateMonth(value: string) {
 function closeMobileMenu() {
   mobileMenuOpen.value = false
 }
+
+async function signOut() {
+  closeMobileMenu()
+  await authStore.signOut()
+  await router.replace('/login')
+}
 </script>
 
 <template>
-  <div class="app-shell">
+  <RouterView v-if="isPublicRoute" />
+
+  <div v-else class="app-shell">
     <header class="mobile-header">
       <button
         class="mobile-header__menu"
@@ -128,6 +155,11 @@ function closeMobileMenu() {
           <span>{{ link.label }}</span>
         </RouterLink>
       </nav>
+
+      <button class="nav-link nav-link--button" type="button" @click="signOut">
+        <LogOut :size="18" aria-hidden="true" />
+        <span>Sair</span>
+      </button>
     </aside>
 
     <Teleport to="body">
@@ -203,6 +235,14 @@ function closeMobileMenu() {
               <component :is="link.icon" :size="22" aria-hidden="true" />
               <span>{{ link.label }}</span>
             </RouterLink>
+            <button
+              class="mobile-menu__link mobile-menu__link--button"
+              type="button"
+              @click="signOut"
+            >
+              <LogOut :size="22" aria-hidden="true" />
+              <span>Sair</span>
+            </button>
           </nav>
         </div>
       </Transition>

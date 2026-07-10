@@ -7,7 +7,7 @@ import { assertRemoteSuccess, supabaseClient } from './supabase/query-helpers'
 
 export async function getOrCreateProfile(): Promise<UserProfile> {
   const client = supabaseClient()
-  const { data, error } = await client.from('profiles').select('*').limit(1).maybeSingle()
+  const { data, error } = await client.from('profiles').select('*').maybeSingle()
   assertRemoteSuccess(error, 'Falha ao carregar perfil')
 
   if (data) return fromProfileRow(data)
