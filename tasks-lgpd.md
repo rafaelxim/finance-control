@@ -9,6 +9,6 @@ Este arquivo nao substitui revisao juridica.
 - [x] Implementar exclusao completa da conta via operacao server-side segura, incluindo Supabase Auth, dados financeiros e sessoes.
 - [x] Documentar politica de retencao para dados financeiros, conta, backups, logs e eventos de autenticacao.
 - [x] Documentar base legal por operacao de tratamento.
-- [ ] Disponibilizar canal de atendimento para direitos do titular.
+- [x] Disponibilizar canal de atendimento para direitos do titular.
 - [ ] Documentar plano de resposta a incidentes de seguranca.
 - [ ] Revisar migrations e scripts para evitar identificadores reais hardcoded em migrations genericas.

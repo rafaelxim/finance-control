@@ -15,8 +15,9 @@
       <section>
         <h2>1. Quem controla os dados</h2>
         <p>
-          O OrganizaGrana é o controlador dos dados inseridos no app. O contato formal do
-          controlador e do canal LGPD ainda deve ser definido antes de uso público.
+          O OrganizaGrana é o controlador dos dados inseridos no app. Para solicitações de
+          privacidade, direitos do titular ou dúvidas sobre tratamento de dados, use
+          <a href="mailto:privacidade@organizagrana.app">privacidade@organizagrana.app</a>.
         </p>
       </section>
 
@@ -89,8 +90,8 @@
         <p>
           O usuário pode solicitar confirmação de tratamento, acesso, correção, portabilidade,
           exclusão, informação sobre compartilhamentos e oposição nos casos previstos na LGPD.
-          O canal operacional para essas solicitações ainda deve ser publicado antes de uso
-          público.
+          O canal de atendimento é
+          <a href="mailto:privacidade@organizagrana.app">privacidade@organizagrana.app</a>.
         </p>
       </section>
 

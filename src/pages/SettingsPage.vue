@@ -238,8 +238,9 @@ async function deleteAccount() {
             <div>
               <h3>Política e contato</h3>
               <p>
-                Canal LGPD/controlador: a definir antes do uso público. Use a política para ver o
-                tratamento atual documentado.
+                Canal LGPD/controlador:
+                <a href="mailto:privacidade@organizagrana.app">privacidade@organizagrana.app</a>.
+                Use a política para ver o tratamento atual documentado.
               </p>
             </div>
             <RouterLink class="button button--secondary privacy-data__link" to="/privacidade">
@@ -347,6 +348,17 @@ async function deleteAccount() {
 
 .privacy-data__item .button {
   width: fit-content;
+}
+
+.privacy-data__item a:not(.button) {
+  color: var(--color-primary);
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.privacy-data__item a:not(.button):hover,
+.privacy-data__item a:not(.button):focus-visible {
+  text-decoration: underline;
 }
 
 .privacy-data__link {

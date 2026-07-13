@@ -119,7 +119,8 @@ de considerar o app adequado para uso publico:
 - implementar exclusao completa da conta por operacao server-side segura,
   incluindo Supabase Auth;
 - documentar politica de retencao e plano de resposta a incidentes;
-- manter um canal de atendimento para solicitacoes LGPD.
+- manter um canal de atendimento para solicitacoes LGPD:
+  `privacidade@organizagrana.app`.
 
 Veja `tasks-lgpd.md` para o checklist de adequacao em andamento e
 `docs/privacy/retention-policy.md` para a politica de retencao. A matriz de
