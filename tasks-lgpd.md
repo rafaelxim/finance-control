@@ -10,5 +10,5 @@ Este arquivo nao substitui revisao juridica.
 - [x] Documentar politica de retencao para dados financeiros, conta, backups, logs e eventos de autenticacao.
 - [x] Documentar base legal por operacao de tratamento.
 - [x] Disponibilizar canal de atendimento para direitos do titular.
-- [ ] Documentar plano de resposta a incidentes de seguranca.
+- [x] Documentar plano de resposta a incidentes de seguranca.
 - [ ] Revisar migrations e scripts para evitar identificadores reais hardcoded em migrations genericas.

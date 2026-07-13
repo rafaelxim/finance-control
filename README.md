@@ -124,7 +124,8 @@ de considerar o app adequado para uso publico:
 
 Veja `tasks-lgpd.md` para o checklist de adequacao em andamento e
 `docs/privacy/retention-policy.md` para a politica de retencao. A matriz de
-bases legais por operacao esta em `docs/privacy/legal-basis.md`.
+bases legais por operacao esta em `docs/privacy/legal-basis.md`. O plano de
+resposta a incidentes esta em `docs/privacy/security-incident-response.md`.
 
 ## Fontes e Assets
 
