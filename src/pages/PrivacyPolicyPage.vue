@@ -47,7 +47,9 @@
           O tratamento principal ocorre para executar o serviço solicitado pelo usuário:
           registrar e consultar seus próprios dados financeiros. Medidas de segurança,
           prevenção a fraude e manutenção técnica podem se apoiar em legítimo interesse ou
-          obrigação legal, conforme o caso.
+          obrigação legal, conforme o caso. Consulte a
+          <RouterLink to="/bases-legais">matriz de bases legais</RouterLink>
+          para ver a base prevista por operação de tratamento.
         </p>
       </section>
 

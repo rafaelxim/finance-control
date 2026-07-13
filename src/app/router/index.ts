@@ -5,6 +5,7 @@ import BudgetPage from '@/pages/BudgetPage.vue'
 import DataRetentionPolicyPage from '@/pages/DataRetentionPolicyPage.vue'
 import DashboardPage from '@/pages/DashboardPage.vue'
 import ExpensesPage from '@/pages/ExpensesPage.vue'
+import LegalBasisPage from '@/pages/LegalBasisPage.vue'
 import LoginPage from '@/pages/LoginPage.vue'
 import PrivacyPolicyPage from '@/pages/PrivacyPolicyPage.vue'
 import SettingsPage from '@/pages/SettingsPage.vue'
@@ -24,6 +25,12 @@ export const router = createRouter({
       path: '/retencao-de-dados',
       name: 'data-retention',
       component: DataRetentionPolicyPage,
+      meta: { public: true, allowAuthenticated: true }
+    },
+    {
+      path: '/bases-legais',
+      name: 'legal-basis',
+      component: LegalBasisPage,
       meta: { public: true, allowAuthenticated: true }
     },
     { path: '/', name: 'dashboard', component: DashboardPage },
