@@ -1,9 +1,13 @@
 do $$
 declare
-  admin_user_id uuid := '51b0b054-471c-4887-a66e-ab38fb16f336';
+  migration_user_id uuid := nullif(current_setting('app.migration_user_id', true), '')::uuid;
 begin
-  if not exists (select 1 from auth.users where id = admin_user_id) then
-    raise exception 'Admin user % was not found in auth.users', admin_user_id;
+  if migration_user_id is null then
+    raise exception 'Set app.migration_user_id to the auth.users id that should own existing rows before applying this migration';
+  end if;
+
+  if not exists (select 1 from auth.users where id = migration_user_id) then
+    raise exception 'Migration user % was not found in auth.users', migration_user_id;
   end if;
 end $$;
 
@@ -22,13 +26,27 @@ alter table public.balance_items
 alter table public.visual_preferences
   add column if not exists user_id uuid references auth.users(id) on delete cascade default auth.uid();
 
-update public.profiles set user_id = '51b0b054-471c-4887-a66e-ab38fb16f336' where user_id is null;
-update public.monthly_budgets set user_id = '51b0b054-471c-4887-a66e-ab38fb16f336' where user_id is null;
-update public.budget_categories set user_id = '51b0b054-471c-4887-a66e-ab38fb16f336' where user_id is null;
-update public.expenses set user_id = '51b0b054-471c-4887-a66e-ab38fb16f336' where user_id is null;
-update public.balance_snapshots set user_id = '51b0b054-471c-4887-a66e-ab38fb16f336' where user_id is null;
-update public.balance_items set user_id = '51b0b054-471c-4887-a66e-ab38fb16f336' where user_id is null;
-update public.visual_preferences set user_id = '51b0b054-471c-4887-a66e-ab38fb16f336' where user_id is null;
+update public.profiles
+set user_id = nullif(current_setting('app.migration_user_id', true), '')::uuid
+where user_id is null;
+update public.monthly_budgets
+set user_id = nullif(current_setting('app.migration_user_id', true), '')::uuid
+where user_id is null;
+update public.budget_categories
+set user_id = nullif(current_setting('app.migration_user_id', true), '')::uuid
+where user_id is null;
+update public.expenses
+set user_id = nullif(current_setting('app.migration_user_id', true), '')::uuid
+where user_id is null;
+update public.balance_snapshots
+set user_id = nullif(current_setting('app.migration_user_id', true), '')::uuid
+where user_id is null;
+update public.balance_items
+set user_id = nullif(current_setting('app.migration_user_id', true), '')::uuid
+where user_id is null;
+update public.visual_preferences
+set user_id = nullif(current_setting('app.migration_user_id', true), '')::uuid
+where user_id is null;
 
 alter table public.profiles alter column user_id set not null;
 alter table public.monthly_budgets alter column user_id set not null;

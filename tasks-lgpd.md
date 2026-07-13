@@ -11,4 +11,4 @@ Este arquivo nao substitui revisao juridica.
 - [x] Documentar base legal por operacao de tratamento.
 - [x] Disponibilizar canal de atendimento para direitos do titular.
 - [x] Documentar plano de resposta a incidentes de seguranca.
-- [ ] Revisar migrations e scripts para evitar identificadores reais hardcoded em migrations genericas.
+- [x] Revisar migrations e scripts para evitar identificadores reais hardcoded em migrations genericas.

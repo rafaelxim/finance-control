@@ -52,6 +52,14 @@ Applied remote migrations through Supabase MCP on 2026-06-26:
 - `optimize_no_auth_policy_initplans`
 - `drop_unused_category_status_index`
 
+For databases that already contain rows from the previous no-auth phase, set
+the owner user id for those rows before applying the auth isolation migration.
+Do not commit a real user id into a migration file.
+
+```sql
+set app.migration_user_id = '<auth.users id that should own existing rows>';
+```
+
 After implementing schema migrations:
 
 1. Run local schema reset or migration application according to the Supabase CLI
