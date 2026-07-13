@@ -96,6 +96,21 @@ export const useAuthStore = defineStore('auth', {
       } finally {
         this.loading = false
       }
+    },
+    async deleteAccount() {
+      this.loading = true
+      try {
+        const { error } = await getSupabaseClient().functions.invoke('delete-account', {
+          method: 'POST'
+        })
+        if (error) throw error
+
+        this.session = null
+        this.user = null
+        this.initialized = true
+      } finally {
+        this.loading = false
+      }
     }
   }
 })

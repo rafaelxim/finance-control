@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue'
+import { useRouter } from 'vue-router'
 import { Download, ExternalLink, Save, ShieldCheck, Trash2, UserX } from 'lucide-vue-next'
 
 import CategoryVisualSelector from '@/components/budget/CategoryVisualSelector.vue'
@@ -11,11 +12,14 @@ import {
   readVisualPreferences,
   saveVisualPreferences
 } from '@/storage/data-export.repository'
+import { useAuthStore } from '@/stores/auth.store'
 import { useBalanceStore } from '@/stores/balance.store'
 import { useBudgetStore } from '@/stores/budget.store'
 import { useExpensesStore } from '@/stores/expenses.store'
 import { useProfileStore } from '@/stores/profile.store'
 
+const router = useRouter()
+const authStore = useAuthStore()
 const budgetStore = useBudgetStore()
 const expensesStore = useExpensesStore()
 const balanceStore = useBalanceStore()
@@ -26,6 +30,7 @@ const status = ref('')
 const privacyStatus = ref<{ tone: 'success' | 'error'; message: string } | null>(null)
 const exportingData = ref(false)
 const clearingFinancialData = ref(false)
+const deletingAccount = ref(false)
 const pageHydrating = ref(true)
 const pageLoading = computed(() => pageHydrating.value || budgetStore.loading)
 
@@ -116,6 +121,40 @@ async function clearFinancialRecords() {
     clearingFinancialData.value = false
   }
 }
+
+async function deleteAccount() {
+  privacyStatus.value = null
+  const confirmed = window.confirm(
+    'Excluir sua conta permanentemente? Esta ação remove a conta, encerra sessões e apaga os dados associados. Ela não pode ser desfeita.'
+  )
+  if (!confirmed) return
+
+  const typedConfirmation = window.prompt('Digite EXCLUIR para confirmar a exclusão da conta.')
+  if (typedConfirmation !== 'EXCLUIR') {
+    privacyStatus.value = {
+      tone: 'error',
+      message: 'Exclusão cancelada. A confirmação digitada não corresponde a EXCLUIR.'
+    }
+    return
+  }
+
+  deletingAccount.value = true
+  try {
+    await authStore.deleteAccount()
+    profileStore.$reset()
+    budgetStore.$reset()
+    expensesStore.$reset()
+    balanceStore.$reset()
+    await router.replace('/login')
+  } catch (error) {
+    privacyStatus.value = {
+      tone: 'error',
+      message: error instanceof Error ? error.message : 'Não foi possível excluir a conta.'
+    }
+  } finally {
+    deletingAccount.value = false
+  }
+}
 </script>
 
 <template>
@@ -186,13 +225,12 @@ async function clearFinancialRecords() {
             <div>
               <h3>Exclusão de conta</h3>
               <p>
-                A exclusão completa da conta, incluindo Supabase Auth, será feita por operação
-                server-side na próxima etapa do checklist.
+                Remove a conta no Supabase Auth, encerra sessões e apaga registros associados.
               </p>
             </div>
-            <BaseButton variant="secondary" disabled>
+            <BaseButton variant="secondary" :disabled="deletingAccount" @click="deleteAccount">
               <UserX :size="17" aria-hidden="true" />
-              Em implementação
+              {{ deletingAccount ? 'Excluindo...' : 'Excluir conta' }}
             </BaseButton>
           </section>
 
