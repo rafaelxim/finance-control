@@ -36,3 +36,21 @@ export async function clearRemoteTables(client: FinanceSupabaseClient = getSupab
     assertRemoteSuccess(error, `Falha ao limpar ${table}`)
   }
 }
+
+export async function clearFinancialRemoteTables(
+  client: FinanceSupabaseClient = getSupabaseClient()
+) {
+  const tables = [
+    'expenses',
+    'budget_categories',
+    'monthly_budgets',
+    'balance_items',
+    'balance_snapshots',
+    'visual_preferences'
+  ] as const
+
+  for (const table of tables) {
+    const { error } = await client.from(table).delete().neq('id', '__never__')
+    assertRemoteSuccess(error, `Falha ao limpar ${table}`)
+  }
+}

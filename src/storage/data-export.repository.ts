@@ -23,6 +23,7 @@ import {
 } from './supabase/mappers'
 import {
   assertRemoteSuccess,
+  clearFinancialRemoteTables,
   clearRemoteTables,
   getAuthenticatedUserId,
   supabaseClient
@@ -140,4 +141,8 @@ export async function clearLocalData(): Promise<void> {
 
 export async function clearRemoteData(): Promise<void> {
   await clearRemoteTables()
+}
+
+export async function clearFinancialData(): Promise<void> {
+  await clearFinancialRemoteTables()
 }
