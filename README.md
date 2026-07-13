@@ -39,6 +39,40 @@ pnpm build
 
 Use `pnpm format` para aplicar Prettier.
 
+## Deploy no Netlify
+
+Este projeto inclui `netlify.toml` com:
+
+- comando de build: `pnpm build`
+- diretório publicado: `dist`
+- Node.js: `22`
+- rewrite SPA: `/*` para `/index.html`
+
+Para criar o site e conectar o deploy automático da branch `main` pelo terminal:
+
+```bash
+npm install -g netlify-cli
+netlify login
+netlify init
+```
+
+Durante o `netlify init`, selecione o repositório GitHub existente e confirme
+`main` como branch de produção. Depois configure as variáveis públicas usadas no
+build:
+
+```bash
+netlify env:set VITE_SUPABASE_URL "https://fimprjbonudybnxbdaac.supabase.co"
+netlify env:set VITE_SUPABASE_PUBLISHABLE_KEY "sua_publishable_key" --secret --context production deploy-preview branch-deploy
+```
+
+Para validar localmente a configuração do Netlify:
+
+```bash
+netlify build
+```
+
+Após isso, cada push na branch `main` dispara um deploy de produção.
+
 ## Dados Remotos
 
 Os dados ficam no Supabase configurado para o cliente público da aplicação. A
