@@ -99,10 +99,14 @@ select {
   margin-bottom: 28px;
 }
 
+.brand__link {
+  display: block;
+  max-width: 211px;
+}
+
 .brand__logo {
   display: block;
   width: 100%;
-  max-width: 211px;
   height: auto;
 }
 
@@ -131,12 +135,17 @@ select {
   min-height: 48px;
 }
 
-.mobile-menu__logo {
+.mobile-menu__logo-link {
   display: block;
   width: min(240px, 74vw);
-  height: auto;
   justify-self: center;
   grid-column: 2;
+}
+
+.mobile-menu__logo {
+  display: block;
+  width: 100%;
+  height: auto;
 }
 
 .mobile-menu__close {
@@ -639,11 +648,16 @@ select.input {
     cursor: pointer;
   }
 
-  .mobile-header__logo {
+  .mobile-header__logo-link {
     display: block;
     width: min(214px, 62vw);
-    height: auto;
     justify-self: center;
+  }
+
+  .mobile-header__logo {
+    display: block;
+    width: 100%;
+    height: auto;
   }
 
   .mobile-header__spacer {

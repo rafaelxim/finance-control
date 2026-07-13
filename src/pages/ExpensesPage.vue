@@ -8,6 +8,7 @@ import BaseModal from '@/components/ui/BaseModal.vue'
 import EmptyState from '@/components/ui/EmptyState.vue'
 import FormError from '@/components/ui/FormError.vue'
 import LoadingState from '@/components/ui/LoadingState.vue'
+import PageAlert from '@/components/ui/PageAlert.vue'
 import { validateExpenseForBudget } from '@/domain/expenses/schemas'
 import type { Expense, ExpenseDraftInput } from '@/domain/expenses/types'
 import type { MonthKey } from '@/domain/shared/types'
@@ -26,6 +27,7 @@ const saving = ref(false)
 const editingExpense = ref<Expense | null>(null)
 const expenseModalOpen = ref(false)
 const categoryVisuals = ref<Record<string, string>>({})
+const pageAlert = ref<{ tone: 'success' | 'error'; message: string } | null>(null)
 
 const defaultDate = computed(() => `${budgetStore.draftMonth}-01`)
 const activeCategories = computed(() => budgetStore.activeCategories)
@@ -50,15 +52,37 @@ watch(
 )
 
 async function saveExpense(expense: ExpenseDraftInput) {
+  pageAlert.value = null
   errors.value = validateExpenseForBudget(expense, budgetStore.budget, activeCategories.value)
-  if (errors.value.length) return
+  if (errors.value.length) {
+    pageAlert.value = {
+      tone: 'error',
+      message: 'Não foi possível salvar a despesa. Revise os campos destacados.'
+    }
+    return
+  }
 
   saving.value = true
+  let savedMessage = ''
   try {
+    const wasEditing = Boolean(editingExpense.value)
     await expensesStore.save(expense)
-    closeExpenseModal()
+    savedMessage = wasEditing ? 'Despesa atualizada com sucesso.' : 'Despesa incluída com sucesso.'
+  } catch (error) {
+    pageAlert.value = {
+      tone: 'error',
+      message: error instanceof Error ? error.message : 'Não foi possível salvar a despesa.'
+    }
   } finally {
     saving.value = false
+  }
+
+  if (savedMessage) {
+    closeExpenseModal()
+    pageAlert.value = {
+      tone: 'success',
+      message: savedMessage
+    }
   }
 }
 
@@ -77,12 +101,14 @@ function createCategory() {
 
 function openCreateExpenseModal() {
   errors.value = []
+  pageAlert.value = null
   editingExpense.value = null
   expenseModalOpen.value = true
 }
 
 function openEditExpenseModal(expense: Expense) {
   errors.value = []
+  pageAlert.value = null
   editingExpense.value = expense
   expenseModalOpen.value = true
 }
@@ -97,6 +123,13 @@ function closeExpenseModal() {
 
 <template>
   <section class="page">
+    <PageAlert
+      v-if="pageAlert"
+      :message="pageAlert.message"
+      :tone="pageAlert.tone"
+      @close="pageAlert = null"
+    />
+
     <LoadingState v-if="budgetStore.loading || expensesStore.loading" />
 
     <template v-else>

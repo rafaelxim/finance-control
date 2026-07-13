@@ -49,6 +49,7 @@ const {
   totalCount: setupTotalCount,
   nextItem: setupNextItem,
   isComplete: setupIsComplete,
+  shouldShowChecklist,
   progressWidth: setupProgressWidth,
   loading: setupLoading,
   loadSetupChecklist,
@@ -141,14 +142,18 @@ async function signOut() {
       >
         <Menu :size="22" aria-hidden="true" />
       </button>
-      <img class="mobile-header__logo" :src="logoUrl" alt="OrganizaGrana" />
+      <RouterLink class="mobile-header__logo-link" to="/" aria-label="Ir para o dashboard">
+        <img class="mobile-header__logo" :src="logoUrl" alt="OrganizaGrana" />
+      </RouterLink>
       <span class="mobile-header__spacer" aria-hidden="true"></span>
     </header>
 
     <aside class="app-shell__sidebar">
       <div class="app-shell__sidebar-main">
         <div class="brand">
-          <img class="brand__logo" :src="logoUrl" alt="OrganizaGrana" />
+          <RouterLink class="brand__link" to="/" aria-label="Ir para o dashboard">
+            <img class="brand__logo" :src="logoUrl" alt="OrganizaGrana" />
+          </RouterLink>
         </div>
 
         <section class="month-context" aria-label="Mês ativo global">
@@ -201,6 +206,7 @@ async function signOut() {
 
       <div class="app-shell__sidebar-bottom">
         <AppShellSetupProgress
+          v-if="shouldShowChecklist"
           :completed-count="setupCompletedCount"
           :total-count="setupTotalCount"
           :progress-width="setupProgressWidth"
@@ -227,7 +233,14 @@ async function signOut() {
           aria-label="Menu principal"
         >
           <header class="mobile-menu__header">
-            <img class="mobile-menu__logo" :src="logoUrl" alt="OrganizaGrana" />
+            <RouterLink
+              class="mobile-menu__logo-link"
+              to="/"
+              aria-label="Ir para o dashboard"
+              @click="closeMobileMenu"
+            >
+              <img class="mobile-menu__logo" :src="logoUrl" alt="OrganizaGrana" />
+            </RouterLink>
             <button
               class="mobile-menu__close"
               type="button"
@@ -279,6 +292,7 @@ async function signOut() {
           </section>
 
           <AppShellSetupProgress
+            v-if="shouldShowChecklist"
             :completed-count="setupCompletedCount"
             :total-count="setupTotalCount"
             :progress-width="setupProgressWidth"

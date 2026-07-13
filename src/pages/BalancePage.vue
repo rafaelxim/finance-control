@@ -12,6 +12,7 @@ import CurrencyInput from '@/components/ui/CurrencyInput.vue'
 import EmptyState from '@/components/ui/EmptyState.vue'
 import FormError from '@/components/ui/FormError.vue'
 import LoadingState from '@/components/ui/LoadingState.vue'
+import PageAlert from '@/components/ui/PageAlert.vue'
 import { validateBalanceSnapshotDraft } from '@/domain/balance/schemas'
 import type { BalanceDraftItemInput, BalanceItem } from '@/domain/balance/types'
 import { useBalanceStore } from '@/stores/balance.store'
@@ -20,11 +21,11 @@ import { useProfileStore } from '@/stores/profile.store'
 const balanceStore = useBalanceStore()
 const profileStore = useProfileStore()
 const saving = ref(false)
-const saved = ref(false)
 const errors = ref<string[]>([])
 const itemModalOpen = ref(false)
 const editingItemId = ref<string | null>(null)
 const itemDraft = ref<BalanceDraftItemInput>(createEmptyItem())
+const pageAlert = ref<{ tone: 'success' | 'error'; message: string } | null>(null)
 
 const kindOptions = [
   { value: 'asset', label: 'Ativo' },
@@ -41,7 +42,6 @@ onMounted(async () => {
 watch(
   () => profileStore.activeMonth,
   async (month) => {
-    saved.value = false
     await balanceStore.loadMonth(month)
     await balanceStore.loadHistory()
   }
@@ -70,6 +70,7 @@ function savedItemsAsDraft(): BalanceDraftItemInput[] {
 
 function openCreateItemModal() {
   errors.value = []
+  pageAlert.value = null
   editingItemId.value = null
   itemDraft.value = createEmptyItem()
   itemModalOpen.value = true
@@ -77,6 +78,7 @@ function openCreateItemModal() {
 
 function openEditItemModal(item: BalanceItem) {
   errors.value = []
+  pageAlert.value = null
   editingItemId.value = item.id
   itemDraft.value = {
     id: item.id,
@@ -106,7 +108,6 @@ function updateItemDraft(patch: Partial<BalanceDraftItemInput>) {
 }
 
 async function persistDraftItems(nextItems: BalanceDraftItemInput[], validate = true) {
-  saved.value = false
   errors.value = validate
     ? validateBalanceSnapshotDraft({
         month: balanceStore.draftMonth,
@@ -120,7 +121,6 @@ async function persistDraftItems(nextItems: BalanceDraftItemInput[], validate = 
   try {
     balanceStore.draftItems = nextItems.map((item, sortOrder) => ({ ...item, sortOrder }))
     await balanceStore.save()
-    saved.value = true
     return true
   } finally {
     saving.value = false
@@ -128,6 +128,8 @@ async function persistDraftItems(nextItems: BalanceDraftItemInput[], validate = 
 }
 
 async function saveItem() {
+  pageAlert.value = null
+  const wasEditing = Boolean(editingItemId.value)
   const currentItems = savedItemsAsDraft()
   const existingIndex = editingItemId.value
     ? currentItems.findIndex((item) => item.id === editingItemId.value)
@@ -141,8 +143,22 @@ async function saveItem() {
       ? currentItems.map((item, index) => (index === existingIndex ? normalizedItem : item))
       : [...currentItems, normalizedItem]
 
-  const persisted = await persistDraftItems(nextItems)
-  if (persisted) closeItemModal()
+  try {
+    const persisted = await persistDraftItems(nextItems)
+    if (!persisted) return
+
+    closeItemModal()
+    pageAlert.value = {
+      tone: 'success',
+      message: wasEditing ? 'Item do balanço atualizado com sucesso.' : 'Item do balanço incluído com sucesso.'
+    }
+  } catch (error) {
+    closeItemModal()
+    pageAlert.value = {
+      tone: 'error',
+      message: error instanceof Error ? error.message : 'Não foi possível salvar o item do balanço.'
+    }
+  }
 }
 
 async function saveNotes() {
@@ -169,6 +185,13 @@ async function removeItem(item: BalanceItem) {
       </BaseButton>
     </header>
 
+    <PageAlert
+      v-if="pageAlert"
+      :message="pageAlert.message"
+      :tone="pageAlert.tone"
+      @close="pageAlert = null"
+    />
+
     <LoadingState v-if="balanceStore.loading" />
 
     <template v-else>
@@ -190,7 +213,6 @@ async function removeItem(item: BalanceItem) {
       </section>
 
       <FormError :errors="errors" />
-      <p v-if="saved" class="save-success" role="status">Fechamento salvo com sucesso.</p>
 
       <EmptyState
         v-if="!balanceStore.items.length"
@@ -278,15 +300,6 @@ async function removeItem(item: BalanceItem) {
   display: flex;
   justify-content: flex-end;
   gap: 10px;
-}
-
-.save-success {
-  border: 1px solid rgba(14, 203, 129, 0.42);
-  border-radius: var(--radius);
-  background: rgba(14, 203, 129, 0.08);
-  color: var(--color-up);
-  margin: 0;
-  padding: 12px;
 }
 
 @media (max-width: 720px) {

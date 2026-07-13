@@ -1,6 +1,6 @@
 import { computed, ref } from 'vue'
 
-import type { MonthKey } from '@/domain/shared/types'
+import { currentMonthKey, type MonthKey } from '@/domain/shared/types'
 import { readVisualPreferences } from '@/storage/data-export.repository'
 import { useBalanceStore } from '@/stores/balance.store'
 import { useBudgetStore } from '@/stores/budget.store'
@@ -17,6 +17,7 @@ export interface SetupChecklistItem {
 
 const categoryVisuals = ref<Record<string, string>>({})
 const loading = ref(false)
+const activeChecklistMonth = ref<MonthKey>(currentMonthKey())
 const hexColorPattern = /^#[0-9a-f]{6}$/i
 
 export function useSetupChecklist() {
@@ -81,12 +82,14 @@ export function useSetupChecklist() {
   const totalCount = computed(() => items.value.length)
   const isComplete = computed(() => completedCount.value === totalCount.value)
   const nextItem = computed(() => items.value.find((item) => !item.completed) ?? null)
+  const shouldShowChecklist = computed(() => activeChecklistMonth.value === currentMonthKey())
   const progressWidth = computed(() => {
     if (!totalCount.value) return '0%'
     return `${Math.round((completedCount.value / totalCount.value) * 100)}%`
   })
 
   async function loadSetupChecklist(month: MonthKey) {
+    activeChecklistMonth.value = month
     loading.value = true
     try {
       categoryVisuals.value = (await readVisualPreferences()).categoryVisuals ?? {}
@@ -102,6 +105,7 @@ export function useSetupChecklist() {
   function resetSetupChecklist() {
     categoryVisuals.value = {}
     loading.value = false
+    activeChecklistMonth.value = currentMonthKey()
   }
 
   return {
@@ -110,6 +114,7 @@ export function useSetupChecklist() {
     totalCount,
     isComplete,
     nextItem,
+    shouldShowChecklist,
     progressWidth,
     loading,
     loadSetupChecklist,

@@ -12,6 +12,7 @@ import CurrencyInput from '@/components/ui/CurrencyInput.vue'
 import EmptyState from '@/components/ui/EmptyState.vue'
 import FormError from '@/components/ui/FormError.vue'
 import LoadingState from '@/components/ui/LoadingState.vue'
+import PageAlert from '@/components/ui/PageAlert.vue'
 import { budgetCategorySchema } from '@/domain/budget/schemas'
 import type { AllocationType, BudgetDraftCategoryInput } from '@/domain/budget/types'
 import type { MonthKey } from '@/domain/shared/types'
@@ -30,6 +31,7 @@ const categoryDraft = ref<BudgetDraftCategoryInput>(createEmptyCategory())
 const availableAmountModalOpen = ref(false)
 const availableAmountDraft = ref('')
 const categoryVisuals = ref<Record<string, string>>({})
+const pageAlert = ref<{ tone: 'success' | 'error'; message: string } | null>(null)
 
 const allocationOptions = [
   { value: 'fixed', label: 'Valor fixo' },
@@ -71,6 +73,7 @@ function createEmptyCategory(): BudgetDraftCategoryInput {
 
 function openCreateCategoryModal() {
   errors.value = []
+  pageAlert.value = null
   editingCategoryIndex.value = null
   categoryDraft.value = createEmptyCategory()
   categoryModalOpen.value = true
@@ -81,6 +84,7 @@ function openEditCategoryModal(index: number) {
   if (!category) return
 
   errors.value = []
+  pageAlert.value = null
   editingCategoryIndex.value = index
   categoryDraft.value = { ...category }
   categoryModalOpen.value = true
@@ -108,6 +112,7 @@ function categoryColor(category: BudgetDraftCategoryInput) {
 
 function openAvailableAmountModal() {
   errors.value = []
+  pageAlert.value = null
   availableAmountDraft.value = budgetStore.draftAvailableAmount
   availableAmountModalOpen.value = true
 }
@@ -156,6 +161,8 @@ async function persistCategories(categories: BudgetDraftCategoryInput[]) {
 }
 
 async function saveCategory() {
+  pageAlert.value = null
+  const wasEditing = editingCategoryIndex.value !== null
   const nextCategories =
     editingCategoryIndex.value === null
       ? [...budgetStore.draftCategories, categoryDraft.value]
@@ -163,25 +170,61 @@ async function saveCategory() {
           index === editingCategoryIndex.value ? categoryDraft.value : category
         )
 
-  const persisted = await persistCategories(nextCategories)
-  if (persisted) closeCategoryModal()
+  try {
+    const persisted = await persistCategories(nextCategories)
+    if (!persisted) return
+
+    closeCategoryModal()
+    pageAlert.value = {
+      tone: 'success',
+      message: wasEditing ? 'Categoria atualizada com sucesso.' : 'Categoria incluída com sucesso.'
+    }
+  } catch (error) {
+    closeCategoryModal()
+    pageAlert.value = {
+      tone: 'error',
+      message: error instanceof Error ? error.message : 'Não foi possível salvar a categoria.'
+    }
+  }
 }
 
 async function saveAvailableAmount() {
   if (!validateBudget()) return
 
+  pageAlert.value = null
   saving.value = true
   let persisted = false
+  let saveError: unknown = null
   try {
     budgetStore.setAvailableAmount(availableAmountDraft.value)
     await budgetStore.save()
     errors.value = []
     persisted = true
+  } catch (error) {
+    saveError = error
   } finally {
     saving.value = false
   }
 
-  if (persisted) closeAvailableAmountModal()
+  if (persisted) {
+    closeAvailableAmountModal()
+    pageAlert.value = {
+      tone: 'success',
+      message: 'Valor mensal disponível salvo com sucesso.'
+    }
+    return
+  }
+
+  if (saveError) {
+    closeAvailableAmountModal()
+    pageAlert.value = {
+      tone: 'error',
+      message:
+        saveError instanceof Error
+          ? saveError.message
+          : 'Não foi possível salvar o valor mensal disponível.'
+    }
+  }
 }
 
 async function removeCategory(index: number) {
@@ -202,6 +245,13 @@ async function removeCategory(index: number) {
       <h1>Orçamento mensal</h1>
       <p>Distribua seu valor disponível entre categorias fixas ou percentuais.</p>
     </header>
+
+    <PageAlert
+      v-if="pageAlert"
+      :message="pageAlert.message"
+      :tone="pageAlert.tone"
+      @close="pageAlert = null"
+    />
 
     <LoadingState v-if="budgetStore.loading" />
 

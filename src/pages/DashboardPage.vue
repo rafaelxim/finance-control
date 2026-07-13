@@ -25,7 +25,8 @@ const profileStore = useProfileStore()
 const {
   items: setupChecklistItems,
   loadSetupChecklist,
-  loading: setupChecklistLoading
+  loading: setupChecklistLoading,
+  shouldShowChecklist
 } = useSetupChecklist()
 
 const cards = computed(() => expensesStore.categoryProgress)
@@ -141,7 +142,7 @@ watch(
     <template v-else>
       <div class="dashboard-layout">
         <div class="dashboard-layout__main">
-          <DashboardSetupChecklist :items="setupChecklistItems" />
+          <DashboardSetupChecklist v-if="shouldShowChecklist" :items="setupChecklistItems" />
           <DashboardFinancialSummary :summary="dashboardSummary" />
           <DashboardBudgetSummary
             :allocated-amount="budgetStore.totals.allocated"
