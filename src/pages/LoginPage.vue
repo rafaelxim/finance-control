@@ -121,6 +121,11 @@ async function submit() {
           {{ authStore.loading ? 'Aguarde...' : submitLabel }}
         </BaseButton>
       </form>
+
+      <p class="auth-card__privacy">
+        Ao entrar ou criar conta, você confirma que leu a
+        <RouterLink to="/privacidade">política de privacidade</RouterLink>.
+      </p>
     </section>
   </main>
 </template>
@@ -217,6 +222,25 @@ async function submit() {
   border: 1px solid rgba(14, 203, 129, 0.42);
   background: rgba(14, 203, 129, 0.08);
   color: var(--color-up);
+}
+
+.auth-card__privacy {
+  margin: 0;
+  color: var(--color-muted);
+  font-size: 0.82rem;
+  line-height: 1.5;
+  text-align: center;
+}
+
+.auth-card__privacy a {
+  color: var(--color-primary);
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.auth-card__privacy a:hover,
+.auth-card__privacy a:focus-visible {
+  text-decoration: underline;
 }
 
 @media (max-width: 520px) {

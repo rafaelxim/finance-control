@@ -5,6 +5,7 @@ import BudgetPage from '@/pages/BudgetPage.vue'
 import DashboardPage from '@/pages/DashboardPage.vue'
 import ExpensesPage from '@/pages/ExpensesPage.vue'
 import LoginPage from '@/pages/LoginPage.vue'
+import PrivacyPolicyPage from '@/pages/PrivacyPolicyPage.vue'
 import SettingsPage from '@/pages/SettingsPage.vue'
 import { useAuthStore } from '@/stores/auth.store'
 
@@ -12,6 +13,12 @@ export const router = createRouter({
   history: createWebHistory(),
   routes: [
     { path: '/login', name: 'login', component: LoginPage, meta: { public: true } },
+    {
+      path: '/privacidade',
+      name: 'privacy',
+      component: PrivacyPolicyPage,
+      meta: { public: true, allowAuthenticated: true }
+    },
     { path: '/', name: 'dashboard', component: DashboardPage },
     { path: '/dashboard', redirect: '/' },
     { path: '/orcamento', name: 'budget', component: BudgetPage },
@@ -27,6 +34,7 @@ router.beforeEach(async (to) => {
   await authStore.initialize()
 
   if (to.meta.public) {
+    if (to.meta.allowAuthenticated) return true
     return authStore.user ? { path: '/' } : true
   }
 
