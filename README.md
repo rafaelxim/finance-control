@@ -75,16 +75,53 @@ Após isso, cada push na branch `main` dispara um deploy de produção.
 
 ## Dados Remotos
 
-Os dados ficam no Supabase configurado para o cliente público da aplicação. A
-tela `Configurações` permite exportar, importar e limpar os dados remotos. O
-backup JSON inclui orçamento, categorias, despesas, balanços, itens de balanço e
-preferências visuais. Ele não inclui imagens, assets decorativos ou dados de
-serviços externos.
+Os dados ficam no Supabase configurado para o cliente público da aplicação. O
+frontend usa `VITE_SUPABASE_URL` e `VITE_SUPABASE_PUBLISHABLE_KEY`; chaves
+secretas ou `service_role` nao devem ser expostas no cliente.
 
-Esta fase não usa autenticação. As políticas RLS permitem CRUD para o papel
-`anon`, então qualquer pessoa com a URL e a publishable key do projeto acessa o
-mesmo conjunto compartilhado de dados. Isso é intencional para a migração atual
-e deve ser revisto antes de uso multiusuário ou público.
+A aplicacao usa Supabase Auth para login e cadastro. As tabelas financeiras em
+`public` possuem `user_id`, RLS habilitado e politicas para que usuarios
+autenticados gerenciem apenas os proprios registros. O papel `anon` nao deve ter
+CRUD nas tabelas financeiras.
+
+Dados tratados pela aplicacao:
+
+- conta de autenticacao no Supabase Auth, incluindo email e credenciais
+  gerenciadas pelo Supabase;
+- perfil de uso, como moeda, mes ativo, tema e nome de exibicao quando
+  preenchido;
+- orcamentos mensais, categorias, limites, despesas, datas e descricoes;
+- snapshots de patrimonio, itens de balanco, instituicoes e observacoes;
+- preferencias visuais das categorias;
+- backups JSON gerados pelo usuario para exportacao/importacao.
+
+O backup JSON inclui perfil, orcamentos, categorias, despesas, balancos, itens de
+balanco e preferencias visuais. Ele nao inclui imagens, assets decorativos ou
+dados de servicos externos.
+
+Subprocessadores e infraestrutura atualmente previstos:
+
+- Supabase: autenticacao, banco Postgres, Data API e armazenamento dos dados da
+  aplicacao;
+- Netlify: build, hospedagem e entrega da aplicacao frontend.
+
+## Privacidade e LGPD
+
+Este projeto trata dados financeiros pessoais e deve manter documentacao e
+controles compativeis com esse risco. O estado atual ja inclui autenticacao e
+isolamento por RLS, mas ainda existem pendencias de produto e governanca antes
+de considerar o app adequado para uso publico:
+
+- publicar aviso/politica de privacidade com controlador, contato, finalidade,
+  base legal, compartilhamentos, retencao e direitos do titular;
+- disponibilizar uma area de privacidade para exportar dados, solicitar
+  correcao, limpar dados financeiros e excluir a conta;
+- implementar exclusao completa da conta por operacao server-side segura,
+  incluindo Supabase Auth;
+- documentar politica de retencao e plano de resposta a incidentes;
+- manter um canal de atendimento para solicitacoes LGPD.
+
+Veja `tasks-lgpd.md` para o checklist de adequacao em andamento.
 
 ## Fontes e Assets
 
@@ -105,6 +142,6 @@ semântica financeira, sem copiar marca, nomes ou assets licenciados.
 
 ## Escopo
 
-Esta versão é um estudo privado, sem autenticação, sincronização offline,
-integrações bancárias, corretoras ou cartões. O objetivo é manter uma aplicação
-pequena, auditável e fácil de evoluir.
+Esta versao e um estudo privado, sem sincronizacao offline, integracoes
+bancarias, corretoras ou cartoes. O objetivo e manter uma aplicacao pequena,
+auditavel e facil de evoluir antes de uso publico.
