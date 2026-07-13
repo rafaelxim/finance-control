@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted, watch } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 
 import CategoryUsageExportButton from '@/components/budget/CategoryUsageExportButton.vue'
 import MarketCategoryCard from '@/components/budget/MarketCategoryCard.vue'
@@ -22,6 +22,8 @@ const budgetStore = useBudgetStore()
 const expensesStore = useExpensesStore()
 const balanceStore = useBalanceStore()
 const profileStore = useProfileStore()
+const dashboardHydrating = ref(true)
+let dashboardLoadId = 0
 const {
   items: setupChecklistItems,
   loadSetupChecklist,
@@ -33,6 +35,7 @@ const cards = computed(() => expensesStore.categoryProgress)
 const latestNetWorth = computed(() => balanceStore.latestEvolution)
 const dashboardLoading = computed(
   () =>
+    dashboardHydrating.value ||
     budgetStore.loading ||
     expensesStore.loading ||
     balanceStore.loading ||
@@ -118,28 +121,41 @@ const dashboardSummary = computed<DashboardFinancialSummaryViewModel>(() => {
   }
 })
 
-onMounted(async () => {
-  await loadSetupChecklist(profileStore.activeMonth)
+async function loadDashboard(month = profileStore.activeMonth) {
+  const loadId = ++dashboardLoadId
+  dashboardHydrating.value = true
+
+  try {
+    await loadSetupChecklist(month)
+  } finally {
+    if (loadId === dashboardLoadId) {
+      dashboardHydrating.value = false
+    }
+  }
+}
+
+onMounted(() => {
+  void loadDashboard()
 })
 
 watch(
   () => profileStore.activeMonth,
-  async (month) => {
-    await loadSetupChecklist(month)
+  (month) => {
+    void loadDashboard(month)
   }
 )
 </script>
 
 <template>
   <section class="page">
-    <header class="page__header">
-      <h1>Dashboard</h1>
-      <p>Resumo do orçamento atual, gastos por categoria e patrimônio recente.</p>
-    </header>
-
     <LoadingState v-if="dashboardLoading" />
 
     <template v-else>
+      <header class="page__header">
+        <h1>Dashboard</h1>
+        <p>Resumo do orçamento atual, gastos por categoria e patrimônio recente.</p>
+      </header>
+
       <div class="dashboard-layout">
         <div class="dashboard-layout__main">
           <DashboardSetupChecklist v-if="shouldShowChecklist" :items="setupChecklistItems" />

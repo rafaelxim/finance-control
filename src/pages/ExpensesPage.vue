@@ -28,26 +28,43 @@ const editingExpense = ref<Expense | null>(null)
 const expenseModalOpen = ref(false)
 const categoryVisuals = ref<Record<string, string>>({})
 const pageAlert = ref<{ tone: 'success' | 'error'; message: string } | null>(null)
+const pageHydrating = ref(true)
+let pageLoadId = 0
 
 const defaultDate = computed(() => `${budgetStore.draftMonth}-01`)
 const activeCategories = computed(() => budgetStore.activeCategories)
+const pageLoading = computed(
+  () => pageHydrating.value || budgetStore.loading || expensesStore.loading
+)
 const categoryFilter = computed(() => {
   const value = route.query.categoria
   return typeof value === 'string' ? value : 'all'
 })
 
-onMounted(async () => {
-  const visualPreferences = await readVisualPreferences()
-  categoryVisuals.value = visualPreferences.categoryVisuals ?? {}
-  await budgetStore.loadMonth(profileStore.activeMonth)
-  await expensesStore.loadForBudget(budgetStore.budget?.id ?? null, budgetStore.draftMonth)
+async function loadPage(month: MonthKey) {
+  const loadId = ++pageLoadId
+  pageHydrating.value = true
+
+  try {
+    const visualPreferences = await readVisualPreferences()
+    categoryVisuals.value = visualPreferences.categoryVisuals ?? {}
+    await budgetStore.loadMonth(month)
+    await expensesStore.loadForBudget(budgetStore.budget?.id ?? null, budgetStore.draftMonth)
+  } finally {
+    if (loadId === pageLoadId) {
+      pageHydrating.value = false
+    }
+  }
+}
+
+onMounted(() => {
+  void loadPage(profileStore.activeMonth)
 })
 
 watch(
   () => profileStore.activeMonth,
-  async (month) => {
-    await budgetStore.loadMonth(month as MonthKey)
-    await expensesStore.loadForBudget(budgetStore.budget?.id ?? null, budgetStore.draftMonth)
+  (month) => {
+    void loadPage(month as MonthKey)
   }
 )
 
@@ -130,7 +147,7 @@ function closeExpenseModal() {
       @close="pageAlert = null"
     />
 
-    <LoadingState v-if="budgetStore.loading || expensesStore.loading" />
+    <LoadingState v-if="pageLoading" />
 
     <template v-else>
       <EmptyState

@@ -26,6 +26,8 @@ const itemModalOpen = ref(false)
 const editingItemId = ref<string | null>(null)
 const itemDraft = ref<BalanceDraftItemInput>(createEmptyItem())
 const pageAlert = ref<{ tone: 'success' | 'error'; message: string } | null>(null)
+const pageHydrating = ref(true)
+let pageLoadId = 0
 
 const kindOptions = [
   { value: 'asset', label: 'Ativo' },
@@ -33,17 +35,30 @@ const kindOptions = [
 ]
 
 const itemModalTitle = computed(() => (editingItemId.value ? 'Editar item' : 'Adicionar item'))
+const pageLoading = computed(() => pageHydrating.value || balanceStore.loading)
 
-onMounted(async () => {
-  await balanceStore.loadMonth(profileStore.activeMonth)
-  await balanceStore.loadHistory()
+async function loadPage(month = profileStore.activeMonth) {
+  const loadId = ++pageLoadId
+  pageHydrating.value = true
+
+  try {
+    await balanceStore.loadMonth(month)
+    await balanceStore.loadHistory()
+  } finally {
+    if (loadId === pageLoadId) {
+      pageHydrating.value = false
+    }
+  }
+}
+
+onMounted(() => {
+  void loadPage()
 })
 
 watch(
   () => profileStore.activeMonth,
-  async (month) => {
-    await balanceStore.loadMonth(month)
-    await balanceStore.loadHistory()
+  (month) => {
+    void loadPage(month)
   }
 )
 
@@ -174,27 +189,27 @@ async function removeItem(item: BalanceItem) {
 
 <template>
   <section class="page">
-    <header class="page__header">
-      <div>
-        <h1>Balanço</h1>
-        <p>Atualize saldos de contas, investimentos e cartões de crédito.</p>
-      </div>
-      <BaseButton @click="openCreateItemModal">
-        <Plus :size="18" aria-hidden="true" />
-        Adicionar item
-      </BaseButton>
-    </header>
-
-    <PageAlert
-      v-if="pageAlert"
-      :message="pageAlert.message"
-      :tone="pageAlert.tone"
-      @close="pageAlert = null"
-    />
-
-    <LoadingState v-if="balanceStore.loading" />
+    <LoadingState v-if="pageLoading" />
 
     <template v-else>
+      <header class="page__header">
+        <div>
+          <h1>Balanço</h1>
+          <p>Atualize saldos de contas, investimentos e cartões de crédito.</p>
+        </div>
+        <BaseButton @click="openCreateItemModal">
+          <Plus :size="18" aria-hidden="true" />
+          Adicionar item
+        </BaseButton>
+      </header>
+
+      <PageAlert
+        v-if="pageAlert"
+        :message="pageAlert.message"
+        :tone="pageAlert.tone"
+        @close="pageAlert = null"
+      />
+
       <section class="balance-summary panel" aria-label="Resumo do balanço">
         <NetWorthSummary :totals="balanceStore.savedTotals" />
         <div class="balance-summary__notes">

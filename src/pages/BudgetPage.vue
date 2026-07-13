@@ -32,6 +32,9 @@ const availableAmountModalOpen = ref(false)
 const availableAmountDraft = ref('')
 const categoryVisuals = ref<Record<string, string>>({})
 const pageAlert = ref<{ tone: 'success' | 'error'; message: string } | null>(null)
+const pageHydrating = ref(true)
+let pageLoadId = 0
+const pageLoading = computed(() => pageHydrating.value || budgetStore.loading)
 
 const allocationOptions = [
   { value: 'fixed', label: 'Valor fixo' },
@@ -47,9 +50,18 @@ const valueLabel = computed(() =>
 )
 
 async function loadMonth(month: MonthKey) {
-  categoryVisuals.value = (await readVisualPreferences()).categoryVisuals ?? {}
-  await budgetStore.loadMonth(month)
-  errors.value = []
+  const loadId = ++pageLoadId
+  pageHydrating.value = true
+
+  try {
+    categoryVisuals.value = (await readVisualPreferences()).categoryVisuals ?? {}
+    await budgetStore.loadMonth(month)
+    errors.value = []
+  } finally {
+    if (loadId === pageLoadId) {
+      pageHydrating.value = false
+    }
+  }
 }
 
 onMounted(() => {
@@ -241,21 +253,21 @@ async function removeCategory(index: number) {
 
 <template>
   <section class="page">
-    <header class="page__header">
-      <h1>Orçamento mensal</h1>
-      <p>Distribua seu valor disponível entre categorias fixas ou percentuais.</p>
-    </header>
-
-    <PageAlert
-      v-if="pageAlert"
-      :message="pageAlert.message"
-      :tone="pageAlert.tone"
-      @close="pageAlert = null"
-    />
-
-    <LoadingState v-if="budgetStore.loading" />
+    <LoadingState v-if="pageLoading" />
 
     <template v-else>
+      <header class="page__header">
+        <h1>Orçamento mensal</h1>
+        <p>Distribua seu valor disponível entre categorias fixas ou percentuais.</p>
+      </header>
+
+      <PageAlert
+        v-if="pageAlert"
+        :message="pageAlert.message"
+        :tone="pageAlert.tone"
+        @close="pageAlert = null"
+      />
+
       <div class="budget-layout">
         <main class="budget-layout__main">
           <section class="budget-overview" aria-label="Visão geral do orçamento">

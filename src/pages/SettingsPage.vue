@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { Save } from 'lucide-vue-next'
 
 import CategoryVisualSelector from '@/components/budget/CategoryVisualSelector.vue'
 import BaseButton from '@/components/ui/BaseButton.vue'
+import LoadingState from '@/components/ui/LoadingState.vue'
 import { readVisualPreferences, saveVisualPreferences } from '@/storage/data-export.repository'
 import { useBudgetStore } from '@/stores/budget.store'
 import { useProfileStore } from '@/stores/profile.store'
@@ -13,10 +14,16 @@ const profileStore = useProfileStore()
 const categoryVisuals = ref<Record<string, string>>({})
 const saving = ref(false)
 const status = ref('')
+const pageHydrating = ref(true)
+const pageLoading = computed(() => pageHydrating.value || budgetStore.loading)
 
 onMounted(async () => {
-  categoryVisuals.value = (await readVisualPreferences()).categoryVisuals ?? {}
-  await budgetStore.loadMonth(profileStore.activeMonth)
+  try {
+    categoryVisuals.value = (await readVisualPreferences()).categoryVisuals ?? {}
+    await budgetStore.loadMonth(profileStore.activeMonth)
+  } finally {
+    pageHydrating.value = false
+  }
 })
 
 function updateVisuals(value: Record<string, string>) {
@@ -37,24 +44,28 @@ async function saveVisuals() {
 
 <template>
   <section class="page">
-    <header class="page__header">
-      <h1>Configurações</h1>
-      <p>Preferências visuais para personalizar as categorias do orçamento.</p>
-    </header>
+    <LoadingState v-if="pageLoading" />
 
-    <CategoryVisualSelector
-      v-model="categoryVisuals"
-      :categories="budgetStore.activeCategories"
-      @update:model-value="updateVisuals"
-    />
+    <template v-else>
+      <header class="page__header">
+        <h1>Configurações</h1>
+        <p>Preferências visuais para personalizar as categorias do orçamento.</p>
+      </header>
 
-    <div class="settings-actions">
-      <BaseButton :disabled="saving" @click="saveVisuals">
-        <Save :size="17" aria-hidden="true" />
-        {{ saving ? 'Salvando...' : 'Salvar preferências visuais' }}
-      </BaseButton>
-      <p v-if="status" class="settings-status" role="status">{{ status }}</p>
-    </div>
+      <CategoryVisualSelector
+        v-model="categoryVisuals"
+        :categories="budgetStore.activeCategories"
+        @update:model-value="updateVisuals"
+      />
+
+      <div class="settings-actions">
+        <BaseButton :disabled="saving" @click="saveVisuals">
+          <Save :size="17" aria-hidden="true" />
+          {{ saving ? 'Salvando...' : 'Salvar preferências visuais' }}
+        </BaseButton>
+        <p v-if="status" class="settings-status" role="status">{{ status }}</p>
+      </div>
+    </template>
   </section>
 </template>
 
