@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 
 import BalancePage from '@/pages/BalancePage.vue'
 import BudgetPage from '@/pages/BudgetPage.vue'
+import DataRetentionPolicyPage from '@/pages/DataRetentionPolicyPage.vue'
 import DashboardPage from '@/pages/DashboardPage.vue'
 import ExpensesPage from '@/pages/ExpensesPage.vue'
 import LoginPage from '@/pages/LoginPage.vue'
@@ -17,6 +18,12 @@ export const router = createRouter({
       path: '/privacidade',
       name: 'privacy',
       component: PrivacyPolicyPage,
+      meta: { public: true, allowAuthenticated: true }
+    },
+    {
+      path: '/retencao-de-dados',
+      name: 'data-retention',
+      component: DataRetentionPolicyPage,
       meta: { public: true, allowAuthenticated: true }
     },
     { path: '/', name: 'dashboard', component: DashboardPage },

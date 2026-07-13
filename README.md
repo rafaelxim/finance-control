@@ -121,7 +121,8 @@ de considerar o app adequado para uso publico:
 - documentar politica de retencao e plano de resposta a incidentes;
 - manter um canal de atendimento para solicitacoes LGPD.
 
-Veja `tasks-lgpd.md` para o checklist de adequacao em andamento.
+Veja `tasks-lgpd.md` para o checklist de adequacao em andamento e
+`docs/privacy/retention-policy.md` para a politica de retencao.
 
 ## Fontes e Assets
 

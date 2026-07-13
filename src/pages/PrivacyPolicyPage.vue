@@ -72,9 +72,13 @@
       <section>
         <h2>7. Retenção e exclusão</h2>
         <p>
-          Os dados permanecem armazenados enquanto a conta existir ou enquanto forem
-          necessários para prestar o serviço. A política formal de retenção e a exclusão completa
-          da conta, incluindo Supabase Auth, ainda estão no checklist LGPD do projeto.
+          Dados financeiros, perfil e preferências permanecem armazenados enquanto a conta
+          existir ou até o usuário solicitar limpeza financeira ou exclusão completa da conta.
+          Backups JSON baixados não são mantidos pelo app após o download. Logs e eventos
+          técnicos seguem as configurações de retenção dos provedores, como Supabase e Netlify.
+          Consulte a
+          <RouterLink to="/retencao-de-dados">política de retenção de dados</RouterLink>
+          para ver categorias, prazos e eventos de exclusão.
         </p>
       </section>
 
@@ -92,7 +96,7 @@
         <h2>9. Alterações deste aviso</h2>
         <p>
           Este aviso pode ser atualizado quando o app evoluir, especialmente ao implementar
-          exclusão de conta, canal LGPD, política de retenção e novas integrações.
+          canal LGPD, novas integrações ou ajustes na política de retenção.
         </p>
       </section>
     </article>
@@ -124,6 +128,17 @@
 
 .privacy-document__back:hover,
 .privacy-document__back:focus-visible {
+  text-decoration: underline;
+}
+
+.privacy-document a:not(.privacy-document__back) {
+  color: var(--color-primary);
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.privacy-document a:not(.privacy-document__back):hover,
+.privacy-document a:not(.privacy-document__back):focus-visible {
   text-decoration: underline;
 }
 
